@@ -8,21 +8,22 @@ format:
     toc: false
     number-sections: true
     highlight-style: github
-bibliography: ../dataanalysis_template_references.bib
+bibliography: ../sarabenist-MADA-project_references.bib
 csl: ../apa.csl
 ---
-
-This uses MS Word as output format. [See here](https://quarto.org/docs/output-formats/ms-word.html) for more information. You can switch to other formats, like html or pdf. See [the Quarto documentation](https://quarto.org/) for other formats.
 
 ```{r, echo=FALSE, message=FALSE}
 # load a few R packages
 library(here)
 library(knitr)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
 ```
 
 # Summary/Abstract
 
-*Write a summary of your project.*
+Full summary to be added (TBA): background of topic, objective of project, quick overview of methods, main findings
 
 {{< pagebreak >}}
 
@@ -30,7 +31,7 @@ library(knitr)
 
 ## General Background Information
 
-*Provide enough background on your topic that others can understand the why and how of your analysis*
+TBA: background of why and how I am studying this topic 
 
 ## Description of data and data source
 
@@ -40,10 +41,7 @@ The World Health Organization collected data on the inequity surrounding tubercu
 
 For the tuberculosis dataset, the data was collected from the WHO Global TB programme, TB prevalence surveys, country-specific TB programmes, the WHO Health Equity Monitor database, TB patient cost surveys, and other sources. The WHO organized the dataset to be used with the Health Equity Assessment Toolkit which is the built in data analysis and exploration tool. The database contains 10 variables regarding the burden, detection, prevention, knowledge, and social protection and observations for 194 countries over various years. The observations for each variable is further separated by up 7 inequality domains. Not all countries have data available for each year or for each inequality domain. The dataset contains a total of 7473 observations.
 
-```{r load data}
-raw_data <- readxl::read_xlsx(path = "../../data/raw_data/202206-repository-tb.xlsx")
-str(raw_data)
-```
+
 
 ## Questions/Hypotheses to be addressed
 
@@ -57,9 +55,6 @@ In addition to the inequality and indicator predictors provided with the dataset
 
 In the data, the pattern I would expect to see is a higher burden of disease on populations with greater inequality. However, I am not confident in predicting how the indicator categories, specifically the TB attitudes and perceptions, would relate to the TB outcomes.
 
-To cite other work (important everywhere, but likely happens first in introduction), make sure your references are in the bibtex file specified in the YAML header above (here `dataanalysis_template_references.bib`) and have the right bibtex key. Then you can include like this:
-
-Examples of reproducible research projects can for instance be found in [@mckay2020; @mckay2020a]
 
 {{< pagebreak >}}
 
@@ -69,88 +64,152 @@ Examples of reproducible research projects can for instance be found in [@mckay2
 
 To analyze, I would need to determine how to handle the missing data. The years between countries are not specific, and not all indicators were collected for each country. At the moment, I would subset the data based on indicator and remove incomplete observations to analyze each indicator individually. For the final analysis, I will most likely focus on TB indicators that are significantly different between subgroups or complete enough for further analysis. As the class progresses, I look forward to learning other analysis techniques. Eventually, I would like to create a dataset that can produce the statistical information, plots, and models that explore TB outcomes based on inequality measures, TB indicators, and/or level of burden.
 
-## Data aquisition
+## Data aquisition, import, and cleaning
+*(Part 2 of project: data importing and cleaning)*
 
-*As applicable, explain where and how you got the data. If you directly import the data from an online source, you can combine this section with the next.*
+The WHO dataset can be found [here](o%20https://www.who.int/data/inequality-monitor/data#PageContent_C158_Col00) under "Tuberculosis Indicators". This data was downloaded and stored into the `raw_data` folder of the repository as `rawdata`. Information on the indicators, social determinants dimensions, and subgroups can be found in the `raw_data` folder under `202206-metadata-tb.pdf`
+```{r load data}
+#path to data
+data_location <- here::here("data","raw_data","202206-repository-tb.xlsx")
 
-## Data import and cleaning
+#load data and assign to rawdata
+rawdata <- readxl::read_excel(data_location)
 
-*Write code that reads in the file and cleans it so it's ready for analysis. Since this will be fairly long code for most datasets, it might be a good idea to have it in one or several R scripts. If that is the case, explain here briefly what kind of cleaning/processing you do, and provide more details and well documented code somewhere (e.g. as supplement in a paper). All materials, including files that contain code, should be commented well so everyone can follow along.*
+str(rawdata)
+```
+Please see `processingfile.qmd` for full code describing data importing and cleaning.
+
+The `rawdata` file contains information on the country, year of data collection, the indicator they are studying, the social determinants of health they are considering, and the subgroup of each dimension. The dataset is mostly complete with only a few main variables missing data points
+```{r}
+#another view of the data
+skimr::skim(rawdata)
+```
+
+The indicators being studied are shown below. 
+
+```{r}
+#look at what indicators are in the dataset
+unique(rawdata$indicator_name)
+```
+
+For the main part of the data cleaning, I used `pivot_wider()` to allow each indicator to have its own column, and assign each indicator into its own object using `filter()` and `select()` functions. These methods will allow for deeper exploration of each indicator in order to explore trends and patterns for each subgroup. An example of the subsetting is shown below. 
+```{r}
+wide_data <- rawdata %>% 
+  select(c(setting, year, indicator_name,
+           indicator_abbr, dimension, subgroup,
+           estimate, population)) %>% 
+  pivot_wider(names_from = "indicator_name", values_from = "estimate")
+slice(wide_data)
+
+# BCG coverage indicator
+bcg <- wide_data %>% 
+  filter(indicator_abbr == "bcg") %>% 
+  select(c(1,2,3,4,5,6,7))
+summary(bcg)
+```
+
+Due to the `pivot_wider()` function, there was several missing observations for countries and years that had data for only some subgroups (ex: data on males but no data on females). Most of these observations were dropped since no important information was lost by removing these "empty" observations. An example is shown below.
+```{r}
+# BCG missing population & bcg data 
+# due to missing info for dimension levels
+bcg <- bcg %>% 
+  drop_na()
+```
+
+ 
+
+The processed and cleaned data was then saved into the `processed_data` folder under `processeddata.rda` to be used during the exploratory analysis phase. 
+
+
 
 ## Statistical analysis
 
-*Explain anything related to your statistical analyses.*
+TBA: statistical analysis description
 
 {{< pagebreak >}}
 
 # Results
 
 ## Exploratory/Descriptive analysis
+*(Part 2 of project: exploratory analysis)*
+Please see `exploratory_analysis.qmd` for full code describing data exploratory analysis. 
 
-*Use a combination of text/tables/figures to explore and describe your data. Show the most important descriptive results here. Additional ones should go in the supplement. Even more can be in the R and Quarto files that are part of your project.*
-
-@tbl-summarytable shows a summary of the data.
-
-Note the loading of the data providing a **relative** path using the `../../` notation. (Two dots means a folder up). You never want to specify an **absolute** path like `C:\ahandel\myproject\results\` because if you share this with someone, it won't work for them since they don't have that path. You can also use the `here` R package to create paths. See examples of that below.
+The `processedcode` was loaded into the `exploratory_analysis.qmd` file which pulls coding from the `exploratoryanalysis.r` script. 
 
 ```{r}
-#| label: tbl-summarytable
-#| tbl-cap: "Data summary table."
-#| echo: FALSE
-resulttable=readRDS("../../results/summarytable.rds")
-knitr::kable(resulttable)
+#Path to data.
+data_location <- here::here("data","processed_data","processeddata.rda")
+#load data
+load(data_location)
 ```
+
+For each indicator, I produced a summary table using `skim()` to determine the number of dimensions and subgroups as well as the summary statistics to see any overall trends in the data. The summary tables are stored in the `results` folder. An example of the code is shown below.
+
+```{r}
+#incidence summary and save to file location
+summary_inc <- skimr::skim(incidence)
+print(summary_inc)
+incsummarytable_file <- here("results", "summary tables", "incsummarytable.rds")
+saveRDS(summary_inc, file = incsummarytable_file)
+
+#mortality summary and save to file location
+summary_mort <- skimr::skim(mortality)
+print(summary_mort)
+mortsummarytable_file <- here("results", "summary tables", "mortsummarytable.rds")
+saveRDS(summary_mort, file = mortsummarytable_file)
+```
+The population for most variables were relatively low and skewed to the right. The TB incidence and mortality indicators also showed a skewed distribution. The highest incidence rate was 908 cases/100,000 and highest mortality rate was 140 deaths/100,000. 
+
+After getting an overview of the indicators, I wanted to explore the differences between subgroups and start identifying the largest disparities. Using `ggplot()`, I created plots of the indicators separated by dimension and subgroup. For most variables, these disparities were described using the `boxplot()` function as shown below.
+
+```{r}
+p13 <- tb_cough_f %>% ggplot(aes(x=dimension,
+                                 y = `People who report TB is spread through coughing - Female (%)`,
+                                 fill = subgroup)) +
+  geom_boxplot()+
+  theme(axis.text.x = element_text(angle = 90))   
+plot(p13) # plots knowledge about TB by dimension and subgroup for females
+```
+
+The main outcomes of interest for TB incidence, mortality, and prevalence were plotted using the `geom_point()` function as shown below.
+```{r}
+p6 <- mortality %>% ggplot(aes(x=fct_reorder(
+  setting, `TB mortality (deaths per 100 000 population)`),
+  y = `TB mortality (deaths per 100 000 population)`,
+  color = subgroup)) +
+    geom_point()+
+  theme(axis.text.x = element_text(angle = 90))+
+  scale_fill_brewer(palette = "Spectral")+
+  xlab("setting")
+plot(p6) #plots mortality by country from lowest mortality to highest, colored by subgroup
+```
+
+Most indicators showed the greatest disparities due to economic status and education level. Further exploratory analysis should look into level of TB burden as a possible variable that should be considered, and statistical analysis in the next step should attempt to quantify the disparities between subgroups and the impact on TB outcomes.
+
 
 ## Basic statistical analysis
+TBA: simple statistical models for associations in data
 
-*To get some further insight into your data, if reasonable you could compute simple statistics (e.g. simple models with 1 predictor) to look for associations between your outcome(s) and each individual predictor variable. Though note that unless you pre-specified the outcome and main exposure, any "p\<0.05 means statistical significance" interpretation is not valid.*
-
-@fig-result shows a scatterplot figure produced by one of the R scripts.
-
-```{r}
-#| label: fig-result
-#| fig-cap: "Height and weight stratified by gender."
-#| echo: FALSE
-knitr::include_graphics(here("results","height_weight_stratified.png"))
-```
 
 ## Full analysis
+TBA: final analysis with statistic/ML methods, meaningful figures/tables, load saved products here
 
-*Use one or several suitable statistical/machine learning methods to analyze your data and to produce meaningful figures, tables, etc. This might again be code that is best placed in one or several separate R scripts that need to be well documented. You want the code to produce figures and data ready for display as tables, and save those. Then you load them here.*
-
-Example @tbl-resulttable2 shows a summary of a linear model fit.
-
-```{r}
-#| label: tbl-resulttable2
-#| tbl-cap: "Linear model fit table."
-#| echo: FALSE
-resulttable2 = readRDS(here("results","resulttable2.rds"))
-knitr::kable(resulttable2)
-```
 
 {{< pagebreak >}}
 
 # Discussion
 
 ## Summary and Interpretation
+TBA: summary of findings and why it matters
 
-*Summarize what you did, what you found and what it means.*
 
 ## Strengths and Limitations
+TBA: strengths and limitations of analysis
 
-*Discuss what you perceive as strengths and limitations of your analysis.*
 
 ## Conclusions
+TBA: take away messages, citations from bibtex
 
-*What are the main take-home messages?*
-
-*Include citations in your Rmd file using bibtex, the list of references will automatically be placed at the end*
-
-This paper [@leek2015] discusses types of analyses.
-
-These papers [@mckay2020; @mckay2020a] are good examples of papers published using a fully reproducible setup similar to the one shown in this template.
-
-Note that this cited reference will show up at the end of the document, the reference formatting is determined by the CSL file specified in the YAML header. Many more style files for almost any journal [are available](https://www.zotero.org/styles). You also specify the location of your bibtex reference file in the YAML. You can call your reference file anything you like, I just used the generic word `references.bib` but giving it a more descriptive name is probably better.
 
 {{< pagebreak >}}
 

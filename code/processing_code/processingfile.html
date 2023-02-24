@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.313">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sara Benist">
+<meta name="dcterms.date" content="2023-02-24">
+
+<title>Data Exploring, Cleaning, and Wrangling</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="processingfile_files/libs/clipboard/clipboard.min.js"></script>
+<script src="processingfile_files/libs/quarto-html/quarto.js"></script>
+<script src="processingfile_files/libs/quarto-html/popper.min.js"></script>
+<script src="processingfile_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="processingfile_files/libs/quarto-html/anchor.min.js"></script>
+<link href="processingfile_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="processingfile_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="processingfile_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="processingfile_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="processingfile_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data Exploring, Cleaning, and Wrangling</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Sara Benist </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 24, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="processing-script-with-code-pulled-in" class="level1">
+<h1>Processing script with code pulled in</h1>
+<p>This is Quarto file processes code chunks located in the <code>processingcode.r</code> script.</p>
+</section>
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<p>The script below indicates which R file the Quarto should pull from.</p>
+<p>Load needed packages for data cleaning.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load needed packages. make sure they are installed.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl) <span class="co">#for loading Excel files</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co">#for data processing/cleaning</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr) <span class="co">#for data processing/cleaning</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr) <span class="co">#for nice visualization of data </span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here) <span class="co">#to set paths</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar) <span class="co">#to look for missing data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-loading" class="level1">
+<h1>Data loading</h1>
+<p>Load data into <code>raw_data</code> folder and assign to <code>rawdata</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#path to data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_location <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>,<span class="st">"raw_data"</span>,<span class="st">"202206-repository-tb.xlsx"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#load data and assign to rawdata</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>rawdata <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(data_location)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="explore-data" class="level1">
+<h1>Explore data</h1>
+<p>Let’s look at the data using <code>glimpse()</code> and <code>skim()</code> which both present an overview of the data. Running <code>gg_miss_var()</code> will check for missing data by each variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#take a look at the data</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(rawdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 7,473
+Columns: 21
+$ setting              &lt;chr&gt; "Afghanistan", "Afghanistan", "Afghanistan", "Afg…
+$ year                 &lt;dbl&gt; 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2…
+$ source               &lt;chr&gt; "MICS", "MICS", "MICS", "MICS", "MICS", "MICS", "…
+$ indicator_abbr       &lt;chr&gt; "bcg", "bcg", "bcg", "bcg", "bcg", "bcg", "bcg", …
+$ indicator_name       &lt;chr&gt; "BCG immunization coverage among one-year-olds (%…
+$ dimension            &lt;chr&gt; "Economic status (wealth quintile)", "Economic st…
+$ subgroup             &lt;chr&gt; "Quintile 1 (poorest)", "Quintile 2", "Quintile 3…
+$ estimate             &lt;dbl&gt; 53.76060, 61.90263, 58.12188, 65.14779, 77.85419,…
+$ se                   &lt;dbl&gt; 4.204196, 3.117296, 3.371752, 3.772776, 2.239340,…
+$ ci_lb                &lt;dbl&gt; 45.46945, 55.61623, 51.38703, 57.41825, 73.14312,…
+$ ci_ub                &lt;dbl&gt; 61.84886, 67.81393, 64.56706, 72.15468, 81.94288,…
+$ population           &lt;dbl&gt; 532.1957, 549.4944, 495.0633, 472.5659, 447.2211,…
+$ flag                 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ setting_average      &lt;dbl&gt; 62.88902, 62.88902, 62.88902, 62.88902, 62.88902,…
+$ iso3                 &lt;chr&gt; "AFG", "AFG", "AFG", "AFG", "AFG", "AFG", "AFG", …
+$ favourable_indicator &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ indicator_scale      &lt;dbl&gt; 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,…
+$ ordered_dimension    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1…
+$ subgroup_order       &lt;dbl&gt; 1, 2, 3, 4, 5, 1, 2, 3, 0, 0, 0, 0, 1, 2, 3, 4, 5…
+$ reference_subgroup   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0…
+$ topic                &lt;chr&gt; "TB", "TB", "TB", "TB", "TB", "TB", "TB", "TB", "…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#another view of the data</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>skimr<span class="sc">::</span><span class="fu">skim</span>(rawdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">rawdata</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">7473</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">21</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">setting</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">194</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">source</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">61</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">indicator_abbr</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">indicator_name</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dimension</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">subgroup</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">flag</td>
+<td style="text-align: right;">7113</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">iso3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">194</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">topic</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 4%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 11%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">year</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">2010.88</td>
+<td style="text-align: right;">7.40</td>
+<td style="text-align: right;">1991</td>
+<td style="text-align: right;">2006.00</td>
+<td style="text-align: right;">2012.00</td>
+<td style="text-align: right;">2017.00</td>
+<td style="text-align: right;">2020.00</td>
+<td style="text-align: left;">▁▂▅▆▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">estimate</td>
+<td style="text-align: right;">132</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">74.18</td>
+<td style="text-align: right;">56.58</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">48.01</td>
+<td style="text-align: right;">84.09</td>
+<td style="text-align: right;">95.34</td>
+<td style="text-align: right;">1014.00</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">se</td>
+<td style="text-align: right;">1705</td>
+<td style="text-align: right;">0.77</td>
+<td style="text-align: right;">1.71</td>
+<td style="text-align: right;">1.21</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.92</td>
+<td style="text-align: right;">1.46</td>
+<td style="text-align: right;">2.20</td>
+<td style="text-align: right;">14.07</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ci_lb</td>
+<td style="text-align: right;">824</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: right;">66.89</td>
+<td style="text-align: right;">40.77</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">43.26</td>
+<td style="text-align: right;">79.97</td>
+<td style="text-align: right;">91.51</td>
+<td style="text-align: right;">738.00</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ci_ub</td>
+<td style="text-align: right;">824</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: right;">90.07</td>
+<td style="text-align: right;">106.22</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">64.56</td>
+<td style="text-align: right;">91.78</td>
+<td style="text-align: right;">98.18</td>
+<td style="text-align: right;">2176.07</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">population</td>
+<td style="text-align: right;">287</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: right;">2164009.02</td>
+<td style="text-align: right;">25032321.78</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">300.80</td>
+<td style="text-align: right;">752.27</td>
+<td style="text-align: right;">3212.95</td>
+<td style="text-align: right;">738247340.00</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">setting_average</td>
+<td style="text-align: right;">294</td>
+<td style="text-align: right;">0.96</td>
+<td style="text-align: right;">76.35</td>
+<td style="text-align: right;">53.65</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">56.01</td>
+<td style="text-align: right;">84.75</td>
+<td style="text-align: right;">94.98</td>
+<td style="text-align: right;">831.00</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">favourable_indicator</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.76</td>
+<td style="text-align: right;">0.43</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: left;">▂▁▁▁▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">indicator_scale</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">10525.91</td>
+<td style="text-align: right;">30467.66</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">100000.00</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ordered_dimension</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: left;">▆▁▁▁▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">subgroup_order</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1.42</td>
+<td style="text-align: right;">1.60</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">5.00</td>
+<td style="text-align: left;">▇▂▂▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">reference_subgroup</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.22</td>
+<td style="text-align: right;">0.41</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: left;">▇▁▁▁▂</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check for missing data by each column</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gg_miss_var</span>(rawdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: The `guide` argument in `scale_*()` cannot be `FALSE`. This was deprecated in
+ggplot2 3.3.4.
+ℹ Please use "none" instead.
+ℹ The deprecated feature was likely used in the naniar package.
+  Please report the issue at &lt;https://github.com/njtierney/naniar/issues&gt;.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="processingfile_files/figure-html/exploredata1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The data has the countries listed under setting, year of the data, the indicator that is being studied, and the dimension and subgroup for each observation. The estimate column holds the actual percentage or number of interest. Other variables on the data set contain formatting information.</p>
+<p>The <code>skim()</code> function provides more information of the missing data and the numeric summaries (mean, median, percentiles, etc). The <code>gg_miss_var()</code> helps visually display the missing data.</p>
+<p>I would also like a list of the indicator names and a count of how many countries are in the data set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#look at what indicators are in the dataset</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(rawdata<span class="sc">$</span>indicator_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "BCG immunization coverage among one-year-olds (%)"                  
+ [2] "People who report TB is spread through coughing (%)"                
+ [3] "People who report TB is spread through coughing - Female (%)"       
+ [4] "People who report TB is spread through coughing - Male (%)"         
+ [5] "Case detection rate (%)"                                            
+ [6] "TB incidence (new infections per 100 000 population)"               
+ [7] "TB mortality (deaths per 100 000 population)"                       
+ [8] "People with MDR/RR-TB (%)"                                          
+ [9] "People who would want a family member's TB kept secret (%)"         
+[10] "People who would want a family member's TB kept secret - Male (%)"  
+[11] "TB prevalence (cases per 100 000 population)"                       
+[12] "Prevalence to notification ratio (years)"                           
+[13] "Families affected by TB facing catastrophic costs due to TB (%)"    
+[14] "People who would want a family member's TB kept secret - Female (%)"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#count of the number of countries</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(rawdata<span class="sc">$</span>setting))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 194</code></pre>
+</div>
+</div>
+<p>There are 14 indicators and 194 countries.</p>
+</section>
+<section id="cleaning" class="level1">
+<h1>Cleaning</h1>
+<p>Now the data cleaning can get started. This phase will coincide with data exploration, so more cleaning will most likely occur in the <code>exploratory_analysis.qmd</code>.</p>
+<p>To start, I want the indicators to move to columns using <code>pivot_wider()</code> function so each indicator has a column. I will also subset the columns I would like to keep moving into the exploratory phase. The wide version of the data will be assigned to <code>wide_data</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pivot data wider so each indicator has a column</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>wide_data <span class="ot">&lt;-</span> rawdata <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(setting, year, indicator_name,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>           indicator_abbr, dimension, subgroup,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>           estimate, population)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"indicator_name"</span>, <span class="at">values_from =</span> <span class="st">"estimate"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">slice</span>(wide_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7,473 × 20
+   setting  year indic…¹ dimen…² subgr…³ popul…⁴ BCG i…⁵ Peopl…⁶ Peopl…⁷ Peopl…⁸
+   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1 Afghan…  2010 bcg     Econom… Quinti…    532.    53.8      NA      NA      NA
+ 2 Afghan…  2010 bcg     Econom… Quinti…    549.    61.9      NA      NA      NA
+ 3 Afghan…  2010 bcg     Econom… Quinti…    495.    58.1      NA      NA      NA
+ 4 Afghan…  2010 bcg     Econom… Quinti…    473.    65.1      NA      NA      NA
+ 5 Afghan…  2010 bcg     Econom… Quinti…    447.    77.9      NA      NA      NA
+ 6 Afghan…  2010 bcg     Educat… No edu…   2267.    61.1      NA      NA      NA
+ 7 Afghan…  2010 bcg     Educat… Primar…    122.    76.3      NA      NA      NA
+ 8 Afghan…  2010 bcg     Educat… Second…    108.    85.9      NA      NA      NA
+ 9 Afghan…  2010 bcg     Place … Rural     2060.    59.8      NA      NA      NA
+10 Afghan…  2010 bcg     Place … Urban      436.    77.3      NA      NA      NA
+# … with 7,463 more rows, 10 more variables: `Case detection rate (%)` &lt;dbl&gt;,
+#   `TB incidence (new infections per 100 000 population)` &lt;dbl&gt;,
+#   `TB mortality (deaths per 100 000 population)` &lt;dbl&gt;,
+#   `People with MDR/RR-TB (%)` &lt;dbl&gt;,
+#   `People who would want a family member's TB kept secret (%)` &lt;dbl&gt;,
+#   `People who would want a family member's TB kept secret - Male (%)` &lt;dbl&gt;,
+#   `TB prevalence (cases per 100 000 population)` &lt;dbl&gt;, …</code></pre>
+</div>
+</div>
+<p>The <code>wide_data</code> had 7473 rows and 20 columns.</p>
+<section id="subset-by-indicator" class="level2">
+<h2 class="anchored" data-anchor-id="subset-by-indicator">Subset by indicator</h2>
+<p>Next, I would like to create new objects for each indicator so I can make graphs/figures later on. I will use the <code>filter()</code> and <code>select()</code> functions to subset each indicator and reassign to new objects.</p>
+<p>Here, the BCG coverage, drug resistance, and case detection rate indicators are created.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create new subsets by indicator since I want to compare </span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># each indicator to TB outcomes</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(wide_data<span class="sc">$</span>indicator_abbr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "bcg"              "tb_cough"         "tb_cough_f"       "tb_cough_m"      
+ [5] "cdr"              "incidence"        "mortality"        "drug_resistance" 
+ [9] "tb_att"           "tb_att_m"         "prevalence_place" "p:n"             
+[13] "catacost"         "tb_att_f"        </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># BCG coverage indicator</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>bcg <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"bcg"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>))</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(bcg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:4352        Min.   :1991   Length:4352        Length:4352       
+ Class :character   1st Qu.:2003   Class :character   Class :character  
+ Mode  :character   Median :2009   Mode  :character   Mode  :character  
+                    Mean   :2008                                        
+                    3rd Qu.:2014                                        
+                    Max.   :2019                                        
+                                                                        
+   subgroup           population      
+ Length:4352        Min.   :    18.9  
+ Class :character   1st Qu.:   210.3  
+ Mode  :character   Median :   377.8  
+                    Mean   :  1666.4  
+                    3rd Qu.:   719.8  
+                    Max.   :696209.9  
+                    NA's   :96        
+ BCG immunization coverage among one-year-olds (%)
+ Min.   :  5.57                                   
+ 1st Qu.: 85.97                                   
+ Median : 93.65                                   
+ Mean   : 88.73                                   
+ 3rd Qu.: 97.25                                   
+ Max.   :100.00                                   
+ NA's   :96                                       </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MDR-TB percentage indicator</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>drug_resistance <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"drug_resistance"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">14</span>)) </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(drug_resistance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:170         Min.   :2019   Length:170         Length:170        
+ Class :character   1st Qu.:2019   Class :character   Class :character  
+ Mode  :character   Median :2019   Mode  :character   Mode  :character  
+                    Mean   :2019                                        
+                    3rd Qu.:2019                                        
+                    Max.   :2019                                        
+   subgroup           population      People with MDR/RR-TB (%)
+ Length:170         Min.   :   26.0   Min.   : 0.000           
+ Class :character   1st Qu.:  332.2   1st Qu.: 1.485           
+ Mode  :character   Median :  647.0   Median : 2.735           
+                    Mean   : 1706.7   Mean   : 6.828           
+                    3rd Qu.: 1275.5   3rd Qu.: 6.363           
+                    Max.   :21070.0   Max.   :58.790           </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># case detection rate indicator</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>cdr <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"cdr"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">11</span>))</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cdr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:464         Min.   :2020   Length:464         Length:464        
+ Class :character   1st Qu.:2020   Class :character   Class :character  
+ Mode  :character   Median :2020   Mode  :character   Mode  :character  
+                    Mean   :2020                                        
+                    3rd Qu.:2020                                        
+                    Max.   :2020                                        
+                                                                        
+   subgroup           population      Case detection rate (%)
+ Length:464         Min.   :     18   Min.   : 2.889         
+ Class :character   1st Qu.:   2330   1st Qu.:43.833         
+ Mode  :character   Median :   8000   Median :58.326         
+                    Mean   :  64129   Mean   :56.707         
+                    3rd Qu.:  27000   3rd Qu.:69.467         
+                    Max.   :4565000   Max.   :94.393         
+                    NA's   :7         NA's   :7              </code></pre>
+</div>
+</div>
+<p>Here, the percentage reporting TB is spread through cough, overall and by sex, indicators are created.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># TB spread by cough</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>tb_cough <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"tb_cough"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">8</span>))</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tb_cough)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:70          Min.   :2004   Length:70          Length:70         
+ Class :character   1st Qu.:2007   Class :character   Class :character  
+ Mode  :character   Median :2012   Mode  :character   Mode  :character  
+                    Mean   :2011                                        
+                    3rd Qu.:2014                                        
+                    Max.   :2019                                        
+                                                                        
+   subgroup           population    
+ Length:70          Min.   :  1247  
+ Class :character   1st Qu.:  4373  
+ Mode  :character   Median :  7729  
+                    Mean   : 23727  
+                    3rd Qu.: 13514  
+                    Max.   :618274  
+                    NA's   :9       
+ People who report TB is spread through coughing (%)
+ Min.   :24.47                                      
+ 1st Qu.:57.62                                      
+ Median :69.15                                      
+ Mean   :66.67                                      
+ 3rd Qu.:77.49                                      
+ Max.   :88.20                                      
+ NA's   :9                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># TB spread by cough - female</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>tb_cough_f <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"tb_cough_f"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">9</span>))</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tb_cough_f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:429         Min.   :2004   Length:429         Length:429        
+ Class :character   1st Qu.:2007   Class :character   Class :character  
+ Mode  :character   Median :2012   Mode  :character   Mode  :character  
+                    Mean   :2011                                        
+                    3rd Qu.:2014                                        
+                    Max.   :2019                                        
+                                                                        
+   subgroup           population    
+ Length:429         Min.   :    62  
+ Class :character   1st Qu.:  1732  
+ Mode  :character   Median :  3232  
+                    Mean   : 10661  
+                    3rd Qu.:  5747  
+                    Max.   :429594  
+                    NA's   :2       
+ People who report TB is spread through coughing - Female (%)
+ Min.   :21.30                                               
+ 1st Qu.:51.28                                               
+ Median :64.23                                               
+ Mean   :62.26                                               
+ 3rd Qu.:75.23                                               
+ Max.   :92.76                                               
+ NA's   :2                                                   </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># TB spread by cough - male</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>tb_cough_m <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"tb_cough_m"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">10</span>))</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tb_cough_m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:364         Min.   :2004   Length:364         Length:364        
+ Class :character   1st Qu.:2008   Class :character   Class :character  
+ Mode  :character   Median :2012   Mode  :character   Mode  :character  
+                    Mean   :2011                                        
+                    3rd Qu.:2014                                        
+                    Max.   :2019                                        
+                                                                        
+   subgroup           population     
+ Length:364         Min.   :   25.0  
+ Class :character   1st Qu.:  730.5  
+ Mode  :character   Median : 1302.0  
+                    Mean   : 3385.1  
+                    3rd Qu.: 2462.0  
+                    Max.   :74557.0  
+                    NA's   :5        
+ People who report TB is spread through coughing - Male (%)
+ Min.   :21.88                                             
+ 1st Qu.:60.55                                             
+ Median :71.70                                             
+ Mean   :68.83                                             
+ 3rd Qu.:79.92                                             
+ Max.   :94.93                                             
+ NA's   :5                                                 </code></pre>
+</div>
+</div>
+<p>Here, the TB incidence and TB mortality indicators are created.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># TB incidence</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>incidence <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"incidence"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">12</span>))</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(incidence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:388         Min.   :2020   Length:388         Length:388        
+ Class :character   1st Qu.:2020   Class :character   Class :character  
+ Mode  :character   Median :2020   Mode  :character   Mode  :character  
+                    Mean   :2020                                        
+                    3rd Qu.:2020                                        
+                    Max.   :2020                                        
+   subgroup           population       
+ Length:388         Min.   :      798  
+ Class :character   1st Qu.:  1013975  
+ Mode  :character   Median :  4369962  
+                    Mean   : 19974255  
+                    3rd Qu.: 14508898  
+                    Max.   :738247340  
+ TB incidence (new infections per 100 000 population)
+ Min.   :  0.00                                      
+ 1st Qu.:  9.28                                      
+ Median : 40.87                                      
+ Mean   :106.58                                      
+ 3rd Qu.:145.89                                      
+ Max.   :908.27                                      </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># TB mortality</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>mortality <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"mortality"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">13</span>))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mortality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:388         Min.   :2020   Length:388         Length:388        
+ Class :character   1st Qu.:2020   Class :character   Class :character  
+ Mode  :character   Median :2020   Mode  :character   Mode  :character  
+                    Mean   :2020                                        
+                    3rd Qu.:2020                                        
+                    Max.   :2020                                        
+   subgroup           population       
+ Length:388         Min.   :      798  
+ Class :character   1st Qu.:  1013975  
+ Mode  :character   Median :  4369962  
+                    Mean   : 19974255  
+                    3rd Qu.: 14508898  
+                    Max.   :738247340  
+ TB mortality (deaths per 100 000 population)
+ Min.   :  0.0000                            
+ 1st Qu.:  0.6297                            
+ Median :  3.3873                            
+ Mean   : 13.1913                            
+ 3rd Qu.: 16.9453                            
+ Max.   :139.5889                            </code></pre>
+</div>
+</div>
+<p>Here, the percentage wanting to keep TB infection a secret, overall and by sex, indicators are created.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Desire to keep TB of family member a secret</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>tb_att <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"tb_att"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">15</span>)) </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tb_att)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:54          Min.   :2004   Length:54          Length:54         
+ Class :character   1st Qu.:2007   Class :character   Class :character  
+ Mode  :character   Median :2012   Mode  :character   Mode  :character  
+                    Mean   :2011                                        
+                    3rd Qu.:2014                                        
+                    Max.   :2019                                        
+                                                                        
+   subgroup           population    
+ Length:54          Min.   :  1249  
+ Class :character   1st Qu.:  4894  
+ Mode  :character   Median :  7634  
+                    Mean   : 27770  
+                    3rd Qu.: 16268  
+                    Max.   :618274  
+                    NA's   :6       
+ People who would want a family member's TB kept secret (%)
+ Min.   : 2.071                                            
+ 1st Qu.:15.572                                            
+ Median :21.462                                            
+ Mean   :23.281                                            
+ 3rd Qu.:30.277                                            
+ Max.   :50.707                                            
+ NA's   :6                                                 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Male desire to keep TB of family member a secret</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>tb_att_m <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"tb_att_m"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">16</span>)) </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tb_att_m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:299         Min.   :2005   Length:299         Length:299        
+ Class :character   1st Qu.:2007   Class :character   Class :character  
+ Mode  :character   Median :2012   Mode  :character   Mode  :character  
+                    Mean   :2011                                        
+                    3rd Qu.:2014                                        
+                    Max.   :2019                                        
+                                                                        
+   subgroup           population     
+ Length:299         Min.   :  196.0  
+ Class :character   1st Qu.:  774.2  
+ Mode  :character   Median : 1445.5  
+                    Mean   : 4037.0  
+                    3rd Qu.: 2932.8  
+                    Max.   :74557.0  
+                    NA's   :5        
+ People who would want a family member's TB kept secret - Male (%)
+ Min.   : 1.357                                                   
+ 1st Qu.:13.703                                                   
+ Median :20.027                                                   
+ Mean   :19.859                                                   
+ 3rd Qu.:26.728                                                   
+ Max.   :42.369                                                   
+ NA's   :5                                                        </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Female desire to keep TB of family member a secret</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>tb_att_f <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"tb_att_f"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">20</span>))</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tb_att_f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:325         Min.   :2004   Length:325         Length:325        
+ Class :character   1st Qu.:2007   Class :character   Class :character  
+ Mode  :character   Median :2012   Mode  :character   Mode  :character  
+                    Mean   :2011                                        
+                    3rd Qu.:2013                                        
+                    Max.   :2019                                        
+                                                                        
+   subgroup           population    
+ Length:325         Min.   :    61  
+ Class :character   1st Qu.:  1750  
+ Mode  :character   Median :  3408  
+                    Mean   : 12756  
+                    3rd Qu.:  6064  
+                    Max.   :429594  
+                    NA's   :2       
+ People who would want a family member's TB kept secret - Female (%)
+ Min.   : 5.421                                                     
+ 1st Qu.:17.198                                                     
+ Median :24.131                                                     
+ Mean   :26.821                                                     
+ 3rd Qu.:34.621                                                     
+ Max.   :54.001                                                     
+ NA's   :2                                                          </code></pre>
+</div>
+</div>
+<p>Here, the TB prevalence and prevalance to notification ratio indicators are created.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># TB prevalence</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>prevalence_place <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"prevalence_place"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">17</span>))</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(prevalence_place)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:40          Min.   :2011   Length:40          Length:40         
+ Class :character   1st Qu.:2012   Class :character   Class :character  
+ Mode  :character   Median :2013   Mode  :character   Mode  :character  
+                    Mean   :2013                                        
+                    3rd Qu.:2015                                        
+                    Max.   :2018                                        
+                                                                        
+   subgroup           population  TB prevalence (cases per 100 000 population)
+ Length:40          Min.   : NA   Min.   : 109.0                              
+ Class :character   1st Qu.: NA   1st Qu.: 291.2                              
+ Mode  :character   Median : NA   Median : 401.0                              
+                    Mean   :NaN   Mean   : 458.2                              
+                    3rd Qu.: NA   3rd Qu.: 587.8                              
+                    Max.   : NA   Max.   :1014.0                              
+                    NA's   :40                                                </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prevalence to notification ratio</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>pn <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"p:n"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">18</span>))</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:62          Min.   :2007   Length:62          Length:62         
+ Class :character   1st Qu.:2012   Class :character   Class :character  
+ Mode  :character   Median :2014   Mode  :character   Mode  :character  
+                    Mean   :2014                                        
+                    3rd Qu.:2017                                        
+                    Max.   :2019                                        
+                                                                        
+   subgroup           population  Prevalence to notification ratio (years)
+ Length:62          Min.   : NA   Min.   :0.4703                          
+ Class :character   1st Qu.: NA   1st Qu.:1.3621                          
+ Mode  :character   Median : NA   Median :1.9714                          
+                    Mean   :NaN   Mean   :2.0796                          
+                    3rd Qu.: NA   3rd Qu.:2.7031                          
+                    Max.   : NA   Max.   :4.1371                          
+                    NA's   :62                                            </code></pre>
+</div>
+</div>
+<p>Finally, the percentage of afftected people suffering catastrophic costs due to TB indicator is created.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Percentage suffering catastrophic costs due to TB</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>catacost <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(indicator_abbr <span class="sc">==</span> <span class="st">"catacost"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">19</span>))</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(catacost)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   setting               year      indicator_abbr      dimension        
+ Length:68          Min.   :2015   Length:68          Length:68         
+ Class :character   1st Qu.:2017   Class :character   Class :character  
+ Mode  :character   Median :2017   Mode  :character   Mode  :character  
+                    Mean   :2018                                        
+                    3rd Qu.:2019                                        
+                    Max.   :2020                                        
+                                                                        
+   subgroup           population   
+ Length:68          Min.   : 91.0  
+ Class :character   1st Qu.:172.0  
+ Mode  :character   Median :215.0  
+                    Mean   :204.7  
+                    3rd Qu.:229.0  
+                    Max.   :288.0  
+                    NA's   :53     
+ Families affected by TB facing catastrophic costs due to TB (%)
+ Min.   :  4.00                                                 
+ 1st Qu.: 42.75                                                 
+ Median : 58.30                                                 
+ Mean   : 58.06                                                 
+ 3rd Qu.: 79.55                                                 
+ Max.   :100.00                                                 
+                                                                </code></pre>
+</div>
+</div>
+<p>All of these indicator subsets can now be individually graphed and the trends can be compared. Most of the data seems to be from 2004-2020, and the estimates are within the bounds of the indicator (such as all the percentages are between 0 and 100).</p>
+</section>
+<section id="missing-data" class="level2">
+<h2 class="anchored" data-anchor-id="missing-data">Missing data</h2>
+<p>While examining the code using the summary tables, a few of the indicators have missing data.</p>
+<p>Looking over the data more closely, the missing data (marked as <code>NA</code>) is due to a country and year having data for only one subgroup in the dimension. We can drop these observations without losing important data analysis opportunities.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># address missing data</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co"># BCG missing population &amp; bcg data </span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># due to missing info for dimension levels</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>bcg <span class="ot">&lt;-</span> bcg <span class="sc">%&gt;%</span> </span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co"># cdr missing data for cdr &amp; pop nas</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="co"># due to missing age group levels</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>cdr <span class="ot">&lt;-</span> cdr <span class="sc">%&gt;%</span> </span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="co"># tb_cough missing data for pop &amp; cough % </span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="co"># due to missing sex levels</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>tb_cough <span class="ot">&lt;-</span> tb_cough <span class="sc">%&gt;%</span> </span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="co"># tb_cough f missing data for pop &amp; cough % </span></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a><span class="co"># due to missing education levels</span></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>tb_cough_f <span class="ot">&lt;-</span> tb_cough_f <span class="sc">%&gt;%</span> </span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a><span class="co"># tb_cough m missing data for pop &amp; cough % </span></span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a><span class="co"># due to missing education levels</span></span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>tb_cough_m <span class="ot">&lt;-</span> tb_cough_m <span class="sc">%&gt;%</span> </span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a><span class="co"># tb_att missing data for pop &amp; attitude % </span></span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a><span class="co"># due to missing sex levels</span></span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>tb_att <span class="ot">&lt;-</span> tb_att <span class="sc">%&gt;%</span> </span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a><span class="co"># tb_att m missing data for pop &amp; attitude % </span></span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a><span class="co"># due to missing education levels</span></span>
+<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a>tb_att_m <span class="ot">&lt;-</span> tb_att_m <span class="sc">%&gt;%</span> </span>
+<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a><span class="co"># tb_att f missing data for pop &amp; attitude % </span></span>
+<span id="cb44-31"><a href="#cb44-31" aria-hidden="true" tabindex="-1"></a><span class="co"># due to missing education levels</span></span>
+<span id="cb44-32"><a href="#cb44-32" aria-hidden="true" tabindex="-1"></a>tb_att_f <span class="ot">&lt;-</span> tb_att_f <span class="sc">%&gt;%</span> </span>
+<span id="cb44-33"><a href="#cb44-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I would also like to mention the odd population minimums for BCG coverage, drug resistance, and case detection rate which are 18.9, 26, and 18 respectively. These seem like odd population counts when the maximum is in the 600,000s. I believe these numbers are due to the subsetting of the indicators by dimension subgroups, so I will not be changing these numbers.</p>
+<p>The prevalence indicator and prevalence to notification indicator both have no population data associated with the variable. I will drop the population column for both. Catastrophic cost also is missing a lot of data for the population column, but since there is some data available for a few observations, I will leave the indicator as is.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prevalence no pop data</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>prevalence_place <span class="ot">&lt;-</span> prevalence_place <span class="sc">%&gt;%</span> </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>population)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pn no pop data</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>pn <span class="ot">&lt;-</span> pn <span class="sc">%&gt;%</span> </span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>population)</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co"># catacost missing pop data but</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co"># will not drop because not completely missing</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="save-data" class="level1">
+<h1>Save data</h1>
+<p>The data is (mostly) finished cleaning and can be saved. Since I have separated the indicators, we will save each object into the <code>processed_data</code> file under <code>processeddata.rda</code></p>
+<p>The data is saved as an rda file rather than an RDS file in order to save each item individually. This file can be loaded into the <code>exploratory_analysis.qmd</code> for the next step.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all done, data is clean now. </span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's assign at the end to some final variable</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="co"># makes it easier to add steps above</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="co"># location to save file</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>save_data_location <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>,<span class="st">"processed_data"</span>,<span class="st">"processeddata.rda"</span>)</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(bcg, catacost, cdr,</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>        drug_resistance, incidence,</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>        mortality, pn, prevalence_place,</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>        tb_att, tb_att_f, tb_att_m,</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>        tb_cough, tb_cough_f, tb_cough_m, wide_data, <span class="at">file =</span> save_data_location)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
