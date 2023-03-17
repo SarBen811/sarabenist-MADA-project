@@ -44,154 +44,126 @@ length(unique(rawdata$setting))
 
 ## ---- cleandata1 --------
 # Pivot data wider so each indicator has a column
-wide_data <- rawdata %>% 
+ wide_data <- rawdata %>% 
   select(c(setting, year, indicator_name,
            indicator_abbr, dimension, subgroup,
            estimate, population)) %>% 
   pivot_wider(names_from = "indicator_name", values_from = "estimate")
 slice(wide_data)
 
+#subset high burden countries
+highburden <- wide_data %>% 
+  filter(setting %in% c("Brazil", "Central African Republic", "Congo",
+           "Ethiopia", "Gabon", "Kenya",
+           "Lesotho", "Liberia", "Namibia",
+           "Thailand", "Uganda", "United Republic of Tanzania",
+           "Botswana", "Cameroon", "Eswatini",
+           "Guinea", "Guinea-Bissau", "Malawi",
+           "Russian Federation", "Zimbabwe", "China",
+           "Democratic Republic of the Congo", "India",
+           "Indonesia", "Mozambique", "Myanmar",
+           "Nigeria", "Philippines", "South Africa",
+           "Zambia", "Sierra Leone", "Angola",
+           "Bangladesh", "Democratic People's Republic of Korea",
+           "Mongolia", "Pakistan", "Papua New Guinea",
+           "Viet Nam", "Azerbaijan", "Belarus", "Kazakhstan",
+           "Kyrgyzstan", "Nepal", "Peru", "Republic of Moldova",
+           "Somalia", "Tajikistan", "Ukraine",
+           "Uzbekistan", "Zimbabwe")) 
+unique(highburden$setting)
 
 ## ---- cleandata2 --------
-# create new subsets by indicator since I want to compare 
-# each indicator to TB outcomes
+# look at each indicator to check for cleaning requirements
 unique(wide_data$indicator_abbr)
 
 # BCG coverage indicator
-bcg <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "bcg") %>% 
-  select(c(1,2,3,4,5,6,7))
-summary(bcg)
+  select(c(1,2,3,4,5,6,7)) %>% 
+  summary()
 
 # MDR-TB percentage indicator
-drug_resistance <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "drug_resistance") %>% 
-  select(c(1,2,3,4,5,6,14)) 
-summary(drug_resistance)
+  select(c(1,2,3,4,5,6,14)) %>% 
+  summary()
 
 # case detection rate indicator
-cdr <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "cdr") %>% 
-  select(c(1,2,3,4,5,6,11))
-summary(cdr)
+  select(c(1,2,3,4,5,6,11)) %>% 
+  summary()
 
 ## ---- cleandata3 --------
 # TB spread by cough
-tb_cough <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "tb_cough") %>% 
-  select(c(1,2,3,4,5,6,8))
-summary(tb_cough)
+  select(c(1,2,3,4,5,6,8)) %>% 
+  summary()
 
 # TB spread by cough - female
-tb_cough_f <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "tb_cough_f") %>% 
-  select(c(1,2,3,4,5,6,9))
-summary(tb_cough_f)
+  select(c(1,2,3,4,5,6,9)) %>% 
+  summary()
 
 # TB spread by cough - male
-tb_cough_m <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "tb_cough_m") %>% 
-  select(c(1,2,3,4,5,6,10))
-summary(tb_cough_m)
+  select(c(1,2,3,4,5,6,10)) %>% 
+  summary()
 
 ## ---- cleandata4 --------
 # TB incidence
-incidence <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "incidence") %>% 
-  select(c(1,2,3,4,5,6,12))
-summary(incidence)
+  select(c(1,2,3,4,5,6,12)) %>% 
+  summary()
 
 # TB mortality
-mortality <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "mortality") %>% 
-  select(c(1,2,3,4,5,6,13))
-summary(mortality)
+  select(c(1,2,3,4,5,6,13)) %>% 
+  summary()
 
 ## ---- cleandata5 --------
 # Desire to keep TB of family member a secret
-tb_att <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "tb_att") %>% 
-  select(c(1,2,3,4,5,6,15)) 
-summary(tb_att)
+  select(c(1,2,3,4,5,6,15)) %>% 
+  summary()
 
 # Male desire to keep TB of family member a secret
-tb_att_m <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "tb_att_m") %>% 
-  select(c(1,2,3,4,5,6,16)) 
-summary(tb_att_m)
+  select(c(1,2,3,4,5,6,16)) %>% 
+  summary()
 
 # Female desire to keep TB of family member a secret
-tb_att_f <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "tb_att_f") %>% 
-  select(c(1,2,3,4,5,6,20))
-summary(tb_att_f)
+  select(c(1,2,3,4,5,6,20)) %>% 
+  summary()
 
 ## ---- cleandata6 --------
 # TB prevalence
-prevalence_place <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "prevalence_place") %>% 
-  select(c(1,2,3,4,5,6,17))
-summary(prevalence_place)
+  select(c(1,2,3,4,5,6,17)) %>% 
+  summary()
 
 # Prevalence to notification ratio
-pn <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "p:n") %>% 
-  select(c(1,2,3,4,5,6,18))
-summary(pn)
+  select(c(1,2,3,4,5,6,18)) %>% 
+  summary()
 
 ## ---- cleandata7 --------
 # Percentage suffering catastrophic costs due to TB
-catacost <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "catacost") %>% 
-  select(c(1,2,3,4,5,6,19))
-summary(catacost)
-
-
-## ---- cleandata8 --------
-# address missing data
-# BCG missing population & bcg data 
-# due to missing info for dimension levels
-bcg <- bcg %>% 
-  drop_na()
-# cdr missing data for cdr & pop nas
-# due to missing age group levels
-cdr <- cdr %>% 
-  drop_na()
-# tb_cough missing data for pop & cough % 
-# due to missing sex levels
-tb_cough <- tb_cough %>% 
-  drop_na()
-# tb_cough f missing data for pop & cough % 
-# due to missing education levels
-tb_cough_f <- tb_cough_f %>% 
-  drop_na()
-# tb_cough m missing data for pop & cough % 
-# due to missing education levels
-tb_cough_m <- tb_cough_m %>% 
-  drop_na()
-# tb_att missing data for pop & attitude % 
-# due to missing sex levels
-tb_att <- tb_att %>% 
-  drop_na()
-# tb_att m missing data for pop & attitude % 
-# due to missing education levels
-tb_att_m <- tb_att_m %>% 
-  drop_na()
-# tb_att f missing data for pop & attitude % 
-# due to missing education levels
-tb_att_f <- tb_att_f %>% 
-  drop_na()
-
-## ---- cleandata9 --------
-# prevalence no pop data
-prevalence_place <- prevalence_place %>% 
-  select(-population)
-# pn no pop data
-pn <- pn %>% 
-  select(-population)
-# catacost missing pop data but
-# will not drop because not completely missing
-
+  select(c(1,2,3,4,5,6,19)) %>% 
+  summary()
 
 ## ---- savedata --------
 # all done, data is clean now. 
@@ -200,11 +172,7 @@ pn <- pn %>%
 
 # location to save file
 save_data_location <- here::here("data","processed_data","processeddata.rda")
-save(bcg, catacost, cdr,
-        drug_resistance, incidence,
-        mortality, pn, prevalence_place,
-        tb_att, tb_att_f, tb_att_m,
-        tb_cough, tb_cough_f, tb_cough_m, wide_data, file = save_data_location)
+save(wide_data, highburden, file = save_data_location)
 
 
 

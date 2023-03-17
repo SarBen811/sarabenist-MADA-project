@@ -19,6 +19,7 @@ library(knitr)
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
+library(tidymodels)
 ```
 
 # Summary/Abstract
@@ -79,52 +80,68 @@ str(rawdata)
 ```
 Please see `processingfile.qmd` for full code describing data importing and cleaning.
 
-The `rawdata` file contains information on the country, year of data collection, the indicator they are studying, the social determinants of health they are considering, and the subgroup of each dimension. The dataset is mostly complete with only a few main variables missing data points
-```{r}
-#another view of the data
-skimr::skim(rawdata)
-```
-
-The indicators being studied are shown below. 
+The `rawdata` file contains information on the country, year of data collection, the indicator they are studying, the social determinants of health they are considering, and the subgroup of each dimension. The dataset is mostly complete with only a few main variables missing data points. The indicators being studied are shown below. 
 
 ```{r}
 #look at what indicators are in the dataset
 unique(rawdata$indicator_name)
 ```
 
-For the main part of the data cleaning, I used `pivot_wider()` to allow each indicator to have its own column, and assign each indicator into its own object using `filter()` and `select()` functions. These methods will allow for deeper exploration of each indicator in order to explore trends and patterns for each subgroup. An example of the subsetting is shown below. 
+For the main part of the data cleaning, I used `pivot_wider()` to allow each indicator to have its own column, and subset the high burden countries (as indicated by the WHO) into a new object called `highburden`. I also checked each indicator using `filter()`, `select()`, and `summary()` functions. These methods will allow for deeper exploration of each indicator in order to explore trends and patterns for each subgroup. An example of the data cleaning is shown below. 
 ```{r}
 wide_data <- rawdata %>% 
   select(c(setting, year, indicator_name,
            indicator_abbr, dimension, subgroup,
            estimate, population)) %>% 
   pivot_wider(names_from = "indicator_name", values_from = "estimate")
-slice(wide_data)
+head(wide_data)
 
 # BCG coverage indicator
-bcg <- wide_data %>% 
+wide_data %>% 
   filter(indicator_abbr == "bcg") %>% 
-  select(c(1,2,3,4,5,6,7))
-summary(bcg)
+  select(c(1,2,3,4,5,6,7)) %>% 
+  summary()
 ```
 
-Due to the `pivot_wider()` function, there was several missing observations for countries and years that had data for only some subgroups (ex: data on males but no data on females). Most of these observations were dropped since no important information was lost by removing these "empty" observations. An example is shown below.
+Due to the `pivot_wider()` function, there was several missing observations for countries and years that had data for only some subgroups (ex: data on males but no data on females). Since I will be maintaining all the indicators in their own data set, `drop_na()` would remove all data points. Instead, I will handle missing data points after exploring the data further. 
+
+The processed and cleaned data was then saved into the `processed_data` folder under `processeddata.rda` to be used during the exploratory analysis phase. I have loaded the processed data below.
 ```{r}
-# BCG missing population & bcg data 
-# due to missing info for dimension levels
-bcg <- bcg %>% 
-  drop_na()
+#path to data
+data_location <- here::here("data","processed_data","processeddata.rda")
+#load data. 
+load(data_location)
 ```
-
- 
-
-The processed and cleaned data was then saved into the `processed_data` folder under `processeddata.rda` to be used during the exploratory analysis phase. 
-
-
 
 ## Statistical analysis
+*(Part 3 of project: statistical analysis)*
+For the statistical analysis of the data, I created linear models for the main outcomes (TB incidence, TB mortality, and TB prevalence) based on the subgroups of the indicator. An example is shown below. This method was repeated for the `wide_data` and `highburden` countries. 
 
-TBA: statistical analysis description
+```{r}
+# fit linear model using TB incidence as outcome, subgroup as predictor
+lm_mod <- linear_reg() #set linear regression
+
+#fit model with high burden countries
+inclm_fit <- lm_mod %>% 
+  fit(`TB incidence (new infections per 100 000 population)` ~ subgroup,
+      data = highburden) #fit linear model
+incfittable <- tidy(inclm_fit) 
+print(incfittable) #produce tidy table of fitted model
+```
+
+Other indicators were also analyzed and fit to a linear model as shown below. 
+```{r}
+# fit linear model with BCG coverage as outcome, subgroups as predictors
+
+#fit model with high burden countries
+BCGlm_fit <- lm_mod %>% 
+  fit(`BCG immunization coverage among one-year-olds (%)` ~ subgroup,
+      data = highburden) #fit linear model
+BCGfittable <- tidy(BCGlm_fit) 
+print(BCGfittable) #produce tidy table of fitted model
+```
+
+In the next step of my project, I would like to manipulate the data set so I can use the social determinant indicators as predictors for the main outcomes. This will most likely be limited to the high burden countries. 
 
 {{< pagebreak >}}
 
@@ -147,25 +164,23 @@ For each indicator, I produced a summary table using `skim()` to determine the n
 
 ```{r}
 #incidence summary and save to file location
-summary_inc <- skimr::skim(incidence)
+summary_inc <- skimr::skim(wide_data$`TB incidence (new infections per 100 000 population)`)
 print(summary_inc)
-incsummarytable_file <- here("results", "summary tables", "incsummarytable.rds")
-saveRDS(summary_inc, file = incsummarytable_file)
 
 #mortality summary and save to file location
-summary_mort <- skimr::skim(mortality)
+summary_mort <- skimr::skim(wide_data$`TB mortality (deaths per 100 000 population)`)
 print(summary_mort)
-mortsummarytable_file <- here("results", "summary tables", "mortsummarytable.rds")
-saveRDS(summary_mort, file = mortsummarytable_file)
 ```
 The population for most variables were relatively low and skewed to the right. The TB incidence and mortality indicators also showed a skewed distribution. The highest incidence rate was 908 cases/100,000 and highest mortality rate was 140 deaths/100,000. 
 
 After getting an overview of the indicators, I wanted to explore the differences between subgroups and start identifying the largest disparities. Using `ggplot()`, I created plots of the indicators separated by dimension and subgroup. For most variables, these disparities were described using the `boxplot()` function as shown below.
 
 ```{r}
-p13 <- tb_cough_f %>% ggplot(aes(x=dimension,
-                                 y = `People who report TB is spread through coughing - Female (%)`,
-                                 fill = subgroup)) +
+p13 <- highburden %>%
+  filter(!dimension %in% c("Age (2 groups) (0-15+)", "TB drug resistance", "Sex")) %>%
+  ggplot(aes(x=dimension,
+             y = `People who report TB is spread through coughing - Female (%)`,
+             fill = subgroup)) +
   geom_boxplot()+
   theme(axis.text.x = element_text(angle = 90))   
 plot(p13) # plots knowledge about TB by dimension and subgroup for females
@@ -173,7 +188,11 @@ plot(p13) # plots knowledge about TB by dimension and subgroup for females
 
 The main outcomes of interest for TB incidence, mortality, and prevalence were plotted using the `geom_point()` function as shown below.
 ```{r}
-p6 <- mortality %>% ggplot(aes(x=fct_reorder(
+p6 <- highburden %>% 
+  filter(dimension %in% "Sex") %>%
+  filter(indicator_abbr == "mortality") %>% 
+  select(c(1,2,3,4,5,6,13)) %>% 
+  ggplot(aes(x=fct_reorder(
   setting, `TB mortality (deaths per 100 000 population)`),
   y = `TB mortality (deaths per 100 000 population)`,
   color = subgroup)) +
@@ -188,9 +207,36 @@ Most indicators showed the greatest disparities due to economic status and educa
 
 
 ## Basic statistical analysis
+*(Part 3 of project: linear model fitting and predictions, more to be added)*
 TBA: simple statistical models for associations in data
 
+The linear models summary for TB incidence are listed below.The high burden model has the linear equation of `TB incidence = 194 + 126(Male)` where male would equal 1. The full data model has the linear equation of `TB incidence = 82.6 + 48(Male)`. Based on the p-value for the subgroup variable, sex has a significant association with TB incidence in both models. Males having higher TB incidence is congruent with the exploratory analysis findings. The full model has smaller coefficients compared to `highburden` model. 
+```{r}
+readRDS(file = here("results", "model fit tables", "incfittable.rds")) #TB incidence model for high burden countries
+readRDS(file = here("results", "model fit tables", "incfittableFD.rds")) #TB incidence model for full data
+```
+The fitted model summaries below are the TB mortality for high burden countries and full data. For high burden countries, the linear equation is `TB mortality = 23.6 + 14.9(Male)`; for the full data model, the linear equation is `TB mortality = 9.98 + 6.43(Male)`. Sex is a statistically significant predictor of TB mortality (p-values <0.05), but this does not consider any other factors. The next step in my analysis would be to rearrange the data set so I can predict the main outcomes using the sociodemographic indicators. 
+```{r}
+readRDS(file = here("results", "model fit tables", "mortfittable.rds")) #TB mortality model for high burden countries
+readRDS(file = here("results", "model fit tables", "mortfittableFD.rds")) #TB mortality model for full data
+```
+The last outcome model I fitted was TB prevalence for high burden countries and the full data. For high burden countries, the linear equation is `TB Prevalence = 399 + 151(Urban)` with urban residences receiving a 1 and rural residences receiving a 0. The full data model has an equation of `TB Prevalence = 410 + 95.5(Urban)`. 
+```{r}
+readRDS(file = here("results", "model fit tables", "prevfittable.rds")) #TB prevalence model for high burden countries
+readRDS(file = here("results", "model fit tables", "prevfittableFD.rds")) #TB prevalence model for full data
+```
+The models can be further explored by including `setting` as a predictor, shown in the prediction model below. The prediction model is basic prediction of TB incidence from subgroup and setting. As an example, I predicted the incidence for females and males in India (shown in the plot). The estimates for males (249.3660; CI = 139.68336, 359.0486) and females (123.1038; CI = 13.42112, 232.7864) are shown using `geom_point()` and `geom_errorbar()`. I need to explore the prediction modelling further before attempting to predict my main outcomes with more variables. 
+```{r}
+#prediction model for TB incidence with subgroup and setting as predictors
+predinclm_fit <- lm_mod %>% 
+  fit(`TB incidence (new infections per 100 000 population)` ~ subgroup + setting,
+      data = highburden) #fit linear model
+predincfittable <- tidy(predinclm_fit) 
+print(predincfittable)
 
+#prediction plot using the above model estimating TB incidence for females and males in India
+readRDS(file = here("results", "model fit tables", "prediction1.rds")) 
+```
 ## Full analysis
 TBA: final analysis with statistic/ML methods, meaningful figures/tables, load saved products here
 

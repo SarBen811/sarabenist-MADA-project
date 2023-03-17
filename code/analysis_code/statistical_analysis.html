@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.313">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sara Benist">
+<meta name="dcterms.date" content="2023-03-17">
+
+<title>Statistical Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="statistical_analysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="statistical_analysis_files/libs/quarto-html/quarto.js"></script>
+<script src="statistical_analysis_files/libs/quarto-html/popper.min.js"></script>
+<script src="statistical_analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="statistical_analysis_files/libs/quarto-html/anchor.min.js"></script>
+<link href="statistical_analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="statistical_analysis_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="statistical_analysis_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="statistical_analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="statistical_analysis_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Statistical Analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Sara Benist </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 17, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="processing-script-with-r-script-code" class="level1">
+<h1>Processing script with R script code</h1>
+<p>This Quarto file runs the statistical analysis code from the <code>statistical_analysis.r</code> script. The processed data is used for model fitting.</p>
+<p>To start, the needed packages are loaded, and the <code>processeddata.rda</code> is loaded from the <code>processed_data</code> folder.</p>
+</section>
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<p>The <code>statistical_analysis.r</code> script needs to be indicated as the file from which to pull code chunks from.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">read_chunk</span>(<span class="st">'statistical_analysis.R'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="load-packages-and-data" class="level1">
+<h1>Load packages and data</h1>
+<p>The packages and data are loaded.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load needed packages</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here) </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#path to data</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_location <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>,<span class="st">"processed_data"</span>,<span class="st">"processeddata.rda"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#load data. </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(data_location)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="model-fitting" class="level1">
+<h1>Model fitting</h1>
+<p>Now that the data has been explored, I would like to start looking at models for the main outcomes and predictors of the data set. First, we will focus on linear models of the outcomes TB incidence, TB mortality, and TB prevalence. I will be fitting two models using the full data set and only the high burden countries.</p>
+<section id="linear-model-fitting-for-tb-incidence" class="level2">
+<h2 class="anchored" data-anchor-id="linear-model-fitting-for-tb-incidence">Linear model fitting for TB Incidence</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">######################################</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Data fitting/statistical analysis</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="do">######################################</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model using TB incidence as outcome, subgroup as predictor</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>lm_mod <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="co">#set linear regression</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with high burden countries</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>inclm_fit <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">TB incidence (new infections per 100 000 population)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> highburden) <span class="co">#fit linear model</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>incfittable <span class="ot">&lt;-</span> <span class="fu">tidy</span>(inclm_fit) </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(incfittable) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term         estimate std.error statistic  p.value
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)      194.      24.2      8.03 2.49e-12
+2 subgroupMale     126.      34.2      3.69 3.70e- 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>table_file1 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"incfittable1.rds"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(incfittable, <span class="at">file =</span> table_file1) <span class="co">#save summary table</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with full data</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>inclm_fitFD <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">TB incidence (new infections per 100 000 population)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> wide_data) <span class="co">#fit linear model</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>incfittable2 <span class="ot">&lt;-</span> <span class="fu">tidy</span>(inclm_fitFD) </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(incfittable2) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term         estimate std.error statistic  p.value
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)      82.6      10.4      7.91 2.78e-14
+2 subgroupMale     48.0      14.8      3.25 1.25e- 3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>table_file2 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>,<span class="st">"incfittable2.rds"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(incfittable2, <span class="at">file =</span> table_file2) <span class="co">#save summary table</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The high burden model has the linear equation of <code>TB incidence = 194 + 126(Male)</code> where male would equal 1. The full data model has the linear equation of <code>TB incidence = 82.6 + 48(Male)</code>. Since many of the countries in the full data set have very low incidence, the coefficients for the intercept and subgroup variable are much lower. The model has more data points with low values.</p>
+<section id="prediction-model-for-tb-incidence" class="level3">
+<h3 class="anchored" data-anchor-id="prediction-model-for-tb-incidence">Prediction model for TB Incidence</h3>
+<p>We can also try to predict the approximate TB incidence for a group. For this example, we will include subgroup and setting as predictors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#prediction model using subgroup and setting</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>predinclm_fit <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">TB incidence (new infections per 100 000 population)</span><span class="st">`</span> <span class="sc">~</span> subgroup <span class="sc">+</span> setting,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> highburden) <span class="co">#fit linear model</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>predincfittable <span class="ot">&lt;-</span> <span class="fu">tidy</span>(predinclm_fit) </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(predincfittable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 50 × 5
+   term                            estimate std.error statistic  p.value
+   &lt;chr&gt;                              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 (Intercept)                         287.      54.6      5.27 3.20e- 6
+ 2 subgroupMale                        126.      15.4      8.18 1.17e-10
+ 3 settingAzerbaijan                  -292.      76.4     -3.83 3.73e- 4
+ 4 settingBangladesh                  -132.      76.4     -1.73 8.97e- 2
+ 5 settingBelarus                     -324.      76.4     -4.24 1.01e- 4
+ 6 settingBotswana                    -111.      76.4     -1.45 1.54e- 1
+ 7 settingBrazil                      -305.      76.4     -4.00 2.21e- 4
+ 8 settingCameroon                    -177.      76.4     -2.32 2.45e- 2
+ 9 settingCentral African Republic     189.      76.4      2.47 1.70e- 2
+10 settingChina                       -293.      76.4     -3.83 3.71e- 4
+# … with 40 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>new_points <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">subgroup =</span> <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>),</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">setting =</span> <span class="st">"India"</span>) <span class="co">#predicting Indian incidence based on sex</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>incpred <span class="ot">&lt;-</span> <span class="fu">predict</span>(predinclm_fit,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">new_data =</span> new_points) <span class="co">#predictions</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>CIincpred <span class="ot">&lt;-</span> <span class="fu">predict</span>(predinclm_fit,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">new_data =</span> new_points,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type =</span> <span class="st">"conf_int"</span>) <span class="co">#confidence intervals for predictions</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>preddata <span class="ot">&lt;-</span> new_points <span class="sc">%&gt;%</span> <span class="co">#create plot data</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(incpred) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(CIincpred)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>predplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(preddata, <span class="fu">aes</span>(subgroup))<span class="sc">+</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred))<span class="sc">+</span> <span class="co">#plot predictions with confidence intervals</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> .pred_lower,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax =</span> .pred_upper),</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">width =</span> .<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"TB Incidence (per 100 000 population)"</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>predplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="statistical_analysis_files/figure-html/pred1-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(predplot, <span class="at">file =</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"prediction1.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With the prediction model including setting, there are a lot of variables in the model. The prediction would have a 1 for the country of interest and 0 for all other setting variables. For example, the prediction for a male in Central African Republic would appear as <code>TB incidence = 126(1)+189(1)</code>.</p>
+<p>As an example, I will predict the incidence rate for males and females in India. The code for prediction modeling is based off of the <code>tidymodels</code> guidance. The plot shows the incidence rate and confidence intervals for males (249.3660; CI = 139.68336, 359.0486) and females (123.1038; CI = 13.42112, 232.7864) in India. This can be repeated with the high burden countries.</p>
+</section>
+</section>
+<section id="linear-model-fitting-for-tb-mortality" class="level2">
+<h2 class="anchored" data-anchor-id="linear-model-fitting-for-tb-mortality">Linear model fitting for TB Mortality</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model using TB mortality as outcome, subgroup and setting as predictor</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with high burden countries</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>mortlm_fit <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">TB mortality (deaths per 100 000 population)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> highburden) <span class="co">#fit linear model</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>mortfittable <span class="ot">&lt;-</span> <span class="fu">tidy</span>(mortlm_fit) </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mortfittable) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term         estimate std.error statistic       p.value
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+1 (Intercept)      23.6      3.55      6.65 0.00000000179
+2 subgroupMale     14.9      5.03      2.97 0.00380      </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>table_file3 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"mortfittable.rds"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(mortfittable, <span class="at">file =</span> table_file3) <span class="co">#save summary table</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with full data</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>mortlm_fitFD <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">TB mortality (deaths per 100 000 population)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> wide_data) <span class="co">#fit linear model</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>mortfittableFD <span class="ot">&lt;-</span> <span class="fu">tidy</span>(mortlm_fitFD) </span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mortfittableFD) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term         estimate std.error statistic  p.value
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)      9.98      1.50      6.64 1.05e-10
+2 subgroupMale     6.43      2.12      3.03 2.65e- 3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>table_file4 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"mortfittableFD.rds"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(mortfittableFD, <span class="at">file =</span> table_file4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For high burden countries, the linear equation is <code>TB mortality = 23.6 + 14.9(Male)</code>; for the full data model, the linear equation is <code>TB mortality = 9.98 + 6.43(Male)</code>.</p>
+</section>
+<section id="linear-model-fitting-for-tb-prevalence" class="level2">
+<h2 class="anchored" data-anchor-id="linear-model-fitting-for-tb-prevalence">Linear model fitting for TB Prevalence</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model TB prevalence as outcome, subgroups as predictors</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with high burden countries</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>prevlm_fit <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">TB prevalence (cases per 100 000 population)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> highburden) <span class="co">#fit linear model</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>prevfittable <span class="ot">&lt;-</span> <span class="fu">tidy</span>(prevlm_fit) </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(prevfittable) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term          estimate std.error statistic      p.value
+  &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+1 (Intercept)       399.      53.2      7.50 0.0000000361
+2 subgroupUrban     151.      75.3      2.01 0.0544      </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>table_file5 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"prevfittable.rds"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(prevfittable, <span class="at">file =</span> table_file5) <span class="co">#save summary table</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with full data</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>prevlm_fitFD <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">TB prevalence (cases per 100 000 population)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> wide_data) <span class="co">#fit linear model</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>prevfittableFD <span class="ot">&lt;-</span> <span class="fu">tidy</span>(prevlm_fitFD) </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(prevfittableFD) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term          estimate std.error statistic  p.value
+  &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)      410.       49.2      8.34 4.15e-10
+2 subgroupUrban     95.5      69.6      1.37 1.78e- 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>table_file6 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"prevfittableFD.rds"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(prevfittableFD, <span class="at">file =</span> table_file6)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For high burden countries, the linear equation is <code>TB Prevalence = 399 + 151(Urban)</code> with urban residences receiving a 1 and rural residences receiving a 0. The full data model has an equation of <code>TB Prevalence = 410 + 95.5(Urban)</code>. The difference between the high burden and full data models is lower than the other outcomes, most likely due to the long duration of TB or less data points available with the full data model.</p>
+</section>
+<section id="linear-model-fitting-for-bcg-coverage" class="level2">
+<h2 class="anchored" data-anchor-id="linear-model-fitting-for-bcg-coverage">Linear model fitting for BCG Coverage</h2>
+<p>Now we can look at some of the other indicators in the data set. I will only be looking at the indicators that had variation between subgroups.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model with BCG coverage as outcome, subgroups as predictors</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with high burden countries</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>BCGlm_fit <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">BCG immunization coverage among one-year-olds (%)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> highburden) <span class="co">#fit linear model</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>BCGfittable <span class="ot">&lt;-</span> <span class="fu">tidy</span>(BCGlm_fit) </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(BCGfittable) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 5
+   term                                  estimate std.error statistic  p.value
+   &lt;chr&gt;                                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 (Intercept)                             88.4       0.884   100.    0       
+ 2 subgroupMale                             0.363     1.25      0.291 7.71e- 1
+ 3 subgroupNo education                   -10.6       1.30     -8.18  4.67e-16
+ 4 subgroupPrimary education                0.169     1.28      0.133 8.95e- 1
+ 5 subgroupQuintile 1 (poorest)            -6.46      1.25     -5.15  2.83e- 7
+ 6 subgroupQuintile 2                      -1.60      1.25     -1.27  2.03e- 1
+ 7 subgroupQuintile 3                       1.06      1.25      0.843 3.99e- 1
+ 8 subgroupQuintile 4                       4.50      1.25      3.59  3.40e- 4
+ 9 subgroupQuintile 5 (richest)             7.01      1.25      5.59  2.52e- 8
+10 subgroupRural                           -2.12      1.25     -1.69  9.06e- 2
+11 subgroupSecondary or higher education    6.66      1.25      5.32  1.14e- 7
+12 subgroupUrban                            5.10      1.25      4.08  4.72e- 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>table_file7 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"BCGfittable.rds"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(BCGfittable, <span class="at">file =</span> table_file7) <span class="co">#save summary table</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with full data</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>BCGlm_fitFD <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">BCG immunization coverage among one-year-olds (%)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> wide_data) <span class="co">#fit linear model</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>BCGfittableFD <span class="ot">&lt;-</span> <span class="fu">tidy</span>(BCGlm_fitFD) </span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(BCGfittableFD) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 5
+   term                                  estimate std.error statistic  p.value
+   &lt;chr&gt;                                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 (Intercept)                             88.3       0.665   133.    0       
+ 2 subgroupMale                             0.245     0.940     0.261 7.94e- 1
+ 3 subgroupNo education                    -9.44      0.992    -9.51  3.12e-21
+ 4 subgroupPrimary education                0.958     0.958     1.00  3.17e- 1
+ 5 subgroupQuintile 1 (poorest)            -6.40      0.945    -6.77  1.48e-11
+ 6 subgroupQuintile 2                      -1.68      0.945    -1.78  7.56e- 2
+ 7 subgroupQuintile 3                       0.773     0.945     0.818 4.14e- 1
+ 8 subgroupQuintile 4                       3.84      0.945     4.06  5.03e- 5
+ 9 subgroupQuintile 5 (richest)             6.41      0.946     6.78  1.38e-11
+10 subgroupRural                           -2.08      0.940    -2.21  2.73e- 2
+11 subgroupSecondary or higher education    6.42      0.941     6.82  1.02e-11
+12 subgroupUrban                            4.75      0.940     5.05  4.57e- 7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>table_file8 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"BCGfittableFD.rds"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(BCGfittableFD, <span class="at">file =</span> table_file8)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The BCG coverage has 12 variables that produce a linear equation of <code>BCG coverage % = 88.4 + 0.363(Male) -10.6(no education) + 0.169(primary education) + 6.66(higher education) - 6.46(quintile 1) - 1.6(quintile 2) +1.06(quintile 3) + 4.50(quintile 4) + 7.01(quintile 5) - 2.12(rural) + 5.10(Urban)</code>. The full model has an equation of <code>BCG coverage % = 88.3 + 0.245(Male) -9.44(no education) + 0.958(primary education) + 6.42(higher education) - 6.40(quintile 1) - 1.68(quintile 2) + 0.773(quintile 3) + 3.84(quintile 4) + 6.41(quintile 5) - 2.08(rural) + 4.75(Urban)</code>. The two models are overall pretty similar and can be used in the same way as the prediction model (entering in 1 or 0 depending on categorization).</p>
+</section>
+<section id="linear-model-fitting-for-catastrophic-costs" class="level2">
+<h2 class="anchored" data-anchor-id="linear-model-fitting-for-catastrophic-costs">Linear model fitting for Catastrophic costs</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model with catastrophic costs as outcome, subgroups as predictors</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with high burden countries</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>costlm_fit <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">Families affected by TB facing catastrophic costs due to TB (%)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> highburden) <span class="co">#fit linear model</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>costfittable <span class="ot">&lt;-</span> <span class="fu">tidy</span>(costlm_fit) </span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(costfittable) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 5
+  term                         estimate std.error statistic  p.value
+  &lt;chr&gt;                           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)                      87.3      4.65     18.8  9.30e-24
+2 subgroupDrug-susceptible TB     -40.4      6.57     -6.14 1.51e- 7
+3 subgroupQuintile 1 (poorest)    -18.6      9.30     -2.00 5.12e- 2
+4 subgroupQuintile 2              -38.8      9.30     -4.18 1.24e- 4
+5 subgroupQuintile 3              -44.6      9.30     -4.80 1.58e- 5
+6 subgroupQuintile 4              -47.4      9.30     -5.09 5.86e- 6
+7 subgroupQuintile 5 (richest)    -58.5      9.30     -6.30 8.83e- 8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>table_file9 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"costfittable.rds"</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(costfittable, <span class="at">file =</span> table_file9) <span class="co">#save summary table</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with full data</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>costlm_fitFD <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">Families affected by TB facing catastrophic costs due to TB (%)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> wide_data) <span class="co">#fit linear model</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>costfittableFD <span class="ot">&lt;-</span> <span class="fu">tidy</span>(costlm_fitFD) </span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(costfittableFD) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 5
+  term                         estimate std.error statistic  p.value
+  &lt;chr&gt;                           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)                      83.5      4.07     20.5  4.37e-29
+2 subgroupDrug-susceptible TB     -35.1      5.75     -6.11 7.64e- 8
+3 subgroupQuintile 1 (poorest)    -11.1      8.30     -1.34 1.85e- 1
+4 subgroupQuintile 2              -30.9      8.30     -3.73 4.27e- 4
+5 subgroupQuintile 3              -38.4      8.30     -4.63 1.95e- 5
+6 subgroupQuintile 4              -41.4      8.30     -4.98 5.45e- 6
+7 subgroupQuintile 5 (richest)    -54.9      8.30     -6.62 1.04e- 8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>table_file10 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"costfittableFD.rds"</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(costfittableFD, <span class="at">file =</span> table_file10)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The high burden model has an equation of <code>% catastrophic costs = 87.3 - 40.4(drug-suseptible TB) - 18.6(quintile 1) - 38.8(quintile 2) - 44.6(quintile 3) - 47.4(quintile 4) - 58.5(quintile 5)</code>. The full model data has an equation of <code>% catastrophic costs = 83.5 - 35.1(drug-suseptible TB) - 11.1(quintile 1) - 30.9(quintile 2) - 38.4(quintile 3) - 41.4(quintile 4) - 54.9(quintile 5)</code>. ## Linear model fitting for case detection rate</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model with case detection rate as outcome, subgroups as predictors</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with high burden countries</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>cdrlm_fit <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">Case detection rate (%)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> highburden) <span class="co">#fit linear model</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>cdrfittable <span class="ot">&lt;-</span> <span class="fu">tidy</span>(cdrlm_fit) </span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cdrfittable) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  term              estimate std.error statistic  p.value
+  &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)           37.9      2.33     16.3  6.48e-38
+2 subgroup15+ years     19.1      3.29      5.81 2.56e- 8
+3 subgroupFemale        16.7      3.28      5.11 7.97e- 7
+4 subgroupMale          16.4      3.28      5.00 1.30e- 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>table_file11 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"cdrfittable.rds"</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(cdrfittable, <span class="at">file =</span> table_file11) <span class="co">#save summary table</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with full data</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>cdrlm_fitFD <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">Case detection rate (%)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> wide_data) <span class="co">#fit linear model</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>cdrfittableFD <span class="ot">&lt;-</span> <span class="fu">tidy</span>(cdrlm_fitFD) </span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cdrfittableFD) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  term              estimate std.error statistic  p.value
+  &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)           43.8      1.76     24.9  4.71e-87
+2 subgroup15+ years     18.9      2.47      7.68 1.00e-13
+3 subgroupFemale        15.3      2.46      6.24 9.98e-10
+4 subgroupMale          16.9      2.46      6.90 1.81e-11</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>table_file12 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"cdrfittableFD.rds"</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(cdrfittableFD, <span class="at">file =</span> table_file12)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For high burden countries, the equation is <code>case detection rate % = 37.9 + 19.1(15+ or older) + 16.7(female) + 16.4(male)</code>. The full data model has an equation of <code>case detection rate % = 43.8 + 18.9(15+ or older) + 15.3(female) + 16.9(male)</code>.</p>
+</section>
+<section id="linear-model-fitting-for-prevalence-to-notification-ratio" class="level2">
+<h2 class="anchored" data-anchor-id="linear-model-fitting-for-prevalence-to-notification-ratio">Linear model fitting for prevalence to notification ratio</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model with prevalence to notification ratio as outcome, subgroups as predictors</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with high burden countries</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>pnrlm_fit <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> highburden) <span class="co">#fit linear model</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>pnrfittable <span class="ot">&lt;-</span> <span class="fu">tidy</span>(pnrlm_fit) </span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(pnrfittable) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term         estimate std.error statistic  p.value
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)     1.73      0.171     10.1  1.71e-13
+2 subgroupMale    0.664     0.242      2.74 8.55e- 3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>table_file13 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"pnrfittable.rds"</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(pnrfittable, <span class="at">file =</span> table_file13) <span class="co">#save summary table</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with full data</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>pnrlm_fitFD <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> wide_data) <span class="co">#fit linear model</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>pnrfittableFD <span class="ot">&lt;-</span> <span class="fu">tidy</span>(pnrlm_fitFD) </span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(pnrfittableFD) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term         estimate std.error statistic  p.value
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)     1.73      0.164     10.5  2.98e-15
+2 subgroupMale    0.701     0.232      3.02 3.72e- 3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>table_file14 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"pnrfittableFD.rds"</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(pnrfittableFD, <span class="at">file =</span> table_file14)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The high burden model has an equation of <code>prevalence to notification ratio in years = 1.73 + 0.664(male)</code>, and the full model has an equation of <code>prevalence to notification ratio in years = 1.73 + 0.701(male)</code>.</p>
+</section>
+<section id="linear-model-fitting-for-attitudes" class="level2">
+<h2 class="anchored" data-anchor-id="linear-model-fitting-for-attitudes">Linear model fitting for attitudes</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model with male attitude as outcome, subgroups as predictors</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with high burden countries</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>attlm_fit <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> highburden) <span class="co">#fit linear model</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>attfittable <span class="ot">&lt;-</span> <span class="fu">tidy</span>(attlm_fit) </span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(attfittable) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 5
+   term                                  estimate std.error statistic  p.value
+   &lt;chr&gt;                                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 (Intercept)                              27.6       2.37    11.7   2.40e-23
+ 2 subgroup20-34 years                      -5.27      3.35    -1.58  1.17e- 1
+ 3 subgroup35-49 years                      -8.21      3.35    -2.45  1.52e- 2
+ 4 subgroupNo education                     -3.53      3.41    -1.03  3.02e- 1
+ 5 subgroupPrimary education                -2.71      3.41    -0.793 4.29e- 1
+ 6 subgroupQuintile 1 (poorest)             -5.01      3.35    -1.50  1.37e- 1
+ 7 subgroupQuintile 2                       -5.23      3.35    -1.56  1.20e- 1
+ 8 subgroupQuintile 3                       -4.97      3.35    -1.49  1.39e- 1
+ 9 subgroupQuintile 4                       -4.38      3.35    -1.31  1.93e- 1
+10 subgroupQuintile 5 (richest)             -5.86      3.35    -1.75  8.18e- 2
+11 subgroupRural                            -4.91      3.35    -1.47  1.44e- 1
+12 subgroupSecondary or higher education    -7.23      3.35    -2.16  3.22e- 2
+13 subgroupUrban                            -6.27      3.35    -1.87  6.29e- 2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>table_file15 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"attfittable.rds"</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(attfittable, <span class="at">file =</span> table_file15) <span class="co">#save summary table</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with full data</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>attlm_fitFD <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> wide_data) <span class="co">#fit linear model</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>attfittableFD <span class="ot">&lt;-</span> <span class="fu">tidy</span>(attlm_fitFD) </span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(attfittableFD) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 5
+   term                                  estimate std.error statistic  p.value
+   &lt;chr&gt;                                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 (Intercept)                              24.7       1.98     12.5  1.09e-28
+ 2 subgroup20-34 years                      -4.94      2.81     -1.76 7.94e- 2
+ 3 subgroup35-49 years                      -8.14      2.81     -2.90 4.02e- 3
+ 4 subgroupNo education                     -4.32      2.91     -1.49 1.38e- 1
+ 5 subgroupPrimary education                -3.08      2.87     -1.07 2.85e- 1
+ 6 subgroupQuintile 1 (poorest)             -4.44      2.81     -1.58 1.15e- 1
+ 7 subgroupQuintile 2                       -5.24      2.81     -1.87 6.30e- 2
+ 8 subgroupQuintile 3                       -5.18      2.81     -1.84 6.61e- 2
+ 9 subgroupQuintile 4                       -4.59      2.81     -1.63 1.03e- 1
+10 subgroupQuintile 5 (richest)             -6.20      2.81     -2.21 2.79e- 2
+11 subgroupRural                            -4.66      2.81     -1.66 9.80e- 2
+12 subgroupSecondary or higher education    -6.41      2.81     -2.29 2.30e- 2
+13 subgroupUrban                            -5.99      2.81     -2.13 3.38e- 2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>table_file16 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>,<span class="st">"model fit tables"</span>, <span class="st">"attfittableFD.rds"</span>)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(attfittableFD, <span class="at">file =</span> table_file16)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The attitude question regarding TB was about the desire to keep a diagnosis hidden. Since males are more likely to be diagnosed with TB, I focused on the male attitude and knowledge. For high burden countries, the equation is <code>% wanting to keep TB secret = 27.6 - 5.27(20-34 years) - 8.21(35-49 years) - 3.53(no education) - 2.71(primary education) - 7.23(higher education) - 5.01(quintile 1) - 5.23(quintile 2) - 4.97(quintile 3) - 4.38(quintile 4) - 5.86(quintile 5) - 4.91(rural) - 6.27(urban)</code>. For the full model, the equation is <code>% wanting to keep TB secret = 24.7 - 4.94(20-34 years) - 8.14(35-49 years) - 4.32(no education) - 3.08(primary education) - 6.41(higher education) - 4.44(quintile 1) - 5.24(quintile 2) - 5.18(quintile 3) - 4.59(quintile 4) - 6.20(quintile 5) - 4.66(rural) - 5.99(urban)</code>.</p>
+</section>
+<section id="linear-model-fitting-for-knowledge" class="level2">
+<h2 class="anchored" data-anchor-id="linear-model-fitting-for-knowledge">Linear model fitting for knowledge</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model with male knowledge as outcome, subgroups as predictors</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with high burden countries</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>knowlm_fit <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> highburden) <span class="co">#fit linear model</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>knowfittable <span class="ot">&lt;-</span> <span class="fu">tidy</span>(knowlm_fit) </span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(knowfittable) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 5
+   term                                  estimate std.error statistic  p.value
+   &lt;chr&gt;                                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 (Intercept)                             65.9        3.58   18.4    3.13e-47
+ 2 subgroup20-34 years                      4.83       5.06    0.953  3.41e- 1
+ 3 subgroup35-49 years                      6.19       5.06    1.22   2.23e- 1
+ 4 subgroupNo education                    -9.91       5.13   -1.93   5.47e- 2
+ 5 subgroupPrimary education               -2.81       5.13   -0.548  5.84e- 1
+ 6 subgroupQuintile 1 (poorest)            -6.01       5.06   -1.19   2.36e- 1
+ 7 subgroupQuintile 2                      -0.464      5.06   -0.0918 9.27e- 1
+ 8 subgroupQuintile 3                       2.32       5.06    0.458  6.47e- 1
+ 9 subgroupQuintile 4                       7.50       5.06    1.48   1.40e- 1
+10 subgroupQuintile 5 (richest)            14.6        5.06    2.88   4.31e- 3
+11 subgroupRural                            0.419      5.06    0.0828 9.34e- 1
+12 subgroupSecondary or higher education   12.6        5.06    2.49   1.33e- 2
+13 subgroupUrban                           11.8        5.06    2.34   2.02e- 2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>table_file17 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"knowfittable.rds"</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(knowfittable, <span class="at">file =</span> table_file17) <span class="co">#save summary table</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with full data</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>knowlm_fitFD <span class="ot">&lt;-</span> lm_mod <span class="sc">%&gt;%</span> </span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span> <span class="sc">~</span> subgroup,</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> wide_data) <span class="co">#fit linear model</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>knowfittableFD <span class="ot">&lt;-</span> <span class="fu">tidy</span>(knowlm_fitFD) </span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(knowfittableFD) <span class="co">#produce tidy table of fitted model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 5
+   term                                  estimate std.error statistic  p.value
+   &lt;chr&gt;                                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 (Intercept)                            64.6         2.77  23.3     6.18e-73
+ 2 subgroup20-34 years                     6.17        3.92   1.58    1.16e- 1
+ 3 subgroup35-49 years                     7.29        3.92   1.86    6.36e- 2
+ 4 subgroupNo education                   -8.55        4.03  -2.12    3.47e- 2
+ 5 subgroupPrimary education              -1.66        3.99  -0.415   6.78e- 1
+ 6 subgroupQuintile 1 (poorest)           -3.88        3.92  -0.991   3.22e- 1
+ 7 subgroupQuintile 2                      0.0280      3.92   0.00716 9.94e- 1
+ 8 subgroupQuintile 3                      3.03        3.92   0.773   4.40e- 1
+ 9 subgroupQuintile 4                      8.18        3.92   2.09    3.74e- 2
+10 subgroupQuintile 5 (richest)           15.8         3.92   4.04    6.72e- 5
+11 subgroupRural                           1.28        3.92   0.328   7.43e- 1
+12 subgroupSecondary or higher education  12.8         3.92   3.26    1.23e- 3
+13 subgroupUrban                          12.8         3.92   3.27    1.20e- 3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>table_file18 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"knowfittableFD.rds"</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(knowfittableFD, <span class="at">file =</span> table_file18)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The knowledge question asked about if TB is spread through cough. We will again focus on male knowledge.</p>
+<p>The high burden countries had an equation of <code>% responding TB is spread through cough = 65.9 + 4.83(20-34 years) + 6.19(35-49 years) - 9.91(no education) - 2.81(primary education) + 12.6(higher education) - 6.01(quintile 1) - 0.464(quintile 2) + 2.32(quintile 3) + 7.50(quintile 4) + 14.6(quintile 5) + 0.419(rural) + 11.8(urban)</code>. The full model had an equation of <code>% responding TB is spread through cough = 64.6 + 6.17(20-34 years) + 7.29(35-49 years) - 8.55(no education) - 1.66(primary education) + 12.8(higher education) - 3.88(quintile 1) + 0.028(quintile 2) + 3.03(quintile 3) + 8.18(quintile 4) + 15.8(quintile 5) + 1.28(rural) + 12.8(urban)</code>.</p>
+<p>I would like to try and create a dataset using the high burden countries in order to predict the main outcomes of TB incidence and mortality from the indicators (BCG Coverage, knowledge, attitudes, etc). Right now, the data is not set up to complete this analysis, but I will try to find a way to do this.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

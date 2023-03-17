@@ -5,25 +5,22 @@ date: "2023-02-24"
 output: html_document
 ---
 
-
 # Processing script with code pulled in
 
 This is Quarto file processes code chunks located in the `processingcode.r` script.
 
 # Setup
 
-The script below indicates which R file the Quarto should pull from. 
+The script below indicates which R file the Quarto should pull from.
 
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('processingcode.R')
 ```
 
-
 Load needed packages for data cleaning.
 
 ```{r, packages, message = FALSE, warning = FALSE}
 ```
-
 
 # Data loading
 
@@ -32,23 +29,23 @@ Load data into `raw_data` folder and assign to `rawdata`
 ```{r, loaddata}
 ```
 
-
 # Explore data
 
-Let's look at the data using `glimpse()` and `skim()` which both present an overview of the data. Running `gg_miss_var()` will check for missing data by each variable. 
-
+Let's look at the data using `glimpse()` and `skim()` which both present an overview of the data. Running `gg_miss_var()` will check for missing data by each variable.
 
 ```{r, exploredata1}
 ```
-The data has the countries listed under setting, year of the data, the indicator that is being studied, and the dimension and subgroup for each observation. The estimate column holds the actual percentage or number of interest. Other variables on the data set contain formatting information. 
+
+The data has the countries listed under setting, year of the data, the indicator that is being studied, and the dimension and subgroup for each observation. The estimate column holds the actual percentage or number of interest. Other variables on the data set contain formatting information.
 
 The `skim()` function provides more information of the missing data and the numeric summaries (mean, median, percentiles, etc). The `gg_miss_var()` helps visually display the missing data.
 
-I would also like a list of the indicator names and a count of how many countries are in the data set. 
+I would also like a list of the indicator names and a count of how many countries are in the data set.
+
 ```{r, exploredata2}
 ```
-There are 14 indicators and 194 countries. 
 
+There are 14 indicators and 194 countries.
 
 # Cleaning
 
@@ -56,68 +53,64 @@ Now the data cleaning can get started. This phase will coincide with data explor
 
 To start, I want the indicators to move to columns using `pivot_wider()` function so each indicator has a column. I will also subset the columns I would like to keep moving into the exploratory phase. The wide version of the data will be assigned to `wide_data`.
 
+I will also be looking specifically at high TB burden countries. The high burden countries list is updated by the WHO and can be found [here](https://www.who.int/news/item/17-06-2021-who-releases-new-global-lists-of-high-burden-countries-for-tb-hiv-associated-tb-and-drug-resistant-tb). I will subset these countries in the `highburden` object.
+
 ```{r, cleandata1}
 ```
-The `wide_data` had 7473 rows and 20 columns. 
+
+The `wide_data` had 7473 rows and 20 columns. The `highburden` object has 3761 rows and 20 columns.
+
 
 ## Subset by indicator
-Next, I would like to create new objects for each indicator so I can make graphs/figures later on. I will use the `filter()` and `select()` functions to subset each indicator and reassign to new objects. 
 
-Here, the BCG coverage, drug resistance, and case detection rate indicators are created. 
+Next, I would like to check each indicator for potential data cleaning issues I need to address. I will use the `filter()` and `select()` functions to subset each indicator and `summary()` to check each indicator.
+
+Here, the BCG coverage, drug resistance, and case detection rate indicators are checked.
+
 ```{r, cleandata2}
 ```
 
-Here, the percentage reporting TB is spread through cough, overall and by sex, indicators are created. 
+Here, the percentage reporting TB is spread through cough, overall and by sex, indicators are checked.
 
 ```{r, cleandata3}
 ```
 
-Here, the TB incidence and TB mortality indicators are created.
+Here, the TB incidence and TB mortality indicators are checked.
 
 ```{r, cleandata4}
 ```
 
-Here, the percentage wanting to keep TB infection a secret, overall and by sex, indicators are created. 
+Here, the percentage wanting to keep TB infection a secret, overall and by sex, indicators are checked.
 
 ```{r, cleandata5}
 ```
 
-Here, the TB prevalence and prevalance to notification ratio indicators are created. 
+Here, the TB prevalence and prevalence to notification ratio indicators are checked.
 
 ```{r, cleandata6}
 ```
 
-Finally, the percentage of afftected people suffering catastrophic costs due to TB indicator is created. 
+Finally, the percentage of affected people suffering catastrophic costs due to TB indicator is checked.
+
 ```{r, cleandata7}
 ```
 
-All of these indicator subsets can now be individually graphed and the trends can be compared. Most of the data seems to be from 2004-2020, and the estimates are within the bounds of the indicator (such as all the percentages are between 0 and 100). 
+Most of the data seems to be from 2004-2020, and the estimates are within the bounds of the indicator (such as all the percentages are between 0 and 100).
 
 ## Missing data
 
-While examining the code using the summary tables, a few of the indicators have missing data. 
+While examining the code using the summary tables, a few of the indicators have missing data.
 
-Looking over the data more closely, the missing data (marked as `NA`) is due to a country and year having data for only one subgroup in the dimension. We can drop these observations without losing important data analysis opportunities. 
+Looking over the data more closely, the missing data (marked as `NA`) is due to a country and year having data for only one subgroup in the dimension. Using the `drop_na()` function would drop all of the data since every row is incomplete. For now, I won't change the data until I have explored more. 
 
-```{r, cleandata8}
-```
+I would also like to mention the odd population minimums for BCG coverage, drug resistance, and case detection rate which are 18.9, 26, and 18 respectively. These seem like odd population counts when the maximum is in the 600,000s. I believe these numbers are due to the subsetting of the indicators by dimension subgroups, so I will not be changing these numbers.
 
-I would also like to mention the odd population minimums for BCG coverage, drug resistance, and case detection rate which are 18.9, 26, and 18 respectively. These seem like odd population counts when the maximum is in the 600,000s. I believe these numbers are due to the subsetting of the indicators by dimension subgroups, so I will not be changing these numbers. 
 
-The prevalence indicator and prevalence to notification indicator both have no population data associated with the variable. I will drop the population column for both. Catastrophic cost also is missing a lot of data for the population column, but since there is some data available for a few observations, I will leave the indicator as is. 
+# Save data
 
-```{r, cleandata9}
-```
+The data is (mostly) finished cleaning and can be saved. Since I have separated the indicators, we will save each object into the `processed_data` file under `processeddata.rda`
 
-# Save data 
-
-The data is (mostly) finished cleaning and can be saved. 
-Since I have separated the indicators, we will save each object into the `processed_data` file under `processeddata.rda`
-
-The data is saved as an rda file rather than an RDS file in order to save each item individually. This file can be loaded into the `exploratory_analysis.qmd` for the next step.  
+The data is saved as an rda file rather than an RDS file in order to save each item individually. This file can be loaded into the `exploratory_analysis.qmd` for the next step.
 
 ```{r, savedata}
 ```
-
-
-

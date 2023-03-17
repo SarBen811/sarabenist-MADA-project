@@ -9,12 +9,10 @@ output: html_document
 
 This Quarto file runs the exploratory analysis code from the `exploratoryanalysis.r` script. The processed data is examined using summary tables and figures. 
 
-To start, the needed packages are loaded and the `processeddata.rda` is loaded from the `processed_data` folder. 
-
-Plots produced here can be scatterplots, boxplots, violinplots, etc. Tables can be simple 2x2 tables or larger ones.
+To start, the needed packages are loaded, and the `processeddata.rda` is loaded from the `processed_data` folder. 
 
 # Setup
-The `exploratoyranalysis.r` script needs to be indicated as the file from which to pull code chunks from. 
+The `exploratoryanalysis.r` script needs to be indicated as the file from which to pull code chunks from. 
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('exploratoryanalysis.R')
 ```
@@ -72,7 +70,7 @@ All summary tables are saved in the `results` folder.
 
 After examining the indicators, I would like to explore the differences between the subgroups using graphs and plots. 
 
-For each indicator, I will be creating a plot using `ggplot()` to study differences between subgroups. For most of these variables, I will be using a boxplot in order to compare the summary measures between subgroups. For viewing multiple dimensions and comparing subgroups within each dimension, I will be colors and grouping through `ggplot()`. 
+For each indicator, I will be creating a plot using the `highburden` data set and `ggplot()` to study differences between subgroups. For most of these variables, I will be using a boxplot in order to compare the summary measures between subgroups. For viewing multiple dimensions and comparing subgroups within each dimension, I will be colors and grouping through `ggplot()`.
 
 ```{r, exploratoryfigures1}
 ```
@@ -86,11 +84,13 @@ The third plot shows case detection rate by age and sex. Higher age groups tend 
 The forth plot shows drug resistance by sex. Neither group appears to have a higher percentage of drug resistance.
 ```{r, exploratoryfigures3}
 ```
-The fifth plot and sixth plot shows TB incidence and mortality rates by country, separated by sex. The countries are ordered from lowest to highest rate, and males seem to have a higher proportion of TB cases.
+The 5a plot and 5b plots show TB incidence by country, separated by sex for the high burden countries and full data set. The countries are ordered from lowest to highest rate, and males seem to have a higher proportion of TB cases.The `highburden` data set appears to include most of the countries that have at least one new case per 100,000. 
+
+The sixth plot shows TB mortality by country, separated by sex. The countries are ordered from lowest to highest rate, and males tend to have a mortality rate. 
 
 The seventh plot shows prevalence to notification ratio by sex. Males tend to have a longer gap between getting TB and being notified they have TB. 
 
-The eighth plot shows TB prevalence by country, showing differences between rural and urban areas. There appears to be a small trend of urban areas having higher prevalence then rural. 
+The 8a and 8b plots show TB prevalence by country, showing differences between rural and urban areas for the `highburden` and full data set. There appears to be a small trend of urban areas having higher prevalence then rural. 
 ```{r, exploratoryfigures4}
 ```
 The ninth plot shows the overall attitude towards keeping a family member's TB a secret by sex. Females tend to be correlated with a higher percentage compared to males. 
@@ -103,6 +103,6 @@ The twelfth plot shows TB knowledge about spreading the disease through cough by
 
 The thirteenth and fourteenth plot shows the same knowledge question for females and males, separated into the same dimensions as the attitude indicator. For both groups, increasing economic status and education showed an association with increased knowledge about TB. Urban populations also tended to show a higher percentage of knowledge compared to rural. For age groups, the 2 older groups (20-34 and 35-49) had similar proportions, but both groups had a higher percentage than the youngest (15-19). Male data appeared to be slightly less dispersed than female responses. 
 
-In the next proportion of the exploratory analysis, I would like to examine more closely the influence of outliers (and if the data needs to be separated by burden of TB) as well as start comparing indicators to TB mortality, incidence, and prevalence. 
+In the next proportion of the exploratory analysis, I would like to examine more closely the influence of outliers as well as start comparing indicators to TB mortality, incidence, and prevalence. 
 
 

@@ -16,7 +16,7 @@ This project uses R Studio, Quarto, Github, and Zotero programs.
 -   All products (manuscripts, supplement, presentation slides, web apps, etc.) can be found in `products` subfolders.
 -   Each folder contains a `readme.md` file with more information.
 
-# Template content
+# Project content
 
 See the `readme` files in each folder for more details.
 
@@ -26,6 +26,7 @@ See the `readme` files in each folder for more details.
 -   The `products` folder contains an example `bibtex` and CSL style files for references (to be updated with project references).
 -   The `manuscript` folder contains the project report written as Quarto file. There is also a sub-folder  for any supplementary material file (to be added and updated).
 -   The `slides` folder will contain a slide presentation for the project made with Quarto (to be added and updated).
+-   The files should be run in this order to complete the analysis: `processingfile.qmd` > `exploratory_analysis.qmd` > `statistical_analysis.qmd`
 
 # Data variables
 
