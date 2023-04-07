@@ -1,13 +1,13 @@
 ---
 title: "Statistical Analysis"
 author: "Sara Benist"
-date: "2023-03-17"
+date: "2023-04-06"
 output: html_document
 ---
 
 # Processing script with R script code
 
-This Quarto file runs the statistical analysis code from the `statistical_analysis.r` script. The processed data is used for model fitting. 
+This Quarto file runs the statistical analysis code from the `statistical_analysis.r` script. The best way to view the output of the script is to render the qmd and view the html document. The processed data is used for model fitting. 
 
 To start, the needed packages are loaded, and the `processeddata.rda` is loaded from the `processed_data` folder. 
 
@@ -25,71 +25,157 @@ The packages and data are loaded.
 ```{r, loaddata}
 ```
 # Model fitting
-Now that the data has been explored, I would like to start looking at models for the main outcomes and predictors of the data set. First, we will focus on linear models of the outcomes TB incidence, TB mortality, and TB prevalence. I will be fitting two models using the full data set and only the high burden countries. 
+Now that the data has been explored, I would like to start looking at models for the main outcomes and predictors of the data set. First, we will focus split the data into testing and training sets and set up the cross-validation folds. The training set will be used to tune the model parameters and the testing set will be used to test model performance on new data.
 
-## Linear model fitting for TB Incidence
+```{r, splitdata}
 
-```{r, fitmodel1}
 ```
-The high burden model has the linear equation of `TB incidence = 194 + 126(Male)` where male would equal 1. The full data model has the linear equation of `TB incidence = 82.6 + 48(Male)`. Since many of the countries in the full data set have very low incidence, the coefficients for the intercept and subgroup variable are much lower. The model has more data points with low values. 
 
-### Prediction model for TB Incidence
-We can also try to predict the approximate TB incidence for a group. For this example, we will include subgroup and setting as predictors.  
-```{r, pred1}
+I will be tuning decision tree models for the main outcomes of TB incidence, TB mortality, and TB prevalence for both high burden countries and the full data set. 
+
+## Decision tree model for TB Incidence
+
+```{r, wdincidencemodel}
 ```
-With the prediction model including setting, there are a lot of variables in the model. The prediction would have a 1 for the country of interest and 0 for all other setting variables. For example, the prediction for a male in Central African Republic would appear as `TB incidence = 126(1)+189(1)`. 
+The best tree model for TB incidence using the full data has a depth of 4 with an RMSE of 128. This is a very low level of performance in predicting TB incidence. The fitted model to the training data has a RMSE of 62.8, but using the testing data, the model had a performance of RMSE = 110. The most important predictor was country.
 
-As an example, I will predict the incidence rate for males and females in India. The code for prediction modeling is based off of the `tidymodels` guidance. The plot shows the incidence rate and confidence intervals for males (249.3660; CI = 139.68336, 359.0486) and females (123.1038; CI = 13.42112, 232.7864) in India. This can be repeated with the high burden countries. 
+```{r, hbincidencemodel}
 
-## Linear model fitting for TB Mortality
-
-```{r, fitmodel2}
 ```
-For high burden countries, the linear equation is `TB mortality = 23.6 + 14.9(Male)`; for the full data model, the linear equation is `TB mortality = 9.98 + 6.43(Male)`.
+The best tree model for TB incidence using the high burden countries has a depth of 4 with an RMSE of 162. This is also a low level of performance in predicting TB incidence. The fitted model to the training data has a RMSE of 126 which was much higher compared to the full dataset. Using the testing data, the model had a performance of RMSE = 134. The most important predictor was also country.
+## Decision tree model for TB Mortality
 
-## Linear model fitting for TB Prevalence
+```{r}
+#recipe predicting TB mortality
+mortrecipe <- recipe(`TB mortality (deaths per 100 000 population)` ~.,
+                 data = wdtrain_data)
+#create tree model
+treemodel <- decision_tree(
+  cost_complexity = tune(),
+  tree_depth = tune(),
+) %>% 
+  set_engine("rpart") %>% 
+  set_mode("regression")
 
-```{r, fitmodel3}
+#create workflow
+mortwflow <- workflow() %>% 
+  add_model(treemodel) %>% 
+  add_recipe(mortrecipe)
+
+#set seed for reproducibility
+set.seed(626)
+#resample using cross-validation folds to tune parameters
+morttree_resamp <- mortwflow %>% 
+  tune_grid(
+    resamples = wdfolds,
+    grid = tree_grid,
+    control = control_grid(save_pred = TRUE)
+  )
+
+#plot resampling by parameters
+morttreeplot <- morttree_resamp %>% autoplot()
+morttreeplot
+
+#show the best model
+morttree_resamp %>% 
+  show_best()
+
+#select best model
+wdmortbest_tree <- morttree_resamp %>% select_best("rmse")
+
+#create final workflow
+wdmortfinal_wf <- mortwflow %>% finalize_workflow(wdmortbest_tree)
+
+#fit the final workflow to the training data
+wdmortfinal_fit <- wdmortfinal_wf %>% fit(wdtrain_data)
+
+#find RMSE for model with training data
+wdmortfitted <- augment(wdmortfinal_fit, wdtrain_data) %>% 
+  select(`TB mortality (deaths per 100 000 population)`, .pred) %>% 
+  rmse(truth = `TB mortality (deaths per 100 000 population)`, .pred)
+wdmortfitted
+#fit final workflow to test data
+wdmortfittest <- wdmortfinal_fit %>% last_fit(wddatasplit)
+
+#find RMSE for model with test data
+wdmortfittest %>% collect_metrics()
+
+#check important variables of model
+wdmortfittest %>% extract_fit_parsnip() %>% vip()
+
 ```
-For high burden countries, the linear equation is `TB Prevalence = 399 + 151(Urban)` with urban residences receiving a 1 and rural residences receiving a 0. The full data model has an equation of `TB Prevalence = 410 + 95.5(Urban)`. The difference between the high burden and full data models is lower than the other outcomes, most likely due to the long duration of TB or less data points available with the full data model. 
+The best tree model for TB mortality using the full data has a depth of 1 with an RMSE of 16.9. The fitted model to the training data has a RMSE of 11.3, but using the testing data, the model had a performance of RMSE = 17.4. The most important predictor was country.
 
-## Linear model fitting for BCG Coverage
-Now we can look at some of the other indicators in the data set. I will only be looking at the indicators that had variation between subgroups. 
-```{r, fitmodel4}
+```{r, hbmortalitymodel}
 ```
-The BCG coverage has 12 variables that produce a linear equation of `BCG coverage % = 88.4 + 0.363(Male) -10.6(no education) + 0.169(primary education) + 6.66(higher education) - 6.46(quintile 1) - 1.6(quintile 2) +1.06(quintile 3) + 4.50(quintile 4) + 7.01(quintile 5) - 2.12(rural) + 5.10(Urban)`. The full model has an equation of `BCG coverage % = 88.3 + 0.245(Male) -9.44(no education) + 0.958(primary education) + 6.42(higher education) - 6.40(quintile 1) - 1.68(quintile 2) + 0.773(quintile 3) + 3.84(quintile 4) + 6.41(quintile 5) - 2.08(rural) + 4.75(Urban)`. The two models are overall pretty similar and can be used in the same way as the prediction model (entering in 1 or 0 depending on categorization).
+The best tree model for TB mortality using the high burden countries has a depth of 1 with an RMSE of 20.8. The fitted model to the training data has a RMSE of 16.0. Using the testing data, the model had a performance of RMSE = 21.0. The most important predictor was country.
 
-## Linear model fitting for Catastrophic costs
+## Decision tree model for TB Prevalence
 
-```{r, fitmodel5}
+```{r, wdprevalencemodel}
 ```
-The high burden model has an equation of `% catastrophic costs = 87.3 - 40.4(drug-suseptible TB) - 18.6(quintile 1) - 38.8(quintile 2) - 44.6(quintile 3) - 47.4(quintile 4) - 58.5(quintile 5)`. The full model data has an equation of `% catastrophic costs = 83.5 - 35.1(drug-suseptible TB) - 11.1(quintile 1) - 30.9(quintile 2) - 38.4(quintile 3) - 41.4(quintile 4) - 54.9(quintile 5)`.
-## Linear model fitting for case detection rate
+The best tree model for TB prevalence using the full data has a depth of 1 with an RMSE of 208. This is a very low level of performance in predicting TB prevalence. The fitted model to the training data has a RMSE of 135, and using the testing data, the model had a performance of RMSE = 287. The most important predictor was country.
 
-```{r, fitmodel6}
+```{r, hbprevalencemodel}
 ```
-For high burden countries, the equation is `case detection rate % = 37.9 + 19.1(15+ or older) + 16.7(female) + 16.4(male)`. The full data model has an equation of `case detection rate % = 43.8 + 18.9(15+ or older) + 15.3(female) + 16.9(male)`.
+The best tree model for TB prevalence using the high burden countries has a depth of 1 with an RMSE of 172. This is a very low level of performance in predicting TB incidence. The fitted model to the training data has a RMSE of 138, but using the testing data, the model had a performance of RMSE = 237. The most important predictor was country.
 
-## Linear model fitting for prevalence to notification ratio
+The models were overall not a good predictor of TB outcomes. This is possibly due to the large variance in the outcomes as well as the low number of predictors available. Since country is consistently the most important predictor, we can look at some of the health indicators to see some of the underlying trends that can occur within a country.
 
-```{r, fitmodel7}
+## Decision tree model for BCG coverage
+
+```{r, wdbcgmodel}
 ```
-The high burden model has an equation of `prevalence to notification ratio in years = 1.73 + 0.664(male)`, and the full model has an equation of `prevalence to notification ratio in years = 1.73 + 0.701(male)`. 
+The best tree model for BCG coverage using the full data has a depth of 15 with an RMSE of 5.86. This would appear to be a better prediction than the previous ones. The fitted model to the training data has a RMSE of 4.29, and using the testing data, the model had a performance of RMSE = 5.30. The most important predictor was country followed by subgroup.
 
-## Linear model fitting for attitudes
-
-```{r, fitmodel8}
+```{r, hbbcgmodel}
 ```
-The attitude question regarding TB was about the desire to keep a diagnosis hidden. Since males are more likely to be diagnosed with TB, I focused on the male attitude and knowledge. For high burden countries, the equation is `% wanting to keep TB secret = 27.6 - 5.27(20-34 years) - 8.21(35-49 years) - 3.53(no education) - 2.71(primary education) - 7.23(higher education) - 5.01(quintile 1) - 5.23(quintile 2) - 4.97(quintile 3) - 4.38(quintile 4) - 5.86(quintile 5) - 4.91(rural) - 6.27(urban)`. For the full model, the equation is `% wanting to keep TB secret = 24.7 - 4.94(20-34 years) - 8.14(35-49 years) - 4.32(no education) - 3.08(primary education) - 6.41(higher education) - 4.44(quintile 1) - 5.24(quintile 2) - 5.18(quintile 3) - 4.59(quintile 4) - 6.20(quintile 5) - 4.66(rural) - 5.99(urban)`.
+The best tree model for BCG coverage using high burden countries has a depth of 11 with an RMSE of 5.79. The fitted model to the training data has a RMSE of 4.00, but using the testing data, the model had a performance of RMSE = 5.56. These are approximately similar to the full data set. The most important predictor was country.
 
-## Linear model fitting for knowledge
-
-```{r, fitmodel9}
+## Decision tree model for Catastrophic Cost
+```{r, wdcatacostmodel}
 ```
-The knowledge question asked about if TB is spread through cough. We will again focus on male knowledge.
+The best tree model for catastrophic costs using the full data has a depth of 4 with an RMSE of 17.2. The fitted model to the training data has a RMSE of 10.2, but using the testing data, the model had a performance of RMSE = 18.1. The most important predictor was subgroup.
 
-The high burden countries had an equation of `% responding TB is spread through cough = 65.9 + 4.83(20-34 years) + 6.19(35-49 years) - 9.91(no education) - 2.81(primary education) + 12.6(higher education) - 6.01(quintile 1) - 0.464(quintile 2) + 2.32(quintile 3) + 7.50(quintile 4) + 14.6(quintile 5) + 0.419(rural) + 11.8(urban)`. The full model had an equation of `% responding TB is spread through cough = 64.6 + 6.17(20-34 years) + 7.29(35-49 years) - 8.55(no education) - 1.66(primary education) + 12.8(higher education) - 3.88(quintile 1) + 0.028(quintile 2) + 3.03(quintile 3) + 8.18(quintile 4) + 15.8(quintile 5) + 1.28(rural) + 12.8(urban)`.
+```{r, hbcatacostmodel}
+```
+The best tree model for catastrophic costs using the high burden countries has a depth of 4 with an RMSE of 16.3. The fitted model to the training data has a RMSE of 10.7, but using the testing data, the model had a performance of RMSE = 15.2. The most important predictor was subgroup.
 
-I would like to try and create a dataset using the high burden countries in order to predict the main outcomes of TB incidence and mortality from the indicators (BCG Coverage, knowledge, attitudes, etc). Right now, the data is not set up to complete this analysis, but I will try to find a way to do this. 
+## Decision tree model for Case Detection Rate
 
+```{r, wdcasedetectmodel}
+```
+The best tree model for case detection rate using the full data has a depth of 8 with an RMSE of 13.6. The fitted model to the training data has a RMSE of ###, but using the testing data, the model had a performance of RMSE = 12.2. The most important predictor was country.
 
+```{r, hbcasedetectmodel}
+```
+The best tree model for case detection rate using high burden countries has a depth of 8 with an RMSE of 16.1. This is a very low level of performance in predicting TB incidence. The fitted model to the training data has a RMSE of 7.93, but using the testing data, the model had a performance of RMSE = 11.8. The most important predictor was country.
+
+## Decision tree model for Prevalence to Notification ratio
+
+```{r, wdptnmodel}
+```
+The best tree model for prevalence to notification ratio using the full data has a depth of 4 with an RMSE of 1.06. This model has the highest performance so far. The fitted model to the training data has a RMSE of 0.546, and using the testing data, the model had a performance of RMSE = 0.656. The most important predictor was country.
+
+```{r, hbptnmodel}
+```
+The best tree model for prevalence to notification ratio using high burden countries has a depth of 1 with an RMSE of 0.984. This model also has high performance and has a different tree depth than the full data set. The fitted model to the training data has a RMSE of 0.650, but using the testing data, the model had a performance of RMSE = 0.773. The most important and only predictor was country.
+
+## Decision tree model for Male Attitudes
+
+```{r, wdmaleattitudemodel}
+```
+The best tree model for male attitudes using the full data has a depth of 4 with an RMSE of 5.39. The fitted model to the training data has a RMSE of 3.87, and using the testing data, the model had a performance of RMSE = 4.62. The most important predictor was country.
+
+```{r, hbmaleattitubemodel}
+```
+The best tree model for male attitude using high burden countries has a depth of 8 with an RMSE of 5.70. The fitted model to the training data has a RMSE of 3.71, but using the testing data, the model had a performance of RMSE = 4.46. The most important predictor was country.
+
+## Decision tree model for Male Knowledge
+```{r, wdmaleknowledgemodel}
+```
+The best tree model for male knowledge using the full data has a depth of 8 with an RMSE of 8.52. The fitted model to the training data has a RMSE of 5.69, but using the testing data, the model had a performance of RMSE = 6.49. The most important predictor was country.
+
+```{r, hbmaleknowledgemodel}
+```
+The best tree model for male knowledge using the high burden countries has a depth of 4 with an RMSE of 10.8. The fitted model to the training data has a RMSE of 6.23, but using the testing data, the model had a performance of RMSE = 8.99. The most important predictor was year which was different from the full data set.
