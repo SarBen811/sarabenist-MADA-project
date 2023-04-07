@@ -24,6 +24,13 @@ The packages and data are loaded.
 
 ```{r, loaddata}
 ```
+
+# Basic modelling
+For some basic modeling, I will be fitting linear models to the TB outcomes with the subgroups as predictors. This will offer another view of the data. The prediction model also offers a way to explore the data by submitting a sample prediction of TB incidence for females and males in India.
+```{r, basicmodels}
+```
+The biggest issue with the linear modeling is the assumption that the relationship between predictors and outcomes is linear, and the model cannot be tuned and replicated.
+
 # Model fitting
 Now that the data has been explored, I would like to start looking at models for the main outcomes and predictors of the data set. First, we will focus split the data into testing and training sets and set up the cross-validation folds. The training set will be used to tune the model parameters and the testing set will be used to test model performance on new data.
 

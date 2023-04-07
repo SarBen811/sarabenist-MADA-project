@@ -21,6 +21,103 @@ data_location <- here::here("data","processed_data","processeddata.rda")
 #load data. 
 load(data_location)
 
+## ---- basicmodels ---------
+# fit linear model with TB incidence as outcome, subgroup as predictor
+lm_mod <- linear_reg()
+
+#fit model with high burden countries
+inclm_fit <- lm_mod %>% 
+  fit(`TB incidence (new infections per 100 000 population)` ~ subgroup,
+      data = highburden) #fit linear model
+incfittable <- tidy(inclm_fit) 
+print(incfittable) #produce tidy table of fitted model
+
+table_file1 = here("results", "model fit tables", "incfittable.rds")
+saveRDS(incfittable, file = table_file1) #save summary table
+
+#fit model with full data
+inclm_fitFD <- lm_mod %>% 
+  fit(`TB incidence (new infections per 100 000 population)` ~ subgroup,
+      data = wide_data) #fit linear model
+incfittable2 <- tidy(inclm_fitFD) 
+print(incfittable2) #produce tidy table of fitted model
+
+table_file2 = here("results", "model fit tables","incfittableFD.rds")
+saveRDS(incfittable2, file = table_file2) #save summary table
+
+#prediction model using subgroup and setting
+predinclm_fit <- lm_mod %>% 
+  fit(`TB incidence (new infections per 100 000 population)` ~ subgroup + setting,
+      data = highburden) #fit linear model
+predincfittable <- tidy(predinclm_fit) 
+print(predincfittable)
+
+new_points <- expand.grid(subgroup = c("Female", "Male"),
+                          setting = "India") #predicting Indian incidence based on sex
+incpred <- predict(predinclm_fit,
+                   new_data = new_points) #predictions
+CIincpred <- predict(predinclm_fit,
+                     new_data = new_points,
+                     type = "conf_int") #confidence intervals for predictions
+preddata <- new_points %>% #create plot data
+  bind_cols(incpred) %>% 
+  bind_cols(CIincpred)
+
+predplot <- ggplot(preddata, aes(subgroup))+
+  geom_point(aes(y = .pred))+ #plot predictions with confidence intervals
+  geom_errorbar(aes(ymin = .pred_lower,
+                    ymax = .pred_upper),
+                width = .2) +
+  labs(y = "TB Incidence (per 100 000 population)")
+predplot
+
+saveRDS(predplot, file = here("results", "model fit tables", "prediction1.rds"))
+
+# fit linear model using TB mortality as outcome, subgroup and setting as predictor
+
+#fit model with high burden countries
+mortlm_fit <- lm_mod %>% 
+  fit(`TB mortality (deaths per 100 000 population)` ~ subgroup,
+      data = highburden) #fit linear model
+mortfittable <- tidy(mortlm_fit) 
+print(mortfittable) #produce tidy table of fitted model
+
+table_file3 = here("results", "model fit tables", "mortfittable.rds")
+saveRDS(mortfittable, file = table_file3) #save summary table
+
+#fit model with full data
+mortlm_fitFD <- lm_mod %>% 
+  fit(`TB mortality (deaths per 100 000 population)` ~ subgroup,
+      data = wide_data) #fit linear model
+mortfittableFD <- tidy(mortlm_fitFD) 
+print(mortfittableFD) #produce tidy table of fitted model
+
+table_file4 = here("results", "model fit tables", "mortfittableFD.rds")
+saveRDS(mortfittableFD, file = table_file4)
+
+# fit linear model TB prevalence as outcome, subgroups as predictors
+
+#fit model with high burden countries
+prevlm_fit <- lm_mod %>% 
+  fit(`TB prevalence (cases per 100 000 population)` ~ subgroup,
+      data = highburden) #fit linear model
+prevfittable <- tidy(prevlm_fit) 
+print(prevfittable) #produce tidy table of fitted model
+
+table_file5 = here("results", "model fit tables", "prevfittable.rds")
+saveRDS(prevfittable, file = table_file5) #save summary table
+
+#fit model with full data
+prevlm_fitFD <- lm_mod %>% 
+  fit(`TB prevalence (cases per 100 000 population)` ~ subgroup,
+      data = wide_data) #fit linear model
+prevfittableFD <- tidy(prevlm_fitFD) 
+print(prevfittableFD) #produce tidy table of fitted model
+
+table_file6 = here("results", "model fit tables", "prevfittableFD.rds")
+saveRDS(prevfittableFD, file = table_file6)
+
+
 ## ---- splitdata --------
 #split data into training and test sets for wide_data
 wddatasplit <- initial_split(wide_data, prop = 3/4)
@@ -79,6 +176,8 @@ inctree_resamp <- incwflow %>%
 #plot resampling by parameters
 inctreeplot <- inctree_resamp %>% autoplot()
 inctreeplot
+treeplot1 = here("results", "tune plots", "wdinctreeplot.rds")
+saveRDS(inctreeplot, file = treeplot1)
 
 #show the best model
 inctree_resamp %>% 
@@ -108,6 +207,11 @@ wdincfittest %>% collect_metrics()
 #check important variables of model
 wdincfittest %>% extract_fit_parsnip() %>% vip()
 
+#save for later comparison: RMSE based on predictions from best model
+wdinc_rmse <- inctree_resamp %>% 
+  collect_predictions(parameters = wdincbest_tree) %>% 
+  rmse(`TB incidence (new infections per 100 000 population)`, .pred) %>% 
+  mutate(model = "wdinc")
 
 ## ---- hbincidencemodel ---------
 #recipe predicting TB incidence
@@ -139,6 +243,8 @@ inctree_resamp <- incwflow %>%
 #plot resampling by parameters
 inctreeplot <- inctree_resamp %>% autoplot()
 inctreeplot
+treeplot2 = here("results", "tune plots", "hbinctreeplot.rds")
+saveRDS(inctreeplot, file = treeplot2)
 
 #show the best model
 inctree_resamp %>% 
@@ -173,6 +279,12 @@ hbincfinal_fit %>%
   extract_fit_engine() %>%
   rpart.plot(roundint = FALSE)
 
+#save for later comparison
+hbinc_rmse <- inctree_resamp %>% 
+  collect_predictions(parameters = hbincbest_tree) %>% 
+  rmse(`TB incidence (new infections per 100 000 population)`, .pred) %>% 
+  mutate(model = "hbinc")
+
 ## ---- wdmortalitymodel ---------
 #recipe predicting TB mortality
 mortrecipe <- recipe(`TB mortality (deaths per 100 000 population)` ~.,
@@ -203,6 +315,8 @@ morttree_resamp <- mortwflow %>%
 #plot resampling by parameters
 morttreeplot <- morttree_resamp %>% autoplot()
 morttreeplot
+treeplot3 = here("results", "tune plots", "wdmorttreeplot.rds")
+saveRDS(morttreeplot, file = treeplot3)
 
 #show the best model
 morttree_resamp %>% 
@@ -230,6 +344,12 @@ wdmortfittest %>% collect_metrics()
 
 #check important variables of model
 wdmortfittest %>% extract_fit_parsnip() %>% vip()
+
+#save for later comparison: RMSE based on predictions from best model
+wdmort_rmse <- morttree_resamp %>% 
+  collect_predictions(parameters = wdmortbest_tree) %>% 
+  rmse(`TB mortality (deaths per 100 000 population)`, .pred) %>% 
+  mutate(model = "wdmort")
 
 ## ---- hbmortalitymodel ---------
 #recipe predicting TB mortality
@@ -261,6 +381,8 @@ morttree_resamp <- mortwflow %>%
 #plot resampling by parameters
 morttreeplot <- morttree_resamp %>% autoplot()
 morttreeplot
+treeplot4 = here("results", "tune plots", "hbmorttreeplot.rds")
+saveRDS(morttreeplot, file = treeplot4)
 
 #show the best model
 morttree_resamp %>% 
@@ -288,6 +410,12 @@ hbmortfittest %>% collect_metrics()
 
 #check important variables of model
 hbmortfittest %>% extract_fit_parsnip() %>% vip()
+
+#save for later comparison: RMSE based on predictions from best model
+hbmort_rmse <- morttree_resamp %>% 
+  collect_predictions(parameters = hbmortbest_tree) %>% 
+  rmse(`TB mortality (deaths per 100 000 population)`, .pred) %>% 
+  mutate(model = "hbmort")
 
 #plot decision tree
 hbmortfinal_fit %>%
@@ -318,6 +446,9 @@ prevtree_resamp <- prevwflow %>%
 prevtreeplot <- prevtree_resamp %>% autoplot()
 prevtreeplot
 
+treeplot5 = here("results", "tune plots", "wdprevtreeplot.rds")
+saveRDS(prevtreeplot, file = treeplot5)
+
 #show the best model
 prevtree_resamp %>% 
   show_best()
@@ -345,6 +476,12 @@ wdprevfittest %>% collect_metrics()
 #check important variables of model
 wdprevfittest %>% extract_fit_parsnip() %>% vip()
 
+#save for later comparison: RMSE based on predictions from best model
+wdprev_rmse <- prevtree_resamp %>% 
+  collect_predictions(parameters = wdprevbest_tree) %>% 
+  rmse(`TB prevalence (cases per 100 000 population)`, .pred) %>% 
+  mutate(model = "wdprev")
+
 ## ---- hbprevalencemodel -----
 #recipe predicting TB prevalence
 prevrecipe <- recipe(`TB prevalence (cases per 100 000 population)` ~.,
@@ -368,6 +505,9 @@ prevtree_resamp <- prevwflow %>%
 #plot resampling by parameters
 prevtreeplot <- prevtree_resamp %>% autoplot()
 prevtreeplot
+
+treeplot6 = here("results", "tune plots", "hbprevtreeplot.rds")
+saveRDS(prevtreeplot, file = treeplot6)
 
 #show the best model
 prevtree_resamp %>% 
@@ -395,6 +535,12 @@ hbprevfittest %>% collect_metrics()
 
 #check important variables of model
 hbprevfittest %>% extract_fit_parsnip() %>% vip()
+
+#save for later comparison: RMSE based on predictions from best model
+hbprev_rmse <- prevtree_resamp %>% 
+  collect_predictions(parameters = hbprevbest_tree) %>% 
+  rmse(`TB prevalence (cases per 100 000 population)`, .pred) %>% 
+  mutate(model = "hbprev")
 
 #plot decision tree
 hbprevfinal_fit %>%
@@ -424,6 +570,8 @@ bcgtree_resamp <- bcgwflow %>%
 #plot resampling by parameters
 bcgtreeplot <- bcgtree_resamp %>% autoplot()
 bcgtreeplot
+treeplot7 = here("results", "tune plots", "wdbcgtreeplot.rds")
+saveRDS(bcgtreeplot, file = treeplot7)
 
 #show the best model
 bcgtree_resamp %>% 
@@ -452,6 +600,12 @@ wdbcgfittest %>% collect_metrics()
 #check important variables of model
 wdbcgfittest %>% extract_fit_parsnip() %>% vip()
 
+#save for later comparison: RMSE based on predictions from best model
+wdbcg_rmse <- bcgtree_resamp %>% 
+  collect_predictions(parameters = wdbcgbest_tree) %>% 
+  rmse(`BCG immunization coverage among one-year-olds (%)`, .pred) %>% 
+  mutate(model = "wdbcg")
+
 ## ---- hbbcgmodel ---------
 #recipe predicting BCG coverage
 bcgrecipe <- recipe(`BCG immunization coverage among one-year-olds (%)` ~.,
@@ -475,6 +629,8 @@ bcgtree_resamp <- bcgwflow %>%
 #plot resampling by parameters
 bcgtreeplot <- bcgtree_resamp %>% autoplot()
 bcgtreeplot
+treeplot8 = here("results", "tune plots", "hbbcgtreeplot.rds")
+saveRDS(bcgtreeplot, file = treeplot8)
 
 #show the best model
 bcgtree_resamp %>% 
@@ -502,6 +658,12 @@ hbbcgfittest %>% collect_metrics()
 
 #check important variables of model
 hbbcgfittest %>% extract_fit_parsnip() %>% vip()
+
+#save for later comparison: RMSE based on predictions from best model
+hbbcg_rmse <- bcgtree_resamp %>% 
+  collect_predictions(parameters = hbbcgbest_tree) %>% 
+  rmse(`BCG immunization coverage among one-year-olds (%)`, .pred) %>% 
+  mutate(model = "hbbcg")
 
 #plot decision tree
 hbbcgfinal_fit %>%
@@ -532,6 +694,9 @@ catatree_resamp <- catawflow %>%
 catatreeplot <- catatree_resamp %>% autoplot()
 catatreeplot
 
+treeplot9 = here("results", "tune plots", "wdcatatreeplot.rds")
+saveRDS(catatreeplot, file = treeplot9)
+
 #show the best model
 catatree_resamp %>% 
   show_best()
@@ -559,6 +724,12 @@ wdcatafittest %>% collect_metrics()
 #check important variables of model
 wdcatafittest %>% extract_fit_parsnip() %>% vip()
 
+#save for later comparison: RMSE based on predictions from best model
+wdcata_rmse <- catatree_resamp %>% 
+  collect_predictions(parameters = wdcatabest_tree) %>% 
+  rmse(`Families affected by TB facing catastrophic costs due to TB (%)`, .pred) %>% 
+  mutate(model = "wdcata")
+
 ## ---- hbcatacostmodel ---------
 #recipe predicting catastrophic cost
 catarecipe <- recipe(`Families affected by TB facing catastrophic costs due to TB (%)` ~.,
@@ -582,6 +753,8 @@ catatree_resamp <- catawflow %>%
 #plot resampling by parameters
 catatreeplot <- catatree_resamp %>% autoplot()
 catatreeplot
+treeplot10 = here("results", "tune plots", "hbcatatreeplot.rds")
+saveRDS(catatreeplot, file = treeplot10)
 
 #show the best model
 catatree_resamp %>% 
@@ -609,6 +782,12 @@ hbcatafittest %>% collect_metrics()
 
 #check important variables of model
 hbcatafittest %>% extract_fit_parsnip() %>% vip()
+
+#save for later comparison: RMSE based on predictions from best model
+hbcata_rmse <- catatree_resamp %>% 
+  collect_predictions(parameters = hbcatabest_tree) %>% 
+  rmse(`Families affected by TB facing catastrophic costs due to TB (%)`, .pred) %>% 
+  mutate(model = "hbcata")
 
 #plot decision tree
 hbcatafinal_fit %>%
@@ -638,6 +817,8 @@ casetree_resamp <- casewflow %>%
 #plot resampling by parameters
 casetreeplot <- casetree_resamp %>% autoplot()
 casetreeplot
+treeplot11 = here("results", "tune plots", "wdcasetreeplot.rds")
+saveRDS(catatreeplot, file = treeplot11)
 
 #show the best model
 casetree_resamp %>% 
@@ -666,6 +847,12 @@ wdcasefittest %>% collect_metrics()
 #check important variables of model
 wdcasefittest %>% extract_fit_parsnip() %>% vip()
 
+#save for later comparison: RMSE based on predictions from best model
+wdcase_rmse <- casetree_resamp %>% 
+  collect_predictions(parameters = wdcasebest_tree) %>% 
+  rmse(`Case detection rate (%)`, .pred) %>% 
+  mutate(model = "wdcase")
+
 ## ---- hbcasedetectmodel --------
 #recipe predicting TB case detection
 caserecipe <- recipe(`Case detection rate (%)` ~.,
@@ -689,6 +876,8 @@ casetree_resamp <- casewflow %>%
 #plot resampling by parameters
 casetreeplot <- casetree_resamp %>% autoplot()
 casetreeplot
+treeplot12 = here("results", "tune plots", "hbcasetreeplot.rds")
+saveRDS(catatreeplot, file = treeplot12)
 
 #show the best model
 casetree_resamp %>% 
@@ -716,6 +905,12 @@ hbcasefittest %>% collect_metrics()
 
 #check important variables of model
 hbcasefittest %>% extract_fit_parsnip() %>% vip()
+
+#save for later comparison: RMSE based on predictions from best model
+hbcase_rmse <- casetree_resamp %>% 
+  collect_predictions(parameters = hbcasebest_tree) %>% 
+  rmse(`Case detection rate (%)`, .pred) %>% 
+  mutate(model = "hbcase")
 
 #plot decision tree
 hbcasefinal_fit %>%
@@ -745,6 +940,8 @@ ptntree_resamp <- ptnwflow %>%
 #plot resampling by parameters
 ptntreeplot <- ptntree_resamp %>% autoplot()
 ptntreeplot
+treeplot13 = here("results", "tune plots", "wdptntreeplot.rds")
+saveRDS(ptntreeplot, file = treeplot13)
 
 #show the best model
 ptntree_resamp %>% 
@@ -773,8 +970,14 @@ wdptnfittest %>% collect_metrics()
 #check important variables of model
 wdptnfittest %>% extract_fit_parsnip() %>% vip()
 
+#save for later comparison: RMSE based on predictions from best model
+wdptn_rmse <- ptntree_resamp %>% 
+  collect_predictions(parameters = wdptnbest_tree) %>% 
+  rmse(`Prevalence to notification ratio (years)`, .pred) %>% 
+  mutate(model = "wdptn")
+
 ## ---- hbptnmodel --------
-#recipe predicting TB prevalence to notifcation
+#recipe predicting TB prevalence to notification
 ptnrecipe <- recipe(`Prevalence to notification ratio (years)` ~.,
                      data = hbtrain_data)
 
@@ -796,16 +999,18 @@ ptntree_resamp <- ptnwflow %>%
 #plot resampling by parameters
 ptntreeplot <- ptntree_resamp %>% autoplot()
 ptntreeplot
+treeplot14 = here("results", "tune plots", "hbptntreeplot.rds")
+saveRDS(ptntreeplot, file = treeplot14)
 
 #show the best model
 ptntree_resamp %>% 
   show_best()
 
 #select best model
-hbtnbest_tree <- ptntree_resamp %>% select_best("rmse")
+hbptnbest_tree <- ptntree_resamp %>% select_best("rmse")
 
 #create final workflow
-hbptnfinal_wf <- ptnwflow %>% finalize_workflow(hbtnbest_tree)
+hbptnfinal_wf <- ptnwflow %>% finalize_workflow(hbptnbest_tree)
 
 #fit the final workflow to the training data
 hbptnfinal_fit <- hbptnfinal_wf %>% fit(hbtrain_data)
@@ -823,6 +1028,12 @@ hbptnfittest %>% collect_metrics()
 
 #check important variables of model
 hbptnfittest %>% extract_fit_parsnip() %>% vip()
+
+#save for later comparison: RMSE based on predictions from best model
+hbptn_rmse <- ptntree_resamp %>% 
+  collect_predictions(parameters = hbptnbest_tree) %>% 
+  rmse(`Prevalence to notification ratio (years)`, .pred) %>% 
+  mutate(model = "hbptn")
 
 #plot decision tree
 hbptnfinal_fit %>%
@@ -852,6 +1063,8 @@ atttree_resamp <- attwflow %>%
 #plot resampling by parameters
 atttreeplot <- atttree_resamp %>% autoplot()
 atttreeplot
+treeplot15 = here("results", "tune plots", "wdatttreeplot.rds")
+saveRDS(atttreeplot, file = treeplot15)
 
 #show the best model
 atttree_resamp %>% 
@@ -880,6 +1093,12 @@ wdattfittest %>% collect_metrics()
 #check important variables of model
 wdattfittest %>% extract_fit_parsnip() %>% vip()
 
+#save for later comparison: RMSE based on predictions from best model
+wdatt_rmse <- atttree_resamp %>% 
+  collect_predictions(parameters = wdattbest_tree) %>% 
+  rmse(`People who would want a family member's TB kept secret - Male (%)`, .pred) %>% 
+  mutate(model = "wdatt")
+
 ## ---- hbmaleattitubemodel ---------
 #recipe predicting male attitude
 attrecipe <- recipe(`People who would want a family member's TB kept secret - Male (%)` ~.,
@@ -903,6 +1122,8 @@ atttree_resamp <- attwflow %>%
 #plot resampling by parameters
 atttreeplot <- atttree_resamp %>% autoplot()
 atttreeplot
+treeplot16 = here("results", "tune plots", "hbatttreeplot.rds")
+saveRDS(atttreeplot, file = treeplot16)
 
 #show the best model
 atttree_resamp %>% 
@@ -930,6 +1151,12 @@ hbattfittest %>% collect_metrics()
 
 #check important variables of model
 hbattfittest %>% extract_fit_parsnip() %>% vip()
+
+#save for later comparison: RMSE based on predictions from best model
+hbatt_rmse <- atttree_resamp %>% 
+  collect_predictions(parameters = hbattbest_tree) %>% 
+  rmse(`People who would want a family member's TB kept secret - Male (%)`, .pred) %>% 
+  mutate(model = "hbatt")
 
 #plot decision tree
 hbattfinal_fit %>%
@@ -960,6 +1187,8 @@ knowtree_resamp <- knowwflow %>%
 #plot resampling by parameters
 knowtreeplot <- knowtree_resamp %>% autoplot()
 knowtreeplot
+treeplot17 = here("results", "tune plots", "wdknowtreeplot.rds")
+saveRDS(knowtreeplot, file = treeplot17)
 
 #show the best model
 knowtree_resamp %>% 
@@ -990,6 +1219,12 @@ wdknowfittest %>% collect_metrics()
 #check important variables of model
 wdknowfittest %>% extract_fit_parsnip() %>% vip()
 
+#save for later comparison: RMSE based on predictions from best model
+wdknow_rmse <- knowtree_resamp %>% 
+  collect_predictions(parameters = wdknowbest_tree) %>% 
+  rmse(`People who report TB is spread through coughing - Male (%)`, .pred) %>% 
+  mutate(model = "wdknow")
+
 ## ---- hbmaleknowledgemodel ---------
 #recipe predicting male knowledge
 knowrecipe <- recipe(`People who report TB is spread through coughing - Male (%)`
@@ -1014,6 +1249,8 @@ knowtree_resamp <- knowwflow %>%
 #plot resampling by parameters
 knowtreeplot <- knowtree_resamp %>% autoplot()
 knowtreeplot
+treeplot18 = here("results", "tune plots", "hbknowtreeplot.rds")
+saveRDS(knowtreeplot, file = treeplot18)
 
 #show the best model
 knowtree_resamp %>% 
@@ -1044,7 +1281,28 @@ hbknowfittest %>% collect_metrics()
 #check important variables of model
 hbknowfittest %>% extract_fit_parsnip() %>% vip()
 
+#save for later comparison: RMSE based on predictions from best model
+hbknow_rmse <- knowtree_resamp %>% 
+  collect_predictions(parameters = hbknowbest_tree) %>% 
+  rmse(`People who report TB is spread through coughing - Male (%)`, .pred) %>% 
+  mutate(model = "hbknow")
+
 #plot decision tree
 hbknowfinal_fit %>%
   extract_fit_engine() %>%
   rpart.plot(roundint = FALSE)
+
+## ---- summary ---------
+#create summary table of RMSE of best models and save
+summary <- bind_rows(wdinc_rmse, hbinc_rmse,
+                     wdmort_rmse, hbmort_rmse,
+                     wdprev_rmse, hbprev_rmse,
+                     wdbcg_rmse, hbbcg_rmse,
+                     wdcata_rmse, hbcata_rmse,
+                     wdcase_rmse, hbcase_rmse,
+                     wdptn_rmse, hbptn_rmse,
+                     wdatt_rmse, hbatt_rmse,
+                     wdknow_rmse, hbknow_rmse)
+summary
+table_file1 = here("results", "summaryrmse.rds")
+saveRDS(summary, file = table_file1)
