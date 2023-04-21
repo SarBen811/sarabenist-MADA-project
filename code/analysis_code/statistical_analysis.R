@@ -32,7 +32,7 @@ inclm_fit <- lm_mod %>%
 incfittable <- tidy(inclm_fit) 
 print(incfittable) #produce tidy table of fitted model
 
-table_file1 = here("results", "model fit tables", "incfittable.rds")
+table_file1 = here("results", "statistical_analysis", "model fit tables", "incfittable.rds")
 saveRDS(incfittable, file = table_file1) #save summary table
 
 #fit model with full data
@@ -42,7 +42,7 @@ inclm_fitFD <- lm_mod %>%
 incfittable2 <- tidy(inclm_fitFD) 
 print(incfittable2) #produce tidy table of fitted model
 
-table_file2 = here("results", "model fit tables","incfittableFD.rds")
+table_file2 = here("results", "statistical_analysis", "model fit tables","incfittableFD.rds")
 saveRDS(incfittable2, file = table_file2) #save summary table
 
 #prediction model using subgroup and setting
@@ -53,7 +53,7 @@ predincfittable <- tidy(predinclm_fit)
 print(predincfittable)
 
 new_points <- expand.grid(subgroup = c("Female", "Male"),
-                          setting = "India") #predicting Indian incidence based on sex
+                          setting = "Central African Republic") #predicting CAR incidence based on sex
 incpred <- predict(predinclm_fit,
                    new_data = new_points) #predictions
 CIincpred <- predict(predinclm_fit,
@@ -68,10 +68,11 @@ predplot <- ggplot(preddata, aes(subgroup))+
   geom_errorbar(aes(ymin = .pred_lower,
                     ymax = .pred_upper),
                 width = .2) +
-  labs(y = "TB Incidence (per 100 000 population)")
+  labs(y = "TB Incidence (per 100 000 population)", 
+       title = "Predicted TB incidence for Central African Republic")
 predplot
 
-saveRDS(predplot, file = here("results", "model fit tables", "prediction1.rds"))
+saveRDS(predplot, file = here("results", "statistical_analysis", "model fit tables", "prediction1.rds"))
 
 # fit linear model using TB mortality as outcome, subgroup and setting as predictor
 
@@ -82,7 +83,7 @@ mortlm_fit <- lm_mod %>%
 mortfittable <- tidy(mortlm_fit) 
 print(mortfittable) #produce tidy table of fitted model
 
-table_file3 = here("results", "model fit tables", "mortfittable.rds")
+table_file3 = here("results", "statistical_analysis", "model fit tables", "mortfittable.rds")
 saveRDS(mortfittable, file = table_file3) #save summary table
 
 #fit model with full data
@@ -92,7 +93,7 @@ mortlm_fitFD <- lm_mod %>%
 mortfittableFD <- tidy(mortlm_fitFD) 
 print(mortfittableFD) #produce tidy table of fitted model
 
-table_file4 = here("results", "model fit tables", "mortfittableFD.rds")
+table_file4 = here("results", "statistical_analysis", "model fit tables", "mortfittableFD.rds")
 saveRDS(mortfittableFD, file = table_file4)
 
 # fit linear model TB prevalence as outcome, subgroups as predictors
@@ -104,7 +105,7 @@ prevlm_fit <- lm_mod %>%
 prevfittable <- tidy(prevlm_fit) 
 print(prevfittable) #produce tidy table of fitted model
 
-table_file5 = here("results", "model fit tables", "prevfittable.rds")
+table_file5 = here("results", "statistical_analysis", "model fit tables", "prevfittable.rds")
 saveRDS(prevfittable, file = table_file5) #save summary table
 
 #fit model with full data
@@ -114,7 +115,7 @@ prevlm_fitFD <- lm_mod %>%
 prevfittableFD <- tidy(prevlm_fitFD) 
 print(prevfittableFD) #produce tidy table of fitted model
 
-table_file6 = here("results", "model fit tables", "prevfittableFD.rds")
+table_file6 = here("results", "statistical_analysis", "model fit tables", "prevfittableFD.rds")
 saveRDS(prevfittableFD, file = table_file6)
 
 
@@ -176,7 +177,7 @@ inctree_resamp <- incwflow %>%
 #plot resampling by parameters
 inctreeplot <- inctree_resamp %>% autoplot()
 inctreeplot
-treeplot1 = here("results", "tune plots", "wdinctreeplot.rds")
+treeplot1 = here("results", "statistical_analysis", "tune plots", "wdinctreeplot.rds")
 saveRDS(inctreeplot, file = treeplot1)
 
 #show the best model
@@ -243,7 +244,7 @@ inctree_resamp <- incwflow %>%
 #plot resampling by parameters
 inctreeplot <- inctree_resamp %>% autoplot()
 inctreeplot
-treeplot2 = here("results", "tune plots", "hbinctreeplot.rds")
+treeplot2 = here("results", "statistical_analysis", "tune plots", "hbinctreeplot.rds")
 saveRDS(inctreeplot, file = treeplot2)
 
 #show the best model
@@ -315,7 +316,7 @@ morttree_resamp <- mortwflow %>%
 #plot resampling by parameters
 morttreeplot <- morttree_resamp %>% autoplot()
 morttreeplot
-treeplot3 = here("results", "tune plots", "wdmorttreeplot.rds")
+treeplot3 = here("results", "statistical_analysis", "tune plots", "wdmorttreeplot.rds")
 saveRDS(morttreeplot, file = treeplot3)
 
 #show the best model
@@ -381,7 +382,7 @@ morttree_resamp <- mortwflow %>%
 #plot resampling by parameters
 morttreeplot <- morttree_resamp %>% autoplot()
 morttreeplot
-treeplot4 = here("results", "tune plots", "hbmorttreeplot.rds")
+treeplot4 = here("results", "statistical_analysis", "tune plots", "hbmorttreeplot.rds")
 saveRDS(morttreeplot, file = treeplot4)
 
 #show the best model
@@ -446,7 +447,7 @@ prevtree_resamp <- prevwflow %>%
 prevtreeplot <- prevtree_resamp %>% autoplot()
 prevtreeplot
 
-treeplot5 = here("results", "tune plots", "wdprevtreeplot.rds")
+treeplot5 = here("results", "statistical_analysis", "tune plots", "wdprevtreeplot.rds")
 saveRDS(prevtreeplot, file = treeplot5)
 
 #show the best model
@@ -506,7 +507,7 @@ prevtree_resamp <- prevwflow %>%
 prevtreeplot <- prevtree_resamp %>% autoplot()
 prevtreeplot
 
-treeplot6 = here("results", "tune plots", "hbprevtreeplot.rds")
+treeplot6 = here("results", "statistical_analysis", "tune plots", "hbprevtreeplot.rds")
 saveRDS(prevtreeplot, file = treeplot6)
 
 #show the best model
@@ -570,7 +571,7 @@ bcgtree_resamp <- bcgwflow %>%
 #plot resampling by parameters
 bcgtreeplot <- bcgtree_resamp %>% autoplot()
 bcgtreeplot
-treeplot7 = here("results", "tune plots", "wdbcgtreeplot.rds")
+treeplot7 = here("results", "statistical_analysis", "tune plots", "wdbcgtreeplot.rds")
 saveRDS(bcgtreeplot, file = treeplot7)
 
 #show the best model
@@ -629,7 +630,7 @@ bcgtree_resamp <- bcgwflow %>%
 #plot resampling by parameters
 bcgtreeplot <- bcgtree_resamp %>% autoplot()
 bcgtreeplot
-treeplot8 = here("results", "tune plots", "hbbcgtreeplot.rds")
+treeplot8 = here("results", "statistical_analysis", "tune plots", "hbbcgtreeplot.rds")
 saveRDS(bcgtreeplot, file = treeplot8)
 
 #show the best model
@@ -694,7 +695,7 @@ catatree_resamp <- catawflow %>%
 catatreeplot <- catatree_resamp %>% autoplot()
 catatreeplot
 
-treeplot9 = here("results", "tune plots", "wdcatatreeplot.rds")
+treeplot9 = here("results", "statistical_analysis", "tune plots", "wdcatatreeplot.rds")
 saveRDS(catatreeplot, file = treeplot9)
 
 #show the best model
@@ -753,7 +754,7 @@ catatree_resamp <- catawflow %>%
 #plot resampling by parameters
 catatreeplot <- catatree_resamp %>% autoplot()
 catatreeplot
-treeplot10 = here("results", "tune plots", "hbcatatreeplot.rds")
+treeplot10 = here("results", "statistical_analysis", "tune plots", "hbcatatreeplot.rds")
 saveRDS(catatreeplot, file = treeplot10)
 
 #show the best model
@@ -817,7 +818,7 @@ casetree_resamp <- casewflow %>%
 #plot resampling by parameters
 casetreeplot <- casetree_resamp %>% autoplot()
 casetreeplot
-treeplot11 = here("results", "tune plots", "wdcasetreeplot.rds")
+treeplot11 = here("results", "statistical_analysis", "tune plots", "wdcasetreeplot.rds")
 saveRDS(catatreeplot, file = treeplot11)
 
 #show the best model
@@ -876,7 +877,7 @@ casetree_resamp <- casewflow %>%
 #plot resampling by parameters
 casetreeplot <- casetree_resamp %>% autoplot()
 casetreeplot
-treeplot12 = here("results", "tune plots", "hbcasetreeplot.rds")
+treeplot12 = here("results", "statistical_analysis", "tune plots", "hbcasetreeplot.rds")
 saveRDS(catatreeplot, file = treeplot12)
 
 #show the best model
@@ -940,7 +941,7 @@ ptntree_resamp <- ptnwflow %>%
 #plot resampling by parameters
 ptntreeplot <- ptntree_resamp %>% autoplot()
 ptntreeplot
-treeplot13 = here("results", "tune plots", "wdptntreeplot.rds")
+treeplot13 = here("results", "statistical_analysis", "tune plots", "wdptntreeplot.rds")
 saveRDS(ptntreeplot, file = treeplot13)
 
 #show the best model
@@ -999,7 +1000,7 @@ ptntree_resamp <- ptnwflow %>%
 #plot resampling by parameters
 ptntreeplot <- ptntree_resamp %>% autoplot()
 ptntreeplot
-treeplot14 = here("results", "tune plots", "hbptntreeplot.rds")
+treeplot14 = here("results", "statistical_analysis", "tune plots", "hbptntreeplot.rds")
 saveRDS(ptntreeplot, file = treeplot14)
 
 #show the best model
@@ -1063,7 +1064,7 @@ atttree_resamp <- attwflow %>%
 #plot resampling by parameters
 atttreeplot <- atttree_resamp %>% autoplot()
 atttreeplot
-treeplot15 = here("results", "tune plots", "wdatttreeplot.rds")
+treeplot15 = here("results", "statistical_analysis", "tune plots", "wdatttreeplot.rds")
 saveRDS(atttreeplot, file = treeplot15)
 
 #show the best model
@@ -1122,7 +1123,7 @@ atttree_resamp <- attwflow %>%
 #plot resampling by parameters
 atttreeplot <- atttree_resamp %>% autoplot()
 atttreeplot
-treeplot16 = here("results", "tune plots", "hbatttreeplot.rds")
+treeplot16 = here("results", "statistical_analysis", "tune plots", "hbatttreeplot.rds")
 saveRDS(atttreeplot, file = treeplot16)
 
 #show the best model
@@ -1187,7 +1188,7 @@ knowtree_resamp <- knowwflow %>%
 #plot resampling by parameters
 knowtreeplot <- knowtree_resamp %>% autoplot()
 knowtreeplot
-treeplot17 = here("results", "tune plots", "wdknowtreeplot.rds")
+treeplot17 = here("results", "statistical_analysis", "tune plots", "wdknowtreeplot.rds")
 saveRDS(knowtreeplot, file = treeplot17)
 
 #show the best model
@@ -1249,7 +1250,7 @@ knowtree_resamp <- knowwflow %>%
 #plot resampling by parameters
 knowtreeplot <- knowtree_resamp %>% autoplot()
 knowtreeplot
-treeplot18 = here("results", "tune plots", "hbknowtreeplot.rds")
+treeplot18 = here("results", "statistical_analysis", "tune plots", "hbknowtreeplot.rds")
 saveRDS(knowtreeplot, file = treeplot18)
 
 #show the best model
@@ -1304,5 +1305,5 @@ summary <- bind_rows(wdinc_rmse, hbinc_rmse,
                      wdatt_rmse, hbatt_rmse,
                      wdknow_rmse, hbknow_rmse)
 summary
-table_file1 = here("results", "summaryrmse.rds")
+table_file1 = here("results", "statistical_analysis", "summaryrmse.rds")
 saveRDS(summary, file = table_file1)

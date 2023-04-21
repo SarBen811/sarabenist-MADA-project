@@ -140,6 +140,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="processing-script-with-r-script-code" class="level1">
 <h1>Processing script with R script code</h1>
 <p>This Quarto file runs the statistical analysis code from the <code>statistical_analysis.r</code> script. The best way to view the output of the script is to render the qmd and view the html document. The processed data is used for model fitting.</p>
+<p><em>Note: this file takes approximately 10 minutes to render</em></p>
 <p>To start, the needed packages are loaded, and the <code>processeddata.rda</code> is loaded from the <code>processed_data</code> folder.</p>
 </section>
 <section id="setup" class="level1">
@@ -189,7 +190,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 1 (Intercept)      194.      24.2      8.03 2.49e-12
 2 subgroupMale     126.      34.2      3.69 3.70e- 4</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>table_file1 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"incfittable.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>table_file1 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"model fit tables"</span>, <span class="st">"incfittable.rds"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(incfittable, <span class="at">file =</span> table_file1) <span class="co">#save summary table</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with full data</span></span>
@@ -205,7 +206,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 1 (Intercept)      82.6      10.4      7.91 2.78e-14
 2 subgroupMale     48.0      14.8      3.25 1.25e- 3</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>table_file2 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>,<span class="st">"incfittableFD.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>table_file2 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"model fit tables"</span>,<span class="st">"incfittableFD.rds"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(incfittable2, <span class="at">file =</span> table_file2) <span class="co">#save summary table</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#prediction model using subgroup and setting</span></span>
@@ -231,7 +232,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 # … with 40 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>new_points <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">subgroup =</span> <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>),</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">setting =</span> <span class="st">"India"</span>) <span class="co">#predicting Indian incidence based on sex</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">setting =</span> <span class="st">"Central African Republic"</span>) <span class="co">#predicting CAR incidence based on sex</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>incpred <span class="ot">&lt;-</span> <span class="fu">predict</span>(predinclm_fit,</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">new_data =</span> new_points) <span class="co">#predictions</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>CIincpred <span class="ot">&lt;-</span> <span class="fu">predict</span>(predinclm_fit,</span>
@@ -246,12 +247,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> .pred_lower,</span>
 <span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax =</span> .pred_upper),</span>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">width =</span> .<span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"TB Incidence (per 100 000 population)"</span>)</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>predplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"TB Incidence (per 100 000 population)"</span>, </span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Predicted TB incidence for Central African Republic"</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>predplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/basicmodels-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(predplot, <span class="at">file =</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"prediction1.rds"</span>))</span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(predplot, <span class="at">file =</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"model fit tables"</span>, <span class="st">"prediction1.rds"</span>))</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model using TB mortality as outcome, subgroup and setting as predictor</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -268,7 +270,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 1 (Intercept)      23.6      3.55      6.65 0.00000000179
 2 subgroupMale     14.9      5.03      2.97 0.00380      </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>table_file3 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"mortfittable.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>table_file3 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"model fit tables"</span>, <span class="st">"mortfittable.rds"</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(mortfittable, <span class="at">file =</span> table_file3) <span class="co">#save summary table</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with full data</span></span>
@@ -284,7 +286,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 1 (Intercept)      9.98      1.50      6.64 1.05e-10
 2 subgroupMale     6.43      2.12      3.03 2.65e- 3</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>table_file4 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"mortfittableFD.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>table_file4 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"model fit tables"</span>, <span class="st">"mortfittableFD.rds"</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(mortfittableFD, <span class="at">file =</span> table_file4)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># fit linear model TB prevalence as outcome, subgroups as predictors</span></span>
@@ -302,7 +304,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 1 (Intercept)       399.      53.2      7.50 0.0000000361
 2 subgroupUrban     151.      75.3      2.01 0.0544      </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>table_file5 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"prevfittable.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>table_file5 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"model fit tables"</span>, <span class="st">"prevfittable.rds"</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(prevfittable, <span class="at">file =</span> table_file5) <span class="co">#save summary table</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#fit model with full data</span></span>
@@ -318,7 +320,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 1 (Intercept)      410.       49.2      8.34 4.15e-10
 2 subgroupUrban     95.5      69.6      1.37 1.78e- 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>table_file6 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"model fit tables"</span>, <span class="st">"prevfittableFD.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>table_file6 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"model fit tables"</span>, <span class="st">"prevfittableFD.rds"</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(prevfittableFD, <span class="at">file =</span> table_file6)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The biggest issue with the linear modeling is the assumption that the relationship between predictors and outcomes is linear, and the model cannot be tuned and replicated.</p>
@@ -389,7 +391,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/wdincidencemodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>treeplot1 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdinctreeplot.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>treeplot1 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdinctreeplot.rds"</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(inctreeplot, <span class="at">file =</span> treeplot1)</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
@@ -402,11 +404,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 5 × 8
   cost_complexity tree_depth .metric .estimator  mean     n std_err .config     
             &lt;dbl&gt;      &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;       
-1    0.0000000001          1 rmse    standard    109.     5    12.6 Preprocesso…
-2    0.0000000178          1 rmse    standard    109.     5    12.6 Preprocesso…
-3    0.00000316            1 rmse    standard    109.     5    12.6 Preprocesso…
-4    0.000562              1 rmse    standard    109.     5    12.6 Preprocesso…
-5    0.1                   1 rmse    standard    109.     5    12.6 Preprocesso…</code></pre>
+1    0.0000000001          4 rmse    standard    131.     5    13.4 Preprocesso…
+2    0.0000000178          4 rmse    standard    131.     5    13.4 Preprocesso…
+3    0.00000316            4 rmse    standard    131.     5    13.4 Preprocesso…
+4    0.000562              4 rmse    standard    131.     5    13.4 Preprocesso…
+5    0.000562              8 rmse    standard    131.     5    13.3 Preprocesso…</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>wdincbest_tree <span class="ot">&lt;-</span> inctree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
@@ -426,7 +428,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard        83.5</code></pre>
+1 rmse    standard        34.8</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>wdincfittest <span class="ot">&lt;-</span> wdincfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(wddatasplit)</span>
@@ -437,8 +439,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard     112.    Preprocessor1_Model1
-2 rsq     standard       0.296 Preprocessor1_Model1</code></pre>
+1 rmse    standard      87.4   Preprocessor1_Model1
+2 rsq     standard       0.650 Preprocessor1_Model1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>wdincfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -485,7 +487,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbincidencemodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>treeplot2 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbinctreeplot.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>treeplot2 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbinctreeplot.rds"</span>)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(inctreeplot, <span class="at">file =</span> treeplot2)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
@@ -522,7 +524,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard        146.</code></pre>
+1 rmse    standard        102.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>hbincfittest <span class="ot">&lt;-</span> hbincfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(hbdatasplit)</span>
@@ -598,11 +600,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 5 × 8
   cost_complexity tree_depth .metric .estimator  mean     n std_err .config     
             &lt;dbl&gt;      &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;       
-1    0.0000000001          4 rmse    standard    18.3     5    1.02 Preprocesso…
-2    0.0000000178          4 rmse    standard    18.3     5    1.02 Preprocesso…
-3    0.00000316            4 rmse    standard    18.3     5    1.02 Preprocesso…
-4    0.000562              4 rmse    standard    18.3     5    1.02 Preprocesso…
-5    0.000562              8 rmse    standard    18.3     5    1.02 Preprocesso…</code></pre>
+1    0.0000000001          8 rmse    standard    15.4     5    1.67 Preprocesso…
+2    0.0000000178          8 rmse    standard    15.4     5    1.67 Preprocesso…
+3    0.0000000001         11 rmse    standard    15.4     5    1.67 Preprocesso…
+4    0.0000000178         11 rmse    standard    15.4     5    1.67 Preprocesso…
+5    0.0000000001         15 rmse    standard    15.4     5    1.67 Preprocesso…</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>wdmortbest_tree <span class="ot">&lt;-</span> morttree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
@@ -622,7 +624,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard        6.78</code></pre>
+1 rmse    standard        6.14</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>wdmortfittest <span class="ot">&lt;-</span> wdmortfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(wddatasplit)</span>
@@ -633,8 +635,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard       8.21  Preprocessor1_Model1
-2 rsq     standard       0.772 Preprocessor1_Model1</code></pre>
+1 rmse    standard      22.2   Preprocessor1_Model1
+2 rsq     standard       0.200 Preprocessor1_Model1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>wdmortfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -676,7 +678,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbmortalitymodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>treeplot4 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbmorttreeplot.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>treeplot4 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbmorttreeplot.rds"</span>)</span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(morttreeplot, <span class="at">file =</span> treeplot4)</span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
@@ -770,7 +772,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>! Fold4: internal: A correlation computation is required, but `estimate` is constant and ha...</code></pre>
+<pre><code>! Fold2: internal: A correlation computation is required, but `estimate` is constant and ha...</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>prevtreeplot <span class="ot">&lt;-</span> prevtree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
@@ -778,7 +780,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/wdprevalencemodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>treeplot5 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdprevtreeplot.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>treeplot5 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdprevtreeplot.rds"</span>)</span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(prevtreeplot, <span class="at">file =</span> treeplot5)</span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
@@ -791,11 +793,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 5 × 8
   cost_complexity tree_depth .metric .estimator  mean     n std_err .config     
             &lt;dbl&gt;      &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;       
-1    0.0000000001          1 rmse    standard    247.     5    42.8 Preprocesso…
-2    0.0000000178          1 rmse    standard    247.     5    42.8 Preprocesso…
-3    0.00000316            1 rmse    standard    247.     5    42.8 Preprocesso…
-4    0.000562              1 rmse    standard    247.     5    42.8 Preprocesso…
-5    0.1                   1 rmse    standard    247.     5    42.8 Preprocesso…</code></pre>
+1    0.0000000001          1 rmse    standard    249.     5    49.6 Preprocesso…
+2    0.0000000178          1 rmse    standard    249.     5    49.6 Preprocesso…
+3    0.00000316            1 rmse    standard    249.     5    49.6 Preprocesso…
+4    0.000562              1 rmse    standard    249.     5    49.6 Preprocesso…
+5    0.1                   1 rmse    standard    249.     5    49.6 Preprocesso…</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>wdprevbest_tree <span class="ot">&lt;-</span> prevtree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
@@ -815,7 +817,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard        150.</code></pre>
+1 rmse    standard        141.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>wdprevfittest <span class="ot">&lt;-</span> wdprevfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(wddatasplit)</span>
@@ -826,8 +828,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard     150.    Preprocessor1_Model1
-2 rsq     standard       0.715 Preprocessor1_Model1</code></pre>
+1 rmse    standard     203.    Preprocessor1_Model1
+2 rsq     standard       0.489 Preprocessor1_Model1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
 <span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>wdprevfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -869,7 +871,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbprevalencemodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>treeplot6 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbprevtreeplot.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>treeplot6 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbprevtreeplot.rds"</span>)</span>
 <span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(prevtreeplot, <span class="at">file =</span> treeplot6)</span>
 <span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
@@ -970,7 +972,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/wdbcgmodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>treeplot7 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdbcgtreeplot.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>treeplot7 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdbcgtreeplot.rds"</span>)</span>
 <span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(bcgtreeplot, <span class="at">file =</span> treeplot7)</span>
 <span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
@@ -983,11 +985,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 5 × 8
   cost_complexity tree_depth .metric .estimator  mean     n std_err .config     
             &lt;dbl&gt;      &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;       
-1    0.00000316           11 rmse    standard    6.14     5   0.222 Preprocesso…
-2    0.0000000001         11 rmse    standard    6.14     5   0.222 Preprocesso…
-3    0.0000000178         11 rmse    standard    6.14     5   0.222 Preprocesso…
-4    0.00000316           15 rmse    standard    6.14     5   0.222 Preprocesso…
-5    0.0000000001         15 rmse    standard    6.14     5   0.222 Preprocesso…</code></pre>
+1    0.0000000001         15 rmse    standard    5.87     5   0.222 Preprocesso…
+2    0.0000000178         15 rmse    standard    5.87     5   0.222 Preprocesso…
+3    0.00000316           15 rmse    standard    5.87     5   0.222 Preprocesso…
+4    0.0000000001         11 rmse    standard    5.87     5   0.221 Preprocesso…
+5    0.0000000178         11 rmse    standard    5.87     5   0.221 Preprocesso…</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>wdbcgbest_tree <span class="ot">&lt;-</span> bcgtree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
@@ -1007,7 +1009,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard        4.07</code></pre>
+1 rmse    standard        4.27</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
 <span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>wdbcgfittest <span class="ot">&lt;-</span> wdbcgfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(wddatasplit)</span>
@@ -1018,8 +1020,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard       5.13  Preprocessor1_Model1
-2 rsq     standard       0.845 Preprocessor1_Model1</code></pre>
+1 rmse    standard       5.66  Preprocessor1_Model1
+2 rsq     standard       0.834 Preprocessor1_Model1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
 <span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>wdbcgfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1059,7 +1061,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbbcgmodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>treeplot8 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbbcgtreeplot.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>treeplot8 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbbcgtreeplot.rds"</span>)</span>
 <span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(bcgtreeplot, <span class="at">file =</span> treeplot8)</span>
 <span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
@@ -1162,7 +1164,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/wdcatacostmodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>treeplot9 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdcatatreeplot.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>treeplot9 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdcatatreeplot.rds"</span>)</span>
 <span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(catatreeplot, <span class="at">file =</span> treeplot9)</span>
 <span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
@@ -1175,11 +1177,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 5 × 8
   cost_complexity tree_depth .metric .estimator  mean     n std_err .config     
             &lt;dbl&gt;      &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;       
-1    0.0000000001          4 rmse    standard    21.9     5    5.18 Preprocesso…
-2    0.0000000178          4 rmse    standard    21.9     5    5.18 Preprocesso…
-3    0.00000316            4 rmse    standard    21.9     5    5.18 Preprocesso…
-4    0.000562              4 rmse    standard    21.9     5    5.18 Preprocesso…
-5    0.1                   4 rmse    standard    21.9     5    5.18 Preprocesso…</code></pre>
+1    0.0000000001          4 rmse    standard    18.4     5    1.38 Preprocesso…
+2    0.0000000178          4 rmse    standard    18.4     5    1.38 Preprocesso…
+3    0.00000316            4 rmse    standard    18.4     5    1.38 Preprocesso…
+4    0.000562              4 rmse    standard    18.4     5    1.38 Preprocesso…
+5    0.1                   4 rmse    standard    18.4     5    1.38 Preprocesso…</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
 <span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a>wdcatabest_tree <span class="ot">&lt;-</span> catatree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
@@ -1199,7 +1201,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard        12.1</code></pre>
+1 rmse    standard        10.8</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
 <span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a>wdcatafittest <span class="ot">&lt;-</span> wdcatafinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(wddatasplit)</span>
@@ -1210,8 +1212,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard      19.4   Preprocessor1_Model1
-2 rsq     standard       0.371 Preprocessor1_Model1</code></pre>
+1 rmse    standard      14.3   Preprocessor1_Model1
+2 rsq     standard       0.774 Preprocessor1_Model1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
 <span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a>wdcatafittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1251,7 +1253,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbcatacostmodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>treeplot10 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbcatatreeplot.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>treeplot10 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbcatatreeplot.rds"</span>)</span>
 <span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(catatreeplot, <span class="at">file =</span> treeplot10)</span>
 <span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb117-4"><a href="#cb117-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
@@ -1351,7 +1353,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/wdcasedetectmodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a>treeplot11 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdcasetreeplot.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a>treeplot11 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdcasetreeplot.rds"</span>)</span>
 <span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(catatreeplot, <span class="at">file =</span> treeplot11)</span>
 <span id="cb127-3"><a href="#cb127-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb127-4"><a href="#cb127-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
@@ -1364,11 +1366,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 5 × 8
   cost_complexity tree_depth .metric .estimator  mean     n std_err .config     
             &lt;dbl&gt;      &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;       
-1    0.0000000001          8 rmse    standard    13.8     5    1.32 Preprocesso…
-2    0.0000000178          8 rmse    standard    13.8     5    1.32 Preprocesso…
-3    0.00000316            8 rmse    standard    13.8     5    1.32 Preprocesso…
-4    0.0000000001         11 rmse    standard    13.8     5    1.32 Preprocesso…
-5    0.0000000178         11 rmse    standard    13.8     5    1.32 Preprocesso…</code></pre>
+1    0.0000000001          8 rmse    standard    13.4     5    1.14 Preprocesso…
+2    0.0000000178          8 rmse    standard    13.4     5    1.14 Preprocesso…
+3    0.00000316            8 rmse    standard    13.4     5    1.14 Preprocesso…
+4    0.0000000001         11 rmse    standard    13.4     5    1.14 Preprocesso…
+5    0.0000000178         11 rmse    standard    13.4     5    1.14 Preprocesso…</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
 <span id="cb130-2"><a href="#cb130-2" aria-hidden="true" tabindex="-1"></a>wdcasebest_tree <span class="ot">&lt;-</span> casetree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
@@ -1388,7 +1390,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard        4.90</code></pre>
+1 rmse    standard        4.94</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb132"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
 <span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>wdcasefittest <span class="ot">&lt;-</span> wdcasefinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(wddatasplit)</span>
@@ -1399,8 +1401,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard      10.5   Preprocessor1_Model1
-2 rsq     standard       0.719 Preprocessor1_Model1</code></pre>
+1 rmse    standard      12.3   Preprocessor1_Model1
+2 rsq     standard       0.732 Preprocessor1_Model1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb134"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
 <span id="cb134-2"><a href="#cb134-2" aria-hidden="true" tabindex="-1"></a>wdcasefittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1440,7 +1442,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbcasedetectmodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a>treeplot12 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbcasetreeplot.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a>treeplot12 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbcasetreeplot.rds"</span>)</span>
 <span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(catatreeplot, <span class="at">file =</span> treeplot12)</span>
 <span id="cb137-3"><a href="#cb137-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb137-4"><a href="#cb137-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
@@ -1532,20 +1534,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb146-15"><a href="#cb146-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> wdfolds,</span>
 <span id="cb146-16"><a href="#cb146-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> tree_grid,</span>
 <span id="cb146-17"><a href="#cb146-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb146-18"><a href="#cb146-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb146-19"><a href="#cb146-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb146-20"><a href="#cb146-20" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
-<span id="cb146-21"><a href="#cb146-21" aria-hidden="true" tabindex="-1"></a>ptntreeplot <span class="ot">&lt;-</span> ptntree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
-<span id="cb146-22"><a href="#cb146-22" aria-hidden="true" tabindex="-1"></a>ptntreeplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb146-18"><a href="#cb146-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>! Fold5: internal: A correlation computation is required, but `estimate` is constant and ha...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb148"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
+<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a>ptntreeplot <span class="ot">&lt;-</span> ptntree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
+<span id="cb148-3"><a href="#cb148-3" aria-hidden="true" tabindex="-1"></a>ptntreeplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/wdptnmodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb147"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a>treeplot13 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdptntreeplot.rds"</span>)</span>
-<span id="cb147-2"><a href="#cb147-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(ptntreeplot, <span class="at">file =</span> treeplot13)</span>
-<span id="cb147-3"><a href="#cb147-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb147-4"><a href="#cb147-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
-<span id="cb147-5"><a href="#cb147-5" aria-hidden="true" tabindex="-1"></a>ptntree_resamp <span class="sc">%&gt;%</span> </span>
-<span id="cb147-6"><a href="#cb147-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb149"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a>treeplot13 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdptntreeplot.rds"</span>)</span>
+<span id="cb149-2"><a href="#cb149-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(ptntreeplot, <span class="at">file =</span> treeplot13)</span>
+<span id="cb149-3"><a href="#cb149-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb149-4"><a href="#cb149-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
+<span id="cb149-5"><a href="#cb149-5" aria-hidden="true" tabindex="-1"></a>ptntree_resamp <span class="sc">%&gt;%</span> </span>
+<span id="cb149-6"><a href="#cb149-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: No value of `metric` was given; metric 'rmse' will be used.</code></pre>
 </div>
@@ -1553,88 +1557,88 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 5 × 8
   cost_complexity tree_depth .metric .estimator  mean     n std_err .config     
             &lt;dbl&gt;      &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;       
-1    0.0000000001          1 rmse    standard   0.976     5   0.107 Preprocesso…
-2    0.0000000178          1 rmse    standard   0.976     5   0.107 Preprocesso…
-3    0.00000316            1 rmse    standard   0.976     5   0.107 Preprocesso…
-4    0.000562              1 rmse    standard   0.976     5   0.107 Preprocesso…
-5    0.1                   1 rmse    standard   0.976     5   0.107 Preprocesso…</code></pre>
+1    0.0000000001          4 rmse    standard    1.00     5   0.108 Preprocesso…
+2    0.0000000178          4 rmse    standard    1.00     5   0.108 Preprocesso…
+3    0.00000316            4 rmse    standard    1.00     5   0.108 Preprocesso…
+4    0.000562              4 rmse    standard    1.00     5   0.108 Preprocesso…
+5    0.0000000001          8 rmse    standard    1.00     5   0.108 Preprocesso…</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb150"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb150-1"><a href="#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
-<span id="cb150-2"><a href="#cb150-2" aria-hidden="true" tabindex="-1"></a>wdptnbest_tree <span class="ot">&lt;-</span> ptntree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
-<span id="cb150-3"><a href="#cb150-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb150-4"><a href="#cb150-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create final workflow</span></span>
-<span id="cb150-5"><a href="#cb150-5" aria-hidden="true" tabindex="-1"></a>wdptnfinal_wf <span class="ot">&lt;-</span> ptnwflow <span class="sc">%&gt;%</span> <span class="fu">finalize_workflow</span>(wdptnbest_tree)</span>
-<span id="cb150-6"><a href="#cb150-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb150-7"><a href="#cb150-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the final workflow to the training data</span></span>
-<span id="cb150-8"><a href="#cb150-8" aria-hidden="true" tabindex="-1"></a>wdptnfinal_fit <span class="ot">&lt;-</span> wdptnfinal_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(wdtrain_data)</span>
-<span id="cb150-9"><a href="#cb150-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb150-10"><a href="#cb150-10" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with training data</span></span>
-<span id="cb150-11"><a href="#cb150-11" aria-hidden="true" tabindex="-1"></a>wdptnfitted <span class="ot">&lt;-</span> <span class="fu">augment</span>(wdptnfinal_fit, wdtrain_data) <span class="sc">%&gt;%</span> </span>
-<span id="cb150-12"><a href="#cb150-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb150-13"><a href="#cb150-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="at">truth =</span> <span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span>, .pred)</span>
-<span id="cb150-14"><a href="#cb150-14" aria-hidden="true" tabindex="-1"></a>wdptnfitted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb152"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
+<span id="cb152-2"><a href="#cb152-2" aria-hidden="true" tabindex="-1"></a>wdptnbest_tree <span class="ot">&lt;-</span> ptntree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
+<span id="cb152-3"><a href="#cb152-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-4"><a href="#cb152-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create final workflow</span></span>
+<span id="cb152-5"><a href="#cb152-5" aria-hidden="true" tabindex="-1"></a>wdptnfinal_wf <span class="ot">&lt;-</span> ptnwflow <span class="sc">%&gt;%</span> <span class="fu">finalize_workflow</span>(wdptnbest_tree)</span>
+<span id="cb152-6"><a href="#cb152-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-7"><a href="#cb152-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the final workflow to the training data</span></span>
+<span id="cb152-8"><a href="#cb152-8" aria-hidden="true" tabindex="-1"></a>wdptnfinal_fit <span class="ot">&lt;-</span> wdptnfinal_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(wdtrain_data)</span>
+<span id="cb152-9"><a href="#cb152-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-10"><a href="#cb152-10" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with training data</span></span>
+<span id="cb152-11"><a href="#cb152-11" aria-hidden="true" tabindex="-1"></a>wdptnfitted <span class="ot">&lt;-</span> <span class="fu">augment</span>(wdptnfinal_fit, wdtrain_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb152-12"><a href="#cb152-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb152-13"><a href="#cb152-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="at">truth =</span> <span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span>, .pred)</span>
+<span id="cb152-14"><a href="#cb152-14" aria-hidden="true" tabindex="-1"></a>wdptnfitted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard       0.694</code></pre>
+1 rmse    standard       0.527</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb152"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
-<span id="cb152-2"><a href="#cb152-2" aria-hidden="true" tabindex="-1"></a>wdptnfittest <span class="ot">&lt;-</span> wdptnfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(wddatasplit)</span>
-<span id="cb152-3"><a href="#cb152-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb152-4"><a href="#cb152-4" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with test data</span></span>
-<span id="cb152-5"><a href="#cb152-5" aria-hidden="true" tabindex="-1"></a>wdptnfittest <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
+<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a>wdptnfittest <span class="ot">&lt;-</span> wdptnfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(wddatasplit)</span>
+<span id="cb154-3"><a href="#cb154-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb154-4"><a href="#cb154-4" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with test data</span></span>
+<span id="cb154-5"><a href="#cb154-5" aria-hidden="true" tabindex="-1"></a>wdptnfittest <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard       0.820 Preprocessor1_Model1
-2 rsq     standard       0.373 Preprocessor1_Model1</code></pre>
+1 rmse    standard      1.28   Preprocessor1_Model1
+2 rsq     standard      0.0543 Preprocessor1_Model1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
-<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a>wdptnfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
+<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a>wdptnfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/wdptnmodel-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb155"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save for later comparison: RMSE based on predictions from best model</span></span>
-<span id="cb155-2"><a href="#cb155-2" aria-hidden="true" tabindex="-1"></a>wdptn_rmse <span class="ot">&lt;-</span> ptntree_resamp <span class="sc">%&gt;%</span> </span>
-<span id="cb155-3"><a href="#cb155-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> wdptnbest_tree) <span class="sc">%&gt;%</span> </span>
-<span id="cb155-4"><a href="#cb155-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb155-5"><a href="#cb155-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"wdptn"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb157"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save for later comparison: RMSE based on predictions from best model</span></span>
+<span id="cb157-2"><a href="#cb157-2" aria-hidden="true" tabindex="-1"></a>wdptn_rmse <span class="ot">&lt;-</span> ptntree_resamp <span class="sc">%&gt;%</span> </span>
+<span id="cb157-3"><a href="#cb157-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> wdptnbest_tree) <span class="sc">%&gt;%</span> </span>
+<span id="cb157-4"><a href="#cb157-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb157-5"><a href="#cb157-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"wdptn"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The best tree model for prevalence to notification ratio using the full data has a depth of 4 with an RMSE of 1.06. This model has the highest performance so far. The fitted model to the training data has a RMSE of 0.546, and using the testing data, the model had a performance of RMSE = 0.656. The most important predictor was country.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="co">#recipe predicting TB prevalence to notification</span></span>
-<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a>ptnrecipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(<span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span> <span class="sc">~</span>.,</span>
-<span id="cb156-3"><a href="#cb156-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> hbtrain_data)</span>
-<span id="cb156-4"><a href="#cb156-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb156-5"><a href="#cb156-5" aria-hidden="true" tabindex="-1"></a><span class="co">#create workflow</span></span>
-<span id="cb156-6"><a href="#cb156-6" aria-hidden="true" tabindex="-1"></a>ptnwflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb156-7"><a href="#cb156-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(treemodel) <span class="sc">%&gt;%</span> </span>
-<span id="cb156-8"><a href="#cb156-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(ptnrecipe)</span>
-<span id="cb156-9"><a href="#cb156-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb156-10"><a href="#cb156-10" aria-hidden="true" tabindex="-1"></a><span class="co">#set seed for reproducibility</span></span>
-<span id="cb156-11"><a href="#cb156-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">626</span>)</span>
-<span id="cb156-12"><a href="#cb156-12" aria-hidden="true" tabindex="-1"></a><span class="co">#resample using cross-validation folds to tune parameters</span></span>
-<span id="cb156-13"><a href="#cb156-13" aria-hidden="true" tabindex="-1"></a>ptntree_resamp <span class="ot">&lt;-</span> ptnwflow <span class="sc">%&gt;%</span> </span>
-<span id="cb156-14"><a href="#cb156-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
-<span id="cb156-15"><a href="#cb156-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> hbfolds,</span>
-<span id="cb156-16"><a href="#cb156-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> tree_grid,</span>
-<span id="cb156-17"><a href="#cb156-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb156-18"><a href="#cb156-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb156-19"><a href="#cb156-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb156-20"><a href="#cb156-20" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
-<span id="cb156-21"><a href="#cb156-21" aria-hidden="true" tabindex="-1"></a>ptntreeplot <span class="ot">&lt;-</span> ptntree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
-<span id="cb156-22"><a href="#cb156-22" aria-hidden="true" tabindex="-1"></a>ptntreeplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="co">#recipe predicting TB prevalence to notification</span></span>
+<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>ptnrecipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(<span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span> <span class="sc">~</span>.,</span>
+<span id="cb158-3"><a href="#cb158-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> hbtrain_data)</span>
+<span id="cb158-4"><a href="#cb158-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-5"><a href="#cb158-5" aria-hidden="true" tabindex="-1"></a><span class="co">#create workflow</span></span>
+<span id="cb158-6"><a href="#cb158-6" aria-hidden="true" tabindex="-1"></a>ptnwflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb158-7"><a href="#cb158-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(treemodel) <span class="sc">%&gt;%</span> </span>
+<span id="cb158-8"><a href="#cb158-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(ptnrecipe)</span>
+<span id="cb158-9"><a href="#cb158-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-10"><a href="#cb158-10" aria-hidden="true" tabindex="-1"></a><span class="co">#set seed for reproducibility</span></span>
+<span id="cb158-11"><a href="#cb158-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">626</span>)</span>
+<span id="cb158-12"><a href="#cb158-12" aria-hidden="true" tabindex="-1"></a><span class="co">#resample using cross-validation folds to tune parameters</span></span>
+<span id="cb158-13"><a href="#cb158-13" aria-hidden="true" tabindex="-1"></a>ptntree_resamp <span class="ot">&lt;-</span> ptnwflow <span class="sc">%&gt;%</span> </span>
+<span id="cb158-14"><a href="#cb158-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
+<span id="cb158-15"><a href="#cb158-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> hbfolds,</span>
+<span id="cb158-16"><a href="#cb158-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> tree_grid,</span>
+<span id="cb158-17"><a href="#cb158-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb158-18"><a href="#cb158-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb158-19"><a href="#cb158-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-20"><a href="#cb158-20" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
+<span id="cb158-21"><a href="#cb158-21" aria-hidden="true" tabindex="-1"></a>ptntreeplot <span class="ot">&lt;-</span> ptntree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
+<span id="cb158-22"><a href="#cb158-22" aria-hidden="true" tabindex="-1"></a>ptntreeplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbptnmodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb157"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a>treeplot14 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbptntreeplot.rds"</span>)</span>
-<span id="cb157-2"><a href="#cb157-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(ptntreeplot, <span class="at">file =</span> treeplot14)</span>
-<span id="cb157-3"><a href="#cb157-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb157-4"><a href="#cb157-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
-<span id="cb157-5"><a href="#cb157-5" aria-hidden="true" tabindex="-1"></a>ptntree_resamp <span class="sc">%&gt;%</span> </span>
-<span id="cb157-6"><a href="#cb157-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb159"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1" aria-hidden="true" tabindex="-1"></a>treeplot14 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbptntreeplot.rds"</span>)</span>
+<span id="cb159-2"><a href="#cb159-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(ptntreeplot, <span class="at">file =</span> treeplot14)</span>
+<span id="cb159-3"><a href="#cb159-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb159-4"><a href="#cb159-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
+<span id="cb159-5"><a href="#cb159-5" aria-hidden="true" tabindex="-1"></a>ptntree_resamp <span class="sc">%&gt;%</span> </span>
+<span id="cb159-6"><a href="#cb159-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: No value of `metric` was given; metric 'rmse' will be used.</code></pre>
 </div>
@@ -1648,31 +1652,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 4    0.000562              1 rmse    standard   0.984     5   0.122 Preprocesso…
 5    0.1                   1 rmse    standard   0.984     5   0.122 Preprocesso…</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb160"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
-<span id="cb160-2"><a href="#cb160-2" aria-hidden="true" tabindex="-1"></a>hbptnbest_tree <span class="ot">&lt;-</span> ptntree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
-<span id="cb160-3"><a href="#cb160-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb160-4"><a href="#cb160-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create final workflow</span></span>
-<span id="cb160-5"><a href="#cb160-5" aria-hidden="true" tabindex="-1"></a>hbptnfinal_wf <span class="ot">&lt;-</span> ptnwflow <span class="sc">%&gt;%</span> <span class="fu">finalize_workflow</span>(hbptnbest_tree)</span>
-<span id="cb160-6"><a href="#cb160-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb160-7"><a href="#cb160-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the final workflow to the training data</span></span>
-<span id="cb160-8"><a href="#cb160-8" aria-hidden="true" tabindex="-1"></a>hbptnfinal_fit <span class="ot">&lt;-</span> hbptnfinal_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(hbtrain_data)</span>
-<span id="cb160-9"><a href="#cb160-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb160-10"><a href="#cb160-10" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with training data</span></span>
-<span id="cb160-11"><a href="#cb160-11" aria-hidden="true" tabindex="-1"></a>hbptnfitted <span class="ot">&lt;-</span> <span class="fu">augment</span>(hbptnfinal_fit, hbtrain_data) <span class="sc">%&gt;%</span> </span>
-<span id="cb160-12"><a href="#cb160-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb160-13"><a href="#cb160-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="at">truth =</span> <span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span>, .pred)</span>
-<span id="cb160-14"><a href="#cb160-14" aria-hidden="true" tabindex="-1"></a>hbptnfitted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb162"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
+<span id="cb162-2"><a href="#cb162-2" aria-hidden="true" tabindex="-1"></a>hbptnbest_tree <span class="ot">&lt;-</span> ptntree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
+<span id="cb162-3"><a href="#cb162-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-4"><a href="#cb162-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create final workflow</span></span>
+<span id="cb162-5"><a href="#cb162-5" aria-hidden="true" tabindex="-1"></a>hbptnfinal_wf <span class="ot">&lt;-</span> ptnwflow <span class="sc">%&gt;%</span> <span class="fu">finalize_workflow</span>(hbptnbest_tree)</span>
+<span id="cb162-6"><a href="#cb162-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-7"><a href="#cb162-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the final workflow to the training data</span></span>
+<span id="cb162-8"><a href="#cb162-8" aria-hidden="true" tabindex="-1"></a>hbptnfinal_fit <span class="ot">&lt;-</span> hbptnfinal_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(hbtrain_data)</span>
+<span id="cb162-9"><a href="#cb162-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-10"><a href="#cb162-10" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with training data</span></span>
+<span id="cb162-11"><a href="#cb162-11" aria-hidden="true" tabindex="-1"></a>hbptnfitted <span class="ot">&lt;-</span> <span class="fu">augment</span>(hbptnfinal_fit, hbtrain_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb162-12"><a href="#cb162-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb162-13"><a href="#cb162-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="at">truth =</span> <span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span>, .pred)</span>
+<span id="cb162-14"><a href="#cb162-14" aria-hidden="true" tabindex="-1"></a>hbptnfitted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
 1 rmse    standard       0.650</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb162"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
-<span id="cb162-2"><a href="#cb162-2" aria-hidden="true" tabindex="-1"></a>hbptnfittest <span class="ot">&lt;-</span> hbptnfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(hbdatasplit)</span>
-<span id="cb162-3"><a href="#cb162-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb162-4"><a href="#cb162-4" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with test data</span></span>
-<span id="cb162-5"><a href="#cb162-5" aria-hidden="true" tabindex="-1"></a>hbptnfittest <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb164"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
+<span id="cb164-2"><a href="#cb164-2" aria-hidden="true" tabindex="-1"></a>hbptnfittest <span class="ot">&lt;-</span> hbptnfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(hbdatasplit)</span>
+<span id="cb164-3"><a href="#cb164-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb164-4"><a href="#cb164-4" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with test data</span></span>
+<span id="cb164-5"><a href="#cb164-5" aria-hidden="true" tabindex="-1"></a>hbptnfittest <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
@@ -1680,21 +1684,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 1 rmse    standard       0.773 Preprocessor1_Model1
 2 rsq     standard       0.479 Preprocessor1_Model1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb164"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
-<span id="cb164-2"><a href="#cb164-2" aria-hidden="true" tabindex="-1"></a>hbptnfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb166"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
+<span id="cb166-2"><a href="#cb166-2" aria-hidden="true" tabindex="-1"></a>hbptnfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbptnmodel-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb165"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save for later comparison: RMSE based on predictions from best model</span></span>
-<span id="cb165-2"><a href="#cb165-2" aria-hidden="true" tabindex="-1"></a>hbptn_rmse <span class="ot">&lt;-</span> ptntree_resamp <span class="sc">%&gt;%</span> </span>
-<span id="cb165-3"><a href="#cb165-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> hbptnbest_tree) <span class="sc">%&gt;%</span> </span>
-<span id="cb165-4"><a href="#cb165-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb165-5"><a href="#cb165-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"hbptn"</span>)</span>
-<span id="cb165-6"><a href="#cb165-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb165-7"><a href="#cb165-7" aria-hidden="true" tabindex="-1"></a><span class="co">#plot decision tree</span></span>
-<span id="cb165-8"><a href="#cb165-8" aria-hidden="true" tabindex="-1"></a>hbptnfinal_fit <span class="sc">%&gt;%</span></span>
-<span id="cb165-9"><a href="#cb165-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_engine</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb165-10"><a href="#cb165-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart.plot</span>(<span class="at">roundint =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb167"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb167-1"><a href="#cb167-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save for later comparison: RMSE based on predictions from best model</span></span>
+<span id="cb167-2"><a href="#cb167-2" aria-hidden="true" tabindex="-1"></a>hbptn_rmse <span class="ot">&lt;-</span> ptntree_resamp <span class="sc">%&gt;%</span> </span>
+<span id="cb167-3"><a href="#cb167-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> hbptnbest_tree) <span class="sc">%&gt;%</span> </span>
+<span id="cb167-4"><a href="#cb167-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="st">`</span><span class="at">Prevalence to notification ratio (years)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb167-5"><a href="#cb167-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"hbptn"</span>)</span>
+<span id="cb167-6"><a href="#cb167-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb167-7"><a href="#cb167-7" aria-hidden="true" tabindex="-1"></a><span class="co">#plot decision tree</span></span>
+<span id="cb167-8"><a href="#cb167-8" aria-hidden="true" tabindex="-1"></a>hbptnfinal_fit <span class="sc">%&gt;%</span></span>
+<span id="cb167-9"><a href="#cb167-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_engine</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb167-10"><a href="#cb167-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart.plot</span>(<span class="at">roundint =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbptnmodel-3.png" class="img-fluid" width="672"></p>
 </div>
@@ -1704,37 +1708,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="decision-tree-model-for-male-attitudes" class="level2">
 <h2 class="anchored" data-anchor-id="decision-tree-model-for-male-attitudes">Decision tree model for Male Attitudes</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb166"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="co">#recipe predicting male attitude</span></span>
-<span id="cb166-2"><a href="#cb166-2" aria-hidden="true" tabindex="-1"></a>attrecipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span> <span class="sc">~</span>.,</span>
-<span id="cb166-3"><a href="#cb166-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> wdtrain_data)</span>
-<span id="cb166-4"><a href="#cb166-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb166-5"><a href="#cb166-5" aria-hidden="true" tabindex="-1"></a><span class="co">#create workflow</span></span>
-<span id="cb166-6"><a href="#cb166-6" aria-hidden="true" tabindex="-1"></a>attwflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb166-7"><a href="#cb166-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(treemodel) <span class="sc">%&gt;%</span> </span>
-<span id="cb166-8"><a href="#cb166-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(attrecipe)</span>
-<span id="cb166-9"><a href="#cb166-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb166-10"><a href="#cb166-10" aria-hidden="true" tabindex="-1"></a><span class="co">#set seed for reproducibility</span></span>
-<span id="cb166-11"><a href="#cb166-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">626</span>)</span>
-<span id="cb166-12"><a href="#cb166-12" aria-hidden="true" tabindex="-1"></a><span class="co">#resample using cross-validation folds to tune parameters</span></span>
-<span id="cb166-13"><a href="#cb166-13" aria-hidden="true" tabindex="-1"></a>atttree_resamp <span class="ot">&lt;-</span> attwflow <span class="sc">%&gt;%</span> </span>
-<span id="cb166-14"><a href="#cb166-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
-<span id="cb166-15"><a href="#cb166-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> wdfolds,</span>
-<span id="cb166-16"><a href="#cb166-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> tree_grid,</span>
-<span id="cb166-17"><a href="#cb166-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb166-18"><a href="#cb166-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb166-19"><a href="#cb166-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb166-20"><a href="#cb166-20" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
-<span id="cb166-21"><a href="#cb166-21" aria-hidden="true" tabindex="-1"></a>atttreeplot <span class="ot">&lt;-</span> atttree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
-<span id="cb166-22"><a href="#cb166-22" aria-hidden="true" tabindex="-1"></a>atttreeplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb168"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="co">#recipe predicting male attitude</span></span>
+<span id="cb168-2"><a href="#cb168-2" aria-hidden="true" tabindex="-1"></a>attrecipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span> <span class="sc">~</span>.,</span>
+<span id="cb168-3"><a href="#cb168-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> wdtrain_data)</span>
+<span id="cb168-4"><a href="#cb168-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb168-5"><a href="#cb168-5" aria-hidden="true" tabindex="-1"></a><span class="co">#create workflow</span></span>
+<span id="cb168-6"><a href="#cb168-6" aria-hidden="true" tabindex="-1"></a>attwflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb168-7"><a href="#cb168-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(treemodel) <span class="sc">%&gt;%</span> </span>
+<span id="cb168-8"><a href="#cb168-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(attrecipe)</span>
+<span id="cb168-9"><a href="#cb168-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb168-10"><a href="#cb168-10" aria-hidden="true" tabindex="-1"></a><span class="co">#set seed for reproducibility</span></span>
+<span id="cb168-11"><a href="#cb168-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">626</span>)</span>
+<span id="cb168-12"><a href="#cb168-12" aria-hidden="true" tabindex="-1"></a><span class="co">#resample using cross-validation folds to tune parameters</span></span>
+<span id="cb168-13"><a href="#cb168-13" aria-hidden="true" tabindex="-1"></a>atttree_resamp <span class="ot">&lt;-</span> attwflow <span class="sc">%&gt;%</span> </span>
+<span id="cb168-14"><a href="#cb168-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
+<span id="cb168-15"><a href="#cb168-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> wdfolds,</span>
+<span id="cb168-16"><a href="#cb168-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> tree_grid,</span>
+<span id="cb168-17"><a href="#cb168-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb168-18"><a href="#cb168-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb168-19"><a href="#cb168-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb168-20"><a href="#cb168-20" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
+<span id="cb168-21"><a href="#cb168-21" aria-hidden="true" tabindex="-1"></a>atttreeplot <span class="ot">&lt;-</span> atttree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
+<span id="cb168-22"><a href="#cb168-22" aria-hidden="true" tabindex="-1"></a>atttreeplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/wdmaleattitudemodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb167"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb167-1"><a href="#cb167-1" aria-hidden="true" tabindex="-1"></a>treeplot15 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdatttreeplot.rds"</span>)</span>
-<span id="cb167-2"><a href="#cb167-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(atttreeplot, <span class="at">file =</span> treeplot15)</span>
-<span id="cb167-3"><a href="#cb167-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb167-4"><a href="#cb167-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
-<span id="cb167-5"><a href="#cb167-5" aria-hidden="true" tabindex="-1"></a>atttree_resamp <span class="sc">%&gt;%</span> </span>
-<span id="cb167-6"><a href="#cb167-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb169"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb169-1"><a href="#cb169-1" aria-hidden="true" tabindex="-1"></a>treeplot15 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdatttreeplot.rds"</span>)</span>
+<span id="cb169-2"><a href="#cb169-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(atttreeplot, <span class="at">file =</span> treeplot15)</span>
+<span id="cb169-3"><a href="#cb169-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb169-4"><a href="#cb169-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
+<span id="cb169-5"><a href="#cb169-5" aria-hidden="true" tabindex="-1"></a>atttree_resamp <span class="sc">%&gt;%</span> </span>
+<span id="cb169-6"><a href="#cb169-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: No value of `metric` was given; metric 'rmse' will be used.</code></pre>
 </div>
@@ -1742,88 +1746,88 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 5 × 8
   cost_complexity tree_depth .metric .estimator  mean     n std_err .config     
             &lt;dbl&gt;      &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;       
-1    0.0000000001          8 rmse    standard    4.90     5   0.256 Preprocesso…
-2    0.0000000178          8 rmse    standard    4.90     5   0.256 Preprocesso…
-3    0.00000316            8 rmse    standard    4.90     5   0.256 Preprocesso…
-4    0.000562              8 rmse    standard    4.90     5   0.256 Preprocesso…
-5    0.0000000001         11 rmse    standard    4.90     5   0.256 Preprocesso…</code></pre>
+1    0.0000000001          4 rmse    standard    4.95     5   0.550 Preprocesso…
+2    0.0000000178          4 rmse    standard    4.95     5   0.550 Preprocesso…
+3    0.00000316            4 rmse    standard    4.95     5   0.550 Preprocesso…
+4    0.000562              4 rmse    standard    4.95     5   0.550 Preprocesso…
+5    0.0000000001          8 rmse    standard    5.01     5   0.517 Preprocesso…</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb170"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
-<span id="cb170-2"><a href="#cb170-2" aria-hidden="true" tabindex="-1"></a>wdattbest_tree <span class="ot">&lt;-</span> atttree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
-<span id="cb170-3"><a href="#cb170-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb170-4"><a href="#cb170-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create final workflow</span></span>
-<span id="cb170-5"><a href="#cb170-5" aria-hidden="true" tabindex="-1"></a>wdattfinal_wf <span class="ot">&lt;-</span> attwflow <span class="sc">%&gt;%</span> <span class="fu">finalize_workflow</span>(wdattbest_tree)</span>
-<span id="cb170-6"><a href="#cb170-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb170-7"><a href="#cb170-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the final workflow to the training data</span></span>
-<span id="cb170-8"><a href="#cb170-8" aria-hidden="true" tabindex="-1"></a>wdattfinal_fit <span class="ot">&lt;-</span> wdattfinal_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(wdtrain_data)</span>
-<span id="cb170-9"><a href="#cb170-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb170-10"><a href="#cb170-10" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with training data</span></span>
-<span id="cb170-11"><a href="#cb170-11" aria-hidden="true" tabindex="-1"></a>wdattfitted <span class="ot">&lt;-</span> <span class="fu">augment</span>(wdattfinal_fit, wdtrain_data) <span class="sc">%&gt;%</span> </span>
-<span id="cb170-12"><a href="#cb170-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb170-13"><a href="#cb170-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="at">truth =</span> <span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span>, .pred)</span>
-<span id="cb170-14"><a href="#cb170-14" aria-hidden="true" tabindex="-1"></a>wdattfitted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb172"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
+<span id="cb172-2"><a href="#cb172-2" aria-hidden="true" tabindex="-1"></a>wdattbest_tree <span class="ot">&lt;-</span> atttree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
+<span id="cb172-3"><a href="#cb172-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-4"><a href="#cb172-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create final workflow</span></span>
+<span id="cb172-5"><a href="#cb172-5" aria-hidden="true" tabindex="-1"></a>wdattfinal_wf <span class="ot">&lt;-</span> attwflow <span class="sc">%&gt;%</span> <span class="fu">finalize_workflow</span>(wdattbest_tree)</span>
+<span id="cb172-6"><a href="#cb172-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-7"><a href="#cb172-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the final workflow to the training data</span></span>
+<span id="cb172-8"><a href="#cb172-8" aria-hidden="true" tabindex="-1"></a>wdattfinal_fit <span class="ot">&lt;-</span> wdattfinal_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(wdtrain_data)</span>
+<span id="cb172-9"><a href="#cb172-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-10"><a href="#cb172-10" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with training data</span></span>
+<span id="cb172-11"><a href="#cb172-11" aria-hidden="true" tabindex="-1"></a>wdattfitted <span class="ot">&lt;-</span> <span class="fu">augment</span>(wdattfinal_fit, wdtrain_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb172-12"><a href="#cb172-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb172-13"><a href="#cb172-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="at">truth =</span> <span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span>, .pred)</span>
+<span id="cb172-14"><a href="#cb172-14" aria-hidden="true" tabindex="-1"></a>wdattfitted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard        3.31</code></pre>
+1 rmse    standard        3.70</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb172"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
-<span id="cb172-2"><a href="#cb172-2" aria-hidden="true" tabindex="-1"></a>wdattfittest <span class="ot">&lt;-</span> wdattfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(wddatasplit)</span>
-<span id="cb172-3"><a href="#cb172-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb172-4"><a href="#cb172-4" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with test data</span></span>
-<span id="cb172-5"><a href="#cb172-5" aria-hidden="true" tabindex="-1"></a>wdattfittest <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb174"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
+<span id="cb174-2"><a href="#cb174-2" aria-hidden="true" tabindex="-1"></a>wdattfittest <span class="ot">&lt;-</span> wdattfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(wddatasplit)</span>
+<span id="cb174-3"><a href="#cb174-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb174-4"><a href="#cb174-4" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with test data</span></span>
+<span id="cb174-5"><a href="#cb174-5" aria-hidden="true" tabindex="-1"></a>wdattfittest <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard       5.60  Preprocessor1_Model1
-2 rsq     standard       0.688 Preprocessor1_Model1</code></pre>
+1 rmse    standard       5.05  Preprocessor1_Model1
+2 rsq     standard       0.760 Preprocessor1_Model1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb174"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
-<span id="cb174-2"><a href="#cb174-2" aria-hidden="true" tabindex="-1"></a>wdattfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb176"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
+<span id="cb176-2"><a href="#cb176-2" aria-hidden="true" tabindex="-1"></a>wdattfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/wdmaleattitudemodel-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb175"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save for later comparison: RMSE based on predictions from best model</span></span>
-<span id="cb175-2"><a href="#cb175-2" aria-hidden="true" tabindex="-1"></a>wdatt_rmse <span class="ot">&lt;-</span> atttree_resamp <span class="sc">%&gt;%</span> </span>
-<span id="cb175-3"><a href="#cb175-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> wdattbest_tree) <span class="sc">%&gt;%</span> </span>
-<span id="cb175-4"><a href="#cb175-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb175-5"><a href="#cb175-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"wdatt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb177"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save for later comparison: RMSE based on predictions from best model</span></span>
+<span id="cb177-2"><a href="#cb177-2" aria-hidden="true" tabindex="-1"></a>wdatt_rmse <span class="ot">&lt;-</span> atttree_resamp <span class="sc">%&gt;%</span> </span>
+<span id="cb177-3"><a href="#cb177-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> wdattbest_tree) <span class="sc">%&gt;%</span> </span>
+<span id="cb177-4"><a href="#cb177-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb177-5"><a href="#cb177-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"wdatt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The best tree model for male attitudes using the full data has a depth of 4 with an RMSE of 5.39. The fitted model to the training data has a RMSE of 3.87, and using the testing data, the model had a performance of RMSE = 4.62. The most important predictor was country.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb176"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a><span class="co">#recipe predicting male attitude</span></span>
-<span id="cb176-2"><a href="#cb176-2" aria-hidden="true" tabindex="-1"></a>attrecipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span> <span class="sc">~</span>.,</span>
-<span id="cb176-3"><a href="#cb176-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> hbtrain_data)</span>
-<span id="cb176-4"><a href="#cb176-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb176-5"><a href="#cb176-5" aria-hidden="true" tabindex="-1"></a><span class="co">#create workflow</span></span>
-<span id="cb176-6"><a href="#cb176-6" aria-hidden="true" tabindex="-1"></a>attwflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb176-7"><a href="#cb176-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(treemodel) <span class="sc">%&gt;%</span> </span>
-<span id="cb176-8"><a href="#cb176-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(attrecipe)</span>
-<span id="cb176-9"><a href="#cb176-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb176-10"><a href="#cb176-10" aria-hidden="true" tabindex="-1"></a><span class="co">#set seed for reproducibility</span></span>
-<span id="cb176-11"><a href="#cb176-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">626</span>)</span>
-<span id="cb176-12"><a href="#cb176-12" aria-hidden="true" tabindex="-1"></a><span class="co">#resample using cross-validation folds to tune parameters</span></span>
-<span id="cb176-13"><a href="#cb176-13" aria-hidden="true" tabindex="-1"></a>atttree_resamp <span class="ot">&lt;-</span> attwflow <span class="sc">%&gt;%</span> </span>
-<span id="cb176-14"><a href="#cb176-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
-<span id="cb176-15"><a href="#cb176-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> hbfolds,</span>
-<span id="cb176-16"><a href="#cb176-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> tree_grid,</span>
-<span id="cb176-17"><a href="#cb176-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb176-18"><a href="#cb176-18" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb176-19"><a href="#cb176-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb176-20"><a href="#cb176-20" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
-<span id="cb176-21"><a href="#cb176-21" aria-hidden="true" tabindex="-1"></a>atttreeplot <span class="ot">&lt;-</span> atttree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
-<span id="cb176-22"><a href="#cb176-22" aria-hidden="true" tabindex="-1"></a>atttreeplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb178"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="co">#recipe predicting male attitude</span></span>
+<span id="cb178-2"><a href="#cb178-2" aria-hidden="true" tabindex="-1"></a>attrecipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span> <span class="sc">~</span>.,</span>
+<span id="cb178-3"><a href="#cb178-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> hbtrain_data)</span>
+<span id="cb178-4"><a href="#cb178-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb178-5"><a href="#cb178-5" aria-hidden="true" tabindex="-1"></a><span class="co">#create workflow</span></span>
+<span id="cb178-6"><a href="#cb178-6" aria-hidden="true" tabindex="-1"></a>attwflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb178-7"><a href="#cb178-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(treemodel) <span class="sc">%&gt;%</span> </span>
+<span id="cb178-8"><a href="#cb178-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(attrecipe)</span>
+<span id="cb178-9"><a href="#cb178-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb178-10"><a href="#cb178-10" aria-hidden="true" tabindex="-1"></a><span class="co">#set seed for reproducibility</span></span>
+<span id="cb178-11"><a href="#cb178-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">626</span>)</span>
+<span id="cb178-12"><a href="#cb178-12" aria-hidden="true" tabindex="-1"></a><span class="co">#resample using cross-validation folds to tune parameters</span></span>
+<span id="cb178-13"><a href="#cb178-13" aria-hidden="true" tabindex="-1"></a>atttree_resamp <span class="ot">&lt;-</span> attwflow <span class="sc">%&gt;%</span> </span>
+<span id="cb178-14"><a href="#cb178-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
+<span id="cb178-15"><a href="#cb178-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> hbfolds,</span>
+<span id="cb178-16"><a href="#cb178-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> tree_grid,</span>
+<span id="cb178-17"><a href="#cb178-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb178-18"><a href="#cb178-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb178-19"><a href="#cb178-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb178-20"><a href="#cb178-20" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
+<span id="cb178-21"><a href="#cb178-21" aria-hidden="true" tabindex="-1"></a>atttreeplot <span class="ot">&lt;-</span> atttree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
+<span id="cb178-22"><a href="#cb178-22" aria-hidden="true" tabindex="-1"></a>atttreeplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbmaleattitubemodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb177"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a>treeplot16 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbatttreeplot.rds"</span>)</span>
-<span id="cb177-2"><a href="#cb177-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(atttreeplot, <span class="at">file =</span> treeplot16)</span>
-<span id="cb177-3"><a href="#cb177-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-4"><a href="#cb177-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
-<span id="cb177-5"><a href="#cb177-5" aria-hidden="true" tabindex="-1"></a>atttree_resamp <span class="sc">%&gt;%</span> </span>
-<span id="cb177-6"><a href="#cb177-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb179"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb179-1"><a href="#cb179-1" aria-hidden="true" tabindex="-1"></a>treeplot16 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbatttreeplot.rds"</span>)</span>
+<span id="cb179-2"><a href="#cb179-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(atttreeplot, <span class="at">file =</span> treeplot16)</span>
+<span id="cb179-3"><a href="#cb179-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb179-4"><a href="#cb179-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
+<span id="cb179-5"><a href="#cb179-5" aria-hidden="true" tabindex="-1"></a>atttree_resamp <span class="sc">%&gt;%</span> </span>
+<span id="cb179-6"><a href="#cb179-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: No value of `metric` was given; metric 'rmse' will be used.</code></pre>
 </div>
@@ -1837,31 +1841,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 4    0.000562              8 rmse    standard    5.70     5   0.280 Preprocesso…
 5    0.0000000001         11 rmse    standard    5.70     5   0.280 Preprocesso…</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb180"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb180-1"><a href="#cb180-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
-<span id="cb180-2"><a href="#cb180-2" aria-hidden="true" tabindex="-1"></a>hbattbest_tree <span class="ot">&lt;-</span> atttree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
-<span id="cb180-3"><a href="#cb180-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb180-4"><a href="#cb180-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create final workflow</span></span>
-<span id="cb180-5"><a href="#cb180-5" aria-hidden="true" tabindex="-1"></a>hbattfinal_wf <span class="ot">&lt;-</span> attwflow <span class="sc">%&gt;%</span> <span class="fu">finalize_workflow</span>(hbattbest_tree)</span>
-<span id="cb180-6"><a href="#cb180-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb180-7"><a href="#cb180-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the final workflow to the training data</span></span>
-<span id="cb180-8"><a href="#cb180-8" aria-hidden="true" tabindex="-1"></a>hbattfinal_fit <span class="ot">&lt;-</span> hbattfinal_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(hbtrain_data)</span>
-<span id="cb180-9"><a href="#cb180-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb180-10"><a href="#cb180-10" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with training data</span></span>
-<span id="cb180-11"><a href="#cb180-11" aria-hidden="true" tabindex="-1"></a>hbattfitted <span class="ot">&lt;-</span> <span class="fu">augment</span>(hbattfinal_fit, hbtrain_data) <span class="sc">%&gt;%</span> </span>
-<span id="cb180-12"><a href="#cb180-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb180-13"><a href="#cb180-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="at">truth =</span> <span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span>, .pred)</span>
-<span id="cb180-14"><a href="#cb180-14" aria-hidden="true" tabindex="-1"></a>hbattfitted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb182"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb182-1"><a href="#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
+<span id="cb182-2"><a href="#cb182-2" aria-hidden="true" tabindex="-1"></a>hbattbest_tree <span class="ot">&lt;-</span> atttree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
+<span id="cb182-3"><a href="#cb182-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb182-4"><a href="#cb182-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create final workflow</span></span>
+<span id="cb182-5"><a href="#cb182-5" aria-hidden="true" tabindex="-1"></a>hbattfinal_wf <span class="ot">&lt;-</span> attwflow <span class="sc">%&gt;%</span> <span class="fu">finalize_workflow</span>(hbattbest_tree)</span>
+<span id="cb182-6"><a href="#cb182-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb182-7"><a href="#cb182-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the final workflow to the training data</span></span>
+<span id="cb182-8"><a href="#cb182-8" aria-hidden="true" tabindex="-1"></a>hbattfinal_fit <span class="ot">&lt;-</span> hbattfinal_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(hbtrain_data)</span>
+<span id="cb182-9"><a href="#cb182-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb182-10"><a href="#cb182-10" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with training data</span></span>
+<span id="cb182-11"><a href="#cb182-11" aria-hidden="true" tabindex="-1"></a>hbattfitted <span class="ot">&lt;-</span> <span class="fu">augment</span>(hbattfinal_fit, hbtrain_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb182-12"><a href="#cb182-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb182-13"><a href="#cb182-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="at">truth =</span> <span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span>, .pred)</span>
+<span id="cb182-14"><a href="#cb182-14" aria-hidden="true" tabindex="-1"></a>hbattfitted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
 1 rmse    standard        3.71</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb182"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb182-1"><a href="#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
-<span id="cb182-2"><a href="#cb182-2" aria-hidden="true" tabindex="-1"></a>hbattfittest <span class="ot">&lt;-</span> hbattfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(hbdatasplit)</span>
-<span id="cb182-3"><a href="#cb182-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb182-4"><a href="#cb182-4" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with test data</span></span>
-<span id="cb182-5"><a href="#cb182-5" aria-hidden="true" tabindex="-1"></a>hbattfittest <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb184"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb184-1"><a href="#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
+<span id="cb184-2"><a href="#cb184-2" aria-hidden="true" tabindex="-1"></a>hbattfittest <span class="ot">&lt;-</span> hbattfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(hbdatasplit)</span>
+<span id="cb184-3"><a href="#cb184-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb184-4"><a href="#cb184-4" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with test data</span></span>
+<span id="cb184-5"><a href="#cb184-5" aria-hidden="true" tabindex="-1"></a>hbattfittest <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
@@ -1869,21 +1873,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 1 rmse    standard       4.46  Preprocessor1_Model1
 2 rsq     standard       0.725 Preprocessor1_Model1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb184"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb184-1"><a href="#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
-<span id="cb184-2"><a href="#cb184-2" aria-hidden="true" tabindex="-1"></a>hbattfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb186"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
+<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a>hbattfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbmaleattitubemodel-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb185"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save for later comparison: RMSE based on predictions from best model</span></span>
-<span id="cb185-2"><a href="#cb185-2" aria-hidden="true" tabindex="-1"></a>hbatt_rmse <span class="ot">&lt;-</span> atttree_resamp <span class="sc">%&gt;%</span> </span>
-<span id="cb185-3"><a href="#cb185-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> hbattbest_tree) <span class="sc">%&gt;%</span> </span>
-<span id="cb185-4"><a href="#cb185-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb185-5"><a href="#cb185-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"hbatt"</span>)</span>
-<span id="cb185-6"><a href="#cb185-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-7"><a href="#cb185-7" aria-hidden="true" tabindex="-1"></a><span class="co">#plot decision tree</span></span>
-<span id="cb185-8"><a href="#cb185-8" aria-hidden="true" tabindex="-1"></a>hbattfinal_fit <span class="sc">%&gt;%</span></span>
-<span id="cb185-9"><a href="#cb185-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_engine</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb185-10"><a href="#cb185-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart.plot</span>(<span class="at">roundint =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb187"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb187-1"><a href="#cb187-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save for later comparison: RMSE based on predictions from best model</span></span>
+<span id="cb187-2"><a href="#cb187-2" aria-hidden="true" tabindex="-1"></a>hbatt_rmse <span class="ot">&lt;-</span> atttree_resamp <span class="sc">%&gt;%</span> </span>
+<span id="cb187-3"><a href="#cb187-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> hbattbest_tree) <span class="sc">%&gt;%</span> </span>
+<span id="cb187-4"><a href="#cb187-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="st">`</span><span class="at">People who would want a family member's TB kept secret - Male (%)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb187-5"><a href="#cb187-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"hbatt"</span>)</span>
+<span id="cb187-6"><a href="#cb187-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb187-7"><a href="#cb187-7" aria-hidden="true" tabindex="-1"></a><span class="co">#plot decision tree</span></span>
+<span id="cb187-8"><a href="#cb187-8" aria-hidden="true" tabindex="-1"></a>hbattfinal_fit <span class="sc">%&gt;%</span></span>
+<span id="cb187-9"><a href="#cb187-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_engine</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb187-10"><a href="#cb187-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart.plot</span>(<span class="at">roundint =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbmaleattitubemodel-3.png" class="img-fluid" width="672"></p>
 </div>
@@ -1893,38 +1897,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="decision-tree-model-for-male-knowledge" class="level2">
 <h2 class="anchored" data-anchor-id="decision-tree-model-for-male-knowledge">Decision tree model for Male Knowledge</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb186"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="co">#recipe predicting male knowledge</span></span>
-<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a>knowrecipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span></span>
-<span id="cb186-3"><a href="#cb186-3" aria-hidden="true" tabindex="-1"></a> <span class="sc">~</span>.,</span>
-<span id="cb186-4"><a href="#cb186-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> wdtrain_data)</span>
-<span id="cb186-5"><a href="#cb186-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb186-6"><a href="#cb186-6" aria-hidden="true" tabindex="-1"></a><span class="co">#create workflow</span></span>
-<span id="cb186-7"><a href="#cb186-7" aria-hidden="true" tabindex="-1"></a>knowwflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb186-8"><a href="#cb186-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(treemodel) <span class="sc">%&gt;%</span> </span>
-<span id="cb186-9"><a href="#cb186-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(knowrecipe)</span>
-<span id="cb186-10"><a href="#cb186-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb186-11"><a href="#cb186-11" aria-hidden="true" tabindex="-1"></a><span class="co">#set seed for reproducibility</span></span>
-<span id="cb186-12"><a href="#cb186-12" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">626</span>)</span>
-<span id="cb186-13"><a href="#cb186-13" aria-hidden="true" tabindex="-1"></a><span class="co">#resample using cross-validation folds to tune parameters</span></span>
-<span id="cb186-14"><a href="#cb186-14" aria-hidden="true" tabindex="-1"></a>knowtree_resamp <span class="ot">&lt;-</span> knowwflow <span class="sc">%&gt;%</span> </span>
-<span id="cb186-15"><a href="#cb186-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
-<span id="cb186-16"><a href="#cb186-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> wdfolds,</span>
-<span id="cb186-17"><a href="#cb186-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> tree_grid,</span>
-<span id="cb186-18"><a href="#cb186-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb186-19"><a href="#cb186-19" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb186-20"><a href="#cb186-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb186-21"><a href="#cb186-21" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
-<span id="cb186-22"><a href="#cb186-22" aria-hidden="true" tabindex="-1"></a>knowtreeplot <span class="ot">&lt;-</span> knowtree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
-<span id="cb186-23"><a href="#cb186-23" aria-hidden="true" tabindex="-1"></a>knowtreeplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb188"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb188-1"><a href="#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="co">#recipe predicting male knowledge</span></span>
+<span id="cb188-2"><a href="#cb188-2" aria-hidden="true" tabindex="-1"></a>knowrecipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span></span>
+<span id="cb188-3"><a href="#cb188-3" aria-hidden="true" tabindex="-1"></a> <span class="sc">~</span>.,</span>
+<span id="cb188-4"><a href="#cb188-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> wdtrain_data)</span>
+<span id="cb188-5"><a href="#cb188-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb188-6"><a href="#cb188-6" aria-hidden="true" tabindex="-1"></a><span class="co">#create workflow</span></span>
+<span id="cb188-7"><a href="#cb188-7" aria-hidden="true" tabindex="-1"></a>knowwflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb188-8"><a href="#cb188-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(treemodel) <span class="sc">%&gt;%</span> </span>
+<span id="cb188-9"><a href="#cb188-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(knowrecipe)</span>
+<span id="cb188-10"><a href="#cb188-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb188-11"><a href="#cb188-11" aria-hidden="true" tabindex="-1"></a><span class="co">#set seed for reproducibility</span></span>
+<span id="cb188-12"><a href="#cb188-12" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">626</span>)</span>
+<span id="cb188-13"><a href="#cb188-13" aria-hidden="true" tabindex="-1"></a><span class="co">#resample using cross-validation folds to tune parameters</span></span>
+<span id="cb188-14"><a href="#cb188-14" aria-hidden="true" tabindex="-1"></a>knowtree_resamp <span class="ot">&lt;-</span> knowwflow <span class="sc">%&gt;%</span> </span>
+<span id="cb188-15"><a href="#cb188-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
+<span id="cb188-16"><a href="#cb188-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> wdfolds,</span>
+<span id="cb188-17"><a href="#cb188-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> tree_grid,</span>
+<span id="cb188-18"><a href="#cb188-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb188-19"><a href="#cb188-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb188-20"><a href="#cb188-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb188-21"><a href="#cb188-21" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
+<span id="cb188-22"><a href="#cb188-22" aria-hidden="true" tabindex="-1"></a>knowtreeplot <span class="ot">&lt;-</span> knowtree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
+<span id="cb188-23"><a href="#cb188-23" aria-hidden="true" tabindex="-1"></a>knowtreeplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/wdmaleknowledgemodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb187"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb187-1"><a href="#cb187-1" aria-hidden="true" tabindex="-1"></a>treeplot17 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdknowtreeplot.rds"</span>)</span>
-<span id="cb187-2"><a href="#cb187-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(knowtreeplot, <span class="at">file =</span> treeplot17)</span>
-<span id="cb187-3"><a href="#cb187-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-4"><a href="#cb187-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
-<span id="cb187-5"><a href="#cb187-5" aria-hidden="true" tabindex="-1"></a>knowtree_resamp <span class="sc">%&gt;%</span> </span>
-<span id="cb187-6"><a href="#cb187-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb189"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb189-1"><a href="#cb189-1" aria-hidden="true" tabindex="-1"></a>treeplot17 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"wdknowtreeplot.rds"</span>)</span>
+<span id="cb189-2"><a href="#cb189-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(knowtreeplot, <span class="at">file =</span> treeplot17)</span>
+<span id="cb189-3"><a href="#cb189-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb189-4"><a href="#cb189-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
+<span id="cb189-5"><a href="#cb189-5" aria-hidden="true" tabindex="-1"></a>knowtree_resamp <span class="sc">%&gt;%</span> </span>
+<span id="cb189-6"><a href="#cb189-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: No value of `metric` was given; metric 'rmse' will be used.</code></pre>
 </div>
@@ -1932,96 +1936,96 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code># A tibble: 5 × 8
   cost_complexity tree_depth .metric .estimator  mean     n std_err .config     
             &lt;dbl&gt;      &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;       
-1    0.0000000001          8 rmse    standard    9.32     5    1.17 Preprocesso…
-2    0.0000000178          8 rmse    standard    9.32     5    1.17 Preprocesso…
-3    0.00000316            8 rmse    standard    9.32     5    1.17 Preprocesso…
-4    0.000562              8 rmse    standard    9.32     5    1.17 Preprocesso…
-5    0.0000000001         11 rmse    standard    9.32     5    1.17 Preprocesso…</code></pre>
+1    0.0000000001          8 rmse    standard    9.48     5    1.59 Preprocesso…
+2    0.0000000178          8 rmse    standard    9.48     5    1.59 Preprocesso…
+3    0.00000316            8 rmse    standard    9.48     5    1.59 Preprocesso…
+4    0.000562              8 rmse    standard    9.48     5    1.59 Preprocesso…
+5    0.0000000001         11 rmse    standard    9.48     5    1.59 Preprocesso…</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb190"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
-<span id="cb190-2"><a href="#cb190-2" aria-hidden="true" tabindex="-1"></a>wdknowbest_tree <span class="ot">&lt;-</span> knowtree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
-<span id="cb190-3"><a href="#cb190-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb190-4"><a href="#cb190-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create final workflow</span></span>
-<span id="cb190-5"><a href="#cb190-5" aria-hidden="true" tabindex="-1"></a>wdknowfinal_wf <span class="ot">&lt;-</span> knowwflow <span class="sc">%&gt;%</span> <span class="fu">finalize_workflow</span>(wdknowbest_tree)</span>
-<span id="cb190-6"><a href="#cb190-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb190-7"><a href="#cb190-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the final workflow to the training data</span></span>
-<span id="cb190-8"><a href="#cb190-8" aria-hidden="true" tabindex="-1"></a>wdknowfinal_fit <span class="ot">&lt;-</span> wdknowfinal_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(wdtrain_data)</span>
-<span id="cb190-9"><a href="#cb190-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb190-10"><a href="#cb190-10" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with training data</span></span>
-<span id="cb190-11"><a href="#cb190-11" aria-hidden="true" tabindex="-1"></a>wdknowfitted <span class="ot">&lt;-</span> <span class="fu">augment</span>(wdknowfinal_fit, wdtrain_data) <span class="sc">%&gt;%</span> </span>
-<span id="cb190-12"><a href="#cb190-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span></span>
-<span id="cb190-13"><a href="#cb190-13" aria-hidden="true" tabindex="-1"></a>, .pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb190-14"><a href="#cb190-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="at">truth =</span> <span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span></span>
-<span id="cb190-15"><a href="#cb190-15" aria-hidden="true" tabindex="-1"></a>, .pred)</span>
-<span id="cb190-16"><a href="#cb190-16" aria-hidden="true" tabindex="-1"></a>wdknowfitted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb192"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
+<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a>wdknowbest_tree <span class="ot">&lt;-</span> knowtree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
+<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-4"><a href="#cb192-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create final workflow</span></span>
+<span id="cb192-5"><a href="#cb192-5" aria-hidden="true" tabindex="-1"></a>wdknowfinal_wf <span class="ot">&lt;-</span> knowwflow <span class="sc">%&gt;%</span> <span class="fu">finalize_workflow</span>(wdknowbest_tree)</span>
+<span id="cb192-6"><a href="#cb192-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-7"><a href="#cb192-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the final workflow to the training data</span></span>
+<span id="cb192-8"><a href="#cb192-8" aria-hidden="true" tabindex="-1"></a>wdknowfinal_fit <span class="ot">&lt;-</span> wdknowfinal_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(wdtrain_data)</span>
+<span id="cb192-9"><a href="#cb192-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-10"><a href="#cb192-10" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with training data</span></span>
+<span id="cb192-11"><a href="#cb192-11" aria-hidden="true" tabindex="-1"></a>wdknowfitted <span class="ot">&lt;-</span> <span class="fu">augment</span>(wdknowfinal_fit, wdtrain_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb192-12"><a href="#cb192-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span></span>
+<span id="cb192-13"><a href="#cb192-13" aria-hidden="true" tabindex="-1"></a>, .pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb192-14"><a href="#cb192-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="at">truth =</span> <span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span></span>
+<span id="cb192-15"><a href="#cb192-15" aria-hidden="true" tabindex="-1"></a>, .pred)</span>
+<span id="cb192-16"><a href="#cb192-16" aria-hidden="true" tabindex="-1"></a>wdknowfitted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard        5.97</code></pre>
+1 rmse    standard        5.70</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb192"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
-<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a>wdknowfittest <span class="ot">&lt;-</span> wdknowfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(wddatasplit)</span>
-<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb192-4"><a href="#cb192-4" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with test data</span></span>
-<span id="cb192-5"><a href="#cb192-5" aria-hidden="true" tabindex="-1"></a>wdknowfittest <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb194"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb194-1"><a href="#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
+<span id="cb194-2"><a href="#cb194-2" aria-hidden="true" tabindex="-1"></a>wdknowfittest <span class="ot">&lt;-</span> wdknowfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(wddatasplit)</span>
+<span id="cb194-3"><a href="#cb194-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb194-4"><a href="#cb194-4" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with test data</span></span>
+<span id="cb194-5"><a href="#cb194-5" aria-hidden="true" tabindex="-1"></a>wdknowfittest <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard       9.24  Preprocessor1_Model1
-2 rsq     standard       0.606 Preprocessor1_Model1</code></pre>
+1 rmse    standard       9.74  Preprocessor1_Model1
+2 rsq     standard       0.590 Preprocessor1_Model1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb194"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb194-1"><a href="#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
-<span id="cb194-2"><a href="#cb194-2" aria-hidden="true" tabindex="-1"></a>wdknowfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb196"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb196-1"><a href="#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
+<span id="cb196-2"><a href="#cb196-2" aria-hidden="true" tabindex="-1"></a>wdknowfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/wdmaleknowledgemodel-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb195"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb195-1"><a href="#cb195-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save for later comparison: RMSE based on predictions from best model</span></span>
-<span id="cb195-2"><a href="#cb195-2" aria-hidden="true" tabindex="-1"></a>wdknow_rmse <span class="ot">&lt;-</span> knowtree_resamp <span class="sc">%&gt;%</span> </span>
-<span id="cb195-3"><a href="#cb195-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> wdknowbest_tree) <span class="sc">%&gt;%</span> </span>
-<span id="cb195-4"><a href="#cb195-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb195-5"><a href="#cb195-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"wdknow"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb197"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb197-1"><a href="#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save for later comparison: RMSE based on predictions from best model</span></span>
+<span id="cb197-2"><a href="#cb197-2" aria-hidden="true" tabindex="-1"></a>wdknow_rmse <span class="ot">&lt;-</span> knowtree_resamp <span class="sc">%&gt;%</span> </span>
+<span id="cb197-3"><a href="#cb197-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> wdknowbest_tree) <span class="sc">%&gt;%</span> </span>
+<span id="cb197-4"><a href="#cb197-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb197-5"><a href="#cb197-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"wdknow"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The best tree model for male knowledge using the full data has a depth of 8 with an RMSE of 8.52. The fitted model to the training data has a RMSE of 5.69, but using the testing data, the model had a performance of RMSE = 6.49. The most important predictor was country.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb196"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb196-1"><a href="#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="co">#recipe predicting male knowledge</span></span>
-<span id="cb196-2"><a href="#cb196-2" aria-hidden="true" tabindex="-1"></a>knowrecipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span></span>
-<span id="cb196-3"><a href="#cb196-3" aria-hidden="true" tabindex="-1"></a> <span class="sc">~</span>.,</span>
-<span id="cb196-4"><a href="#cb196-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> hbtrain_data)</span>
-<span id="cb196-5"><a href="#cb196-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb196-6"><a href="#cb196-6" aria-hidden="true" tabindex="-1"></a><span class="co">#create workflow</span></span>
-<span id="cb196-7"><a href="#cb196-7" aria-hidden="true" tabindex="-1"></a>knowwflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb196-8"><a href="#cb196-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(treemodel) <span class="sc">%&gt;%</span> </span>
-<span id="cb196-9"><a href="#cb196-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(knowrecipe)</span>
-<span id="cb196-10"><a href="#cb196-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb196-11"><a href="#cb196-11" aria-hidden="true" tabindex="-1"></a><span class="co">#set seed for reproducibility</span></span>
-<span id="cb196-12"><a href="#cb196-12" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">626</span>)</span>
-<span id="cb196-13"><a href="#cb196-13" aria-hidden="true" tabindex="-1"></a><span class="co">#resample using cross-validation folds to tune parameters</span></span>
-<span id="cb196-14"><a href="#cb196-14" aria-hidden="true" tabindex="-1"></a>knowtree_resamp <span class="ot">&lt;-</span> knowwflow <span class="sc">%&gt;%</span> </span>
-<span id="cb196-15"><a href="#cb196-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
-<span id="cb196-16"><a href="#cb196-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> hbfolds,</span>
-<span id="cb196-17"><a href="#cb196-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> tree_grid,</span>
-<span id="cb196-18"><a href="#cb196-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb196-19"><a href="#cb196-19" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb198"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb198-1"><a href="#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="co">#recipe predicting male knowledge</span></span>
+<span id="cb198-2"><a href="#cb198-2" aria-hidden="true" tabindex="-1"></a>knowrecipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span></span>
+<span id="cb198-3"><a href="#cb198-3" aria-hidden="true" tabindex="-1"></a> <span class="sc">~</span>.,</span>
+<span id="cb198-4"><a href="#cb198-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> hbtrain_data)</span>
+<span id="cb198-5"><a href="#cb198-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-6"><a href="#cb198-6" aria-hidden="true" tabindex="-1"></a><span class="co">#create workflow</span></span>
+<span id="cb198-7"><a href="#cb198-7" aria-hidden="true" tabindex="-1"></a>knowwflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb198-8"><a href="#cb198-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(treemodel) <span class="sc">%&gt;%</span> </span>
+<span id="cb198-9"><a href="#cb198-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(knowrecipe)</span>
+<span id="cb198-10"><a href="#cb198-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-11"><a href="#cb198-11" aria-hidden="true" tabindex="-1"></a><span class="co">#set seed for reproducibility</span></span>
+<span id="cb198-12"><a href="#cb198-12" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">626</span>)</span>
+<span id="cb198-13"><a href="#cb198-13" aria-hidden="true" tabindex="-1"></a><span class="co">#resample using cross-validation folds to tune parameters</span></span>
+<span id="cb198-14"><a href="#cb198-14" aria-hidden="true" tabindex="-1"></a>knowtree_resamp <span class="ot">&lt;-</span> knowwflow <span class="sc">%&gt;%</span> </span>
+<span id="cb198-15"><a href="#cb198-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_grid</span>(</span>
+<span id="cb198-16"><a href="#cb198-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> hbfolds,</span>
+<span id="cb198-17"><a href="#cb198-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> tree_grid,</span>
+<span id="cb198-18"><a href="#cb198-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_grid</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb198-19"><a href="#cb198-19" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>! Fold1: internal: A correlation computation is required, but `estimate` is constant and ha...</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>! Fold4: internal: A correlation computation is required, but `estimate` is constant and ha...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb199"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb199-1"><a href="#cb199-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
-<span id="cb199-2"><a href="#cb199-2" aria-hidden="true" tabindex="-1"></a>knowtreeplot <span class="ot">&lt;-</span> knowtree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
-<span id="cb199-3"><a href="#cb199-3" aria-hidden="true" tabindex="-1"></a>knowtreeplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb201"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb201-1"><a href="#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot resampling by parameters</span></span>
+<span id="cb201-2"><a href="#cb201-2" aria-hidden="true" tabindex="-1"></a>knowtreeplot <span class="ot">&lt;-</span> knowtree_resamp <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span>
+<span id="cb201-3"><a href="#cb201-3" aria-hidden="true" tabindex="-1"></a>knowtreeplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbmaleknowledgemodel-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb200"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb200-1"><a href="#cb200-1" aria-hidden="true" tabindex="-1"></a>treeplot18 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbknowtreeplot.rds"</span>)</span>
-<span id="cb200-2"><a href="#cb200-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(knowtreeplot, <span class="at">file =</span> treeplot18)</span>
-<span id="cb200-3"><a href="#cb200-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb200-4"><a href="#cb200-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
-<span id="cb200-5"><a href="#cb200-5" aria-hidden="true" tabindex="-1"></a>knowtree_resamp <span class="sc">%&gt;%</span> </span>
-<span id="cb200-6"><a href="#cb200-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb202"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb202-1"><a href="#cb202-1" aria-hidden="true" tabindex="-1"></a>treeplot18 <span class="ot">=</span> <span class="fu">here</span>(<span class="st">"results"</span>, <span class="st">"statistical_analysis"</span>, <span class="st">"tune plots"</span>, <span class="st">"hbknowtreeplot.rds"</span>)</span>
+<span id="cb202-2"><a href="#cb202-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(knowtreeplot, <span class="at">file =</span> treeplot18)</span>
+<span id="cb202-3"><a href="#cb202-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb202-4"><a href="#cb202-4" aria-hidden="true" tabindex="-1"></a><span class="co">#show the best model</span></span>
+<span id="cb202-5"><a href="#cb202-5" aria-hidden="true" tabindex="-1"></a>knowtree_resamp <span class="sc">%&gt;%</span> </span>
+<span id="cb202-6"><a href="#cb202-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_best</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: No value of `metric` was given; metric 'rmse' will be used.</code></pre>
 </div>
@@ -2035,33 +2039,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 4    0.000562              4 rmse    standard    10.8     5    1.63 Preprocesso…
 5    0.0000000001          8 rmse    standard    10.8     5    1.62 Preprocesso…</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb203"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb203-1"><a href="#cb203-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
-<span id="cb203-2"><a href="#cb203-2" aria-hidden="true" tabindex="-1"></a>hbknowbest_tree <span class="ot">&lt;-</span> knowtree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
-<span id="cb203-3"><a href="#cb203-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb203-4"><a href="#cb203-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create final workflow</span></span>
-<span id="cb203-5"><a href="#cb203-5" aria-hidden="true" tabindex="-1"></a>hbknowfinal_wf <span class="ot">&lt;-</span> knowwflow <span class="sc">%&gt;%</span> <span class="fu">finalize_workflow</span>(hbknowbest_tree)</span>
-<span id="cb203-6"><a href="#cb203-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb203-7"><a href="#cb203-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the final workflow to the training data</span></span>
-<span id="cb203-8"><a href="#cb203-8" aria-hidden="true" tabindex="-1"></a>hbknowfinal_fit <span class="ot">&lt;-</span> hbknowfinal_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(hbtrain_data)</span>
-<span id="cb203-9"><a href="#cb203-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb203-10"><a href="#cb203-10" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with training data</span></span>
-<span id="cb203-11"><a href="#cb203-11" aria-hidden="true" tabindex="-1"></a>hbknowfitted <span class="ot">&lt;-</span> <span class="fu">augment</span>(hbknowfinal_fit, hbtrain_data) <span class="sc">%&gt;%</span> </span>
-<span id="cb203-12"><a href="#cb203-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span></span>
-<span id="cb203-13"><a href="#cb203-13" aria-hidden="true" tabindex="-1"></a>, .pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb203-14"><a href="#cb203-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="at">truth =</span> <span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span></span>
-<span id="cb203-15"><a href="#cb203-15" aria-hidden="true" tabindex="-1"></a>, .pred)</span>
-<span id="cb203-16"><a href="#cb203-16" aria-hidden="true" tabindex="-1"></a>hbknowfitted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb205"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb205-1"><a href="#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="co">#select best model</span></span>
+<span id="cb205-2"><a href="#cb205-2" aria-hidden="true" tabindex="-1"></a>hbknowbest_tree <span class="ot">&lt;-</span> knowtree_resamp <span class="sc">%&gt;%</span> <span class="fu">select_best</span>(<span class="st">"rmse"</span>)</span>
+<span id="cb205-3"><a href="#cb205-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb205-4"><a href="#cb205-4" aria-hidden="true" tabindex="-1"></a><span class="co">#create final workflow</span></span>
+<span id="cb205-5"><a href="#cb205-5" aria-hidden="true" tabindex="-1"></a>hbknowfinal_wf <span class="ot">&lt;-</span> knowwflow <span class="sc">%&gt;%</span> <span class="fu">finalize_workflow</span>(hbknowbest_tree)</span>
+<span id="cb205-6"><a href="#cb205-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb205-7"><a href="#cb205-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the final workflow to the training data</span></span>
+<span id="cb205-8"><a href="#cb205-8" aria-hidden="true" tabindex="-1"></a>hbknowfinal_fit <span class="ot">&lt;-</span> hbknowfinal_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(hbtrain_data)</span>
+<span id="cb205-9"><a href="#cb205-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb205-10"><a href="#cb205-10" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with training data</span></span>
+<span id="cb205-11"><a href="#cb205-11" aria-hidden="true" tabindex="-1"></a>hbknowfitted <span class="ot">&lt;-</span> <span class="fu">augment</span>(hbknowfinal_fit, hbtrain_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb205-12"><a href="#cb205-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span></span>
+<span id="cb205-13"><a href="#cb205-13" aria-hidden="true" tabindex="-1"></a>, .pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb205-14"><a href="#cb205-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="at">truth =</span> <span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span></span>
+<span id="cb205-15"><a href="#cb205-15" aria-hidden="true" tabindex="-1"></a>, .pred)</span>
+<span id="cb205-16"><a href="#cb205-16" aria-hidden="true" tabindex="-1"></a>hbknowfitted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
 1 rmse    standard        6.23</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb205"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb205-1"><a href="#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
-<span id="cb205-2"><a href="#cb205-2" aria-hidden="true" tabindex="-1"></a>hbknowfittest <span class="ot">&lt;-</span> hbknowfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(hbdatasplit)</span>
-<span id="cb205-3"><a href="#cb205-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb205-4"><a href="#cb205-4" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with test data</span></span>
-<span id="cb205-5"><a href="#cb205-5" aria-hidden="true" tabindex="-1"></a>hbknowfittest <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb207"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb207-1"><a href="#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit final workflow to test data</span></span>
+<span id="cb207-2"><a href="#cb207-2" aria-hidden="true" tabindex="-1"></a>hbknowfittest <span class="ot">&lt;-</span> hbknowfinal_fit <span class="sc">%&gt;%</span> <span class="fu">last_fit</span>(hbdatasplit)</span>
+<span id="cb207-3"><a href="#cb207-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb207-4"><a href="#cb207-4" aria-hidden="true" tabindex="-1"></a><span class="co">#find RMSE for model with test data</span></span>
+<span id="cb207-5"><a href="#cb207-5" aria-hidden="true" tabindex="-1"></a>hbknowfittest <span class="sc">%&gt;%</span> <span class="fu">collect_metrics</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
   .metric .estimator .estimate .config             
@@ -2069,21 +2073,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 1 rmse    standard       8.99  Preprocessor1_Model1
 2 rsq     standard       0.757 Preprocessor1_Model1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb207"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb207-1"><a href="#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
-<span id="cb207-2"><a href="#cb207-2" aria-hidden="true" tabindex="-1"></a>hbknowfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb209"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb209-1"><a href="#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check important variables of model</span></span>
+<span id="cb209-2"><a href="#cb209-2" aria-hidden="true" tabindex="-1"></a>hbknowfittest <span class="sc">%&gt;%</span> <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbmaleknowledgemodel-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb208"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb208-1"><a href="#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save for later comparison: RMSE based on predictions from best model</span></span>
-<span id="cb208-2"><a href="#cb208-2" aria-hidden="true" tabindex="-1"></a>hbknow_rmse <span class="ot">&lt;-</span> knowtree_resamp <span class="sc">%&gt;%</span> </span>
-<span id="cb208-3"><a href="#cb208-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> hbknowbest_tree) <span class="sc">%&gt;%</span> </span>
-<span id="cb208-4"><a href="#cb208-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
-<span id="cb208-5"><a href="#cb208-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"hbknow"</span>)</span>
-<span id="cb208-6"><a href="#cb208-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb208-7"><a href="#cb208-7" aria-hidden="true" tabindex="-1"></a><span class="co">#plot decision tree</span></span>
-<span id="cb208-8"><a href="#cb208-8" aria-hidden="true" tabindex="-1"></a>hbknowfinal_fit <span class="sc">%&gt;%</span></span>
-<span id="cb208-9"><a href="#cb208-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_engine</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb208-10"><a href="#cb208-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart.plot</span>(<span class="at">roundint =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb210"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb210-1"><a href="#cb210-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save for later comparison: RMSE based on predictions from best model</span></span>
+<span id="cb210-2"><a href="#cb210-2" aria-hidden="true" tabindex="-1"></a>hbknow_rmse <span class="ot">&lt;-</span> knowtree_resamp <span class="sc">%&gt;%</span> </span>
+<span id="cb210-3"><a href="#cb210-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect_predictions</span>(<span class="at">parameters =</span> hbknowbest_tree) <span class="sc">%&gt;%</span> </span>
+<span id="cb210-4"><a href="#cb210-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rmse</span>(<span class="st">`</span><span class="at">People who report TB is spread through coughing - Male (%)</span><span class="st">`</span>, .pred) <span class="sc">%&gt;%</span> </span>
+<span id="cb210-5"><a href="#cb210-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model =</span> <span class="st">"hbknow"</span>)</span>
+<span id="cb210-6"><a href="#cb210-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb210-7"><a href="#cb210-7" aria-hidden="true" tabindex="-1"></a><span class="co">#plot decision tree</span></span>
+<span id="cb210-8"><a href="#cb210-8" aria-hidden="true" tabindex="-1"></a>hbknowfinal_fit <span class="sc">%&gt;%</span></span>
+<span id="cb210-9"><a href="#cb210-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_engine</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb210-10"><a href="#cb210-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rpart.plot</span>(<span class="at">roundint =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="statistical_analysis_files/figure-html/hbmaleknowledgemodel-3.png" class="img-fluid" width="672"></p>
 </div>

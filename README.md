@@ -16,6 +16,9 @@ This project uses R Studio, Quarto, Github, and Zotero programs.
 -   All products (manuscripts, supplement, presentation slides, web apps, etc.) can be found in `products` subfolders.
 -   Each folder contains a `readme.md` file with more information.
 
+## To produce Manuscript and Supplementary files
+  In order to easily view the Manuscript and supplementary files found in the `code` folder, please render the document to produce the Word/HTML documents. This will pull the code from the Rscript files into the Quarto documents without having to switch between outputs. Check the folder `readme.md` file for more information.
+  
 # Project content
 
 See the `readme` files in each folder for more details.

@@ -7,7 +7,9 @@ output: html_document
 
 # Processing script with R script code
 
-This Quarto file runs the statistical analysis code from the `statistical_analysis.r` script. The best way to view the output of the script is to render the qmd and view the html document. The processed data is used for model fitting. 
+This Quarto file runs the statistical analysis code from the `statistical_analysis.r` script. The best way to view the output of the script is to render the qmd and view the html document. The processed data is used for model fitting.
+
+*Note: this file takes approximately 10 minutes to render*
 
 To start, the needed packages are loaded, and the `processeddata.rda` is loaded from the `processed_data` folder. 
 

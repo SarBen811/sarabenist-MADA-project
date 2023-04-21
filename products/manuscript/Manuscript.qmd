@@ -10,52 +10,28 @@ format:
     highlight-style: github
 bibliography: ../sarabenist-MADA-project_references.bib
 csl: ../apa.csl
+execute: 
+  echo: false
 ---
 
 
 ```{r, echo=FALSE, message=FALSE}
+#| output: false
 # load a few R packages
 library(here)
 library(knitr)
 library(tidyverse)
-library(dplyr)
-library(ggplot2)
-library(tidymodels)
 ```
 
-# Questions for Dr. Handel
-I would like to be able to predict the main TB outcomes based on the health equity indicators (ex: level of TB incidence predicted from % of people with drug-resistant strains), but I cannot join the rows together correctly. When I tried bind_rows() on the one of the countries to see if it would work, the outcome rows are still separated and if I remove year to force everything onto the same row, I have 90 variables and they are grouped within the same cell. I added an example below. Do you have any advice? 
-
-```{r}
-#path to data
-data_location <- here::here("data","raw_data","202206-repository-tb.xlsx")
-
-#load data and assign to rawdata
-rawdata <- readxl::read_excel(data_location)
-
-#without year removed: outcomes remain on a separate row
-test <- rawdata %>% 
-  select(c(setting, year, indicator_name,
-           dimension, subgroup,
-           estimate)) %>% 
-  pivot_wider(names_from = c("indicator_name", "dimension", "subgroup"), values_from = "estimate") %>% 
-  filter(setting == "Afghanistan") %>% bind_rows()
-test
-
-#with year removed: cells contain multiple observations
-test2 <- rawdata %>% 
-  select(c(setting, indicator_name,
-           dimension, subgroup,
-           estimate)) %>% 
-  pivot_wider(names_from = c("indicator_name", "dimension", "subgroup"), values_from = "estimate") %>% 
-  filter(setting == "Afghanistan") %>% bind_rows()
-test2
-```
-If it is not feasible, I will be analyzing TB outcomes separately from indicators instead.
 
 # Summary/Abstract
 
-Full summary to be added (TBA): background of topic, objective of project, quick overview of methods, main findings
+Tuberculosis is the leading infectious cause of death, and the burden of TB is disproportionately concentrated in several high burden countries. The reason for the disparity between countries and populations of specific demographics is not fully understood. The World Health Organization collects annual data on tuberculosis outcomes through the Global Tuberculosis Programme with the goal of reducing TB incidence worldwide. The further explore the reasons behind the health inequity surrounding tuberculosis, this analysis explores the health equity indicators collected by WHO and attempts to predict tuberculosis outcomes. 
+
+The project cleans and summarizes the health equity indicators to explore disparities within the indicators based on level of income, education, sex, place of residence, and presence of drug-resistant strains. The data set was also subset into high burden countries to explore difference between high burden countries and all countries. Linear regression and decision tree modelling using cross-validation tuning were conducted with predict tuberculosis outcomes and level of equity indicators. 
+
+In 2020, Lesotho had the highest TB incidence, but with the inclusion of mortality rates, Central African Republic had the highest case fatality rate with a high incidence and mortality. Males have a higher proportion of cases compared to females, and level of income and education had the largest disparity between the highest and lowest levels. More research needs to be conducted to measure the direct relationship between the health equity indicators and tuberculosis outcomes. 
+
 
 {{< pagebreak >}}
 
@@ -63,7 +39,7 @@ Full summary to be added (TBA): background of topic, objective of project, quick
 
 ## General Background Information
 
-Tuberculosis is an infectious disease caused by *Mycobacterium tuberculosis* and is the leading infectious cause of death in the world even though the disease is both treatable and curable[@WHO2022]. Approximately 10 million people are infected each year, and 1.5 million die from the disease [@WHO2022]. Humanity has been impacted by TB for centuries, but the burden of disease is not equal across countries and populations [@WHO2022b]. The World Health Organization marked 30 countries as having highest burden of TB due to the number of cases, presence of multi-drug resistance strains, and the high mortality within certain populations such as HIV [@WHO2021b]. To understand more about why some countries or groups of people experience the higher burden, the World Health Organization gathered data on several health equity indicators subgroups. The Global Tuberculosis Programme houses the End TB Strategy with a goal to eradicating TB. Their current objective is to reduce TB incidence by 80% and TB deaths by 90% by 2030 [@WHO2022c]. Previous research has focused on trends in TB outcomes,; this project will explore and analyze the disparities within the indicators based on subgroup and burden of disease as well as analyizing trends in tuberculosis outcomes.
+Tuberculosis is an infectious disease caused by *Mycobacterium tuberculosis* and is the leading infectious cause of death in the world even though the disease is both treatable and curable[@WHO2022]. Approximately 10 million people are infected each year, and 1.5 million die from the disease [@WHO2022]. Humanity has been impacted by TB for centuries, but the burden of disease is not equal across countries and populations [@WHO2022b]. The World Health Organization marked 30 countries as having highest burden of TB due to the number of cases, presence of multi-drug resistance strains, and the high mortality within certain populations such as HIV [@WHO2021b]. To understand more about why some countries or groups of people experience the higher burden, the World Health Organization gathered data on several health equity indicators subgroups. The Global Tuberculosis Programme houses the End TB Strategy with a goal to eradicating TB. Their current objective is to reduce TB incidence by 80% and TB deaths by 90% by 2030 [@WHO2022c]. Previous research has focused on trends in TB outcomes; this project will explore and analyze the disparities within the indicators based on subgroup and burden of disease as well as analyzing trends in tuberculosis outcomes.
 
 ## Description of data and data source
 
@@ -72,7 +48,7 @@ The World Health Organization collected data on the inequity surrounding tubercu
 For the tuberculosis dataset, the data was collected from the WHO Global TB programme, TB prevalence surveys, country-specific TB programmes, the WHO Health Equity Monitor database, TB patient cost surveys, and other sources [@WHO2021]. The WHO organized the dataset to be used with the Health Equity Assessment Toolkit which is the built in data analysis and exploration tool. The database contains 10 variables regarding the burden, detection, prevention, knowledge, and social protection and observations for 194 countries over various years. The observations for each variable is further separated by up 7 inequality domains. Not all countries have data available for each year or for each inequality domain. The dataset contains a total of 7473 observations.
 
 ## Questions/Hypotheses to be addressed
-*update depending on ability to bind indicators with outcomes*
+*update depending on ability to bind indicators with outcomes; discuss with Zane next week*
 
 Research question: Does high disparities between inequality measures show high correlation to TB incidence, prevalence, and mortality of a country? How do these relationships differ for high burden countries compared to all countries?
 
@@ -90,85 +66,20 @@ The data cleaning will consist of widening the data set so each TB indicator is 
 
 ## Data aquisition, import, and cleaning
 
-The WHO dataset can be found [here](o%20https://www.who.int/data/inequality-monitor/data#PageContent_C158_Col00) under "Tuberculosis Indicators". This data was downloaded and stored into the `raw_data` folder of the repository as `rawdata`. Information on the indicators, social determinants dimensions, and subgroups can be found in the `raw_data` folder under `202206-metadata-tb.pdf`
+The WHO dataset can be found [here](o%20https://www.who.int/data/inequality-monitor/data#PageContent_C158_Col00) under "Tuberculosis Indicators". This data was downloaded and stored into the `raw_data` folder of the repository as `rawdata`. Information on the indicators, social determinants dimensions, and subgroups can be found in the `raw_data` folder under `202206-metadata-tb.pdf`. Please render the `processingfile.qmd` file for full results from data importing and cleaning. The associated R script file contains all coding steps with descriptions. 
 
-```{r load data}
-#path to data
-data_location <- here::here("data","raw_data","202206-repository-tb.xlsx")
-
-#load data and assign to rawdata
-rawdata <- readxl::read_excel(data_location)
-
-str(rawdata)
-```
-
-Please see `processingfile.qmd` for full code describing data importing and cleaning.
-
-The `rawdata` file contains information on the country, year of data collection, the indicator they are studying, the social determinants of health they are considering, and the subgroup of each dimension. The dataset is mostly complete with only a few main variables missing data points. The indicators being studied are shown below.
-
-```{r}
-#look at what indicators are in the dataset
-unique(rawdata$indicator_name)
-```
-
-For the main part of the data cleaning, I used `pivot_wider()` to allow each indicator to have its own column, and subset the high burden countries (as indicated by the WHO) into a new object called `highburden`. I also checked each indicator using `filter()`, `select()`, and `summary()` functions. These methods will allow for deeper exploration of each indicator in order to explore trends and patterns for each subgroup. An example of the data cleaning is shown below.
-
-```{r}
-wide_data <- rawdata %>% 
-  select(c(setting, year, indicator_name,
-           indicator_abbr, dimension, subgroup,
-           estimate, population)) %>% 
-  pivot_wider(names_from = "indicator_name", values_from = "estimate")
-head(wide_data)
-
-# BCG coverage indicator
-wide_data %>% 
-  filter(indicator_abbr == "bcg") %>% 
-  select(c(1,2,3,4,5,6,7)) %>% 
-  summary()
-```
+For the main part of the data cleaning, I used `pivot_wider()` to allow each indicator to have its own column, and subset the high burden countries (as indicated by the WHO) into a new object called `highburden`. I also checked each indicator using `filter()`, `select()`, and `summary()` functions. These methods will allow for deeper exploration of each indicator in order to explore trends and patterns for each subgroup. 
 
 Due to the `pivot_wider()` function, there was several missing observations for countries and years that had data for only some subgroups (ex: data on males but no data on females). Since I will be maintaining all the indicators in their own data set, `drop_na()` would remove all data points. Instead, I will handle missing data points after exploring the data further.
 
 The processed and cleaned data was then saved into the `processed_data` folder under `processeddata.rda` to be used during the exploratory analysis phase. I have loaded the processed data below.
 
-```{r}
-#path to data
-data_location <- here::here("data","processed_data","processeddata.rda")
-#load data. 
-load(data_location)
-```
-
 ## Statistical analysis
 
-For the statistical analysis of the data, I created decision tree models for the main outcomes (TB incidence, TB mortality, and TB prevalence) based on the subgroups of the indicator and tuned the models using cross-validation folds. The data was initially split into test/train data sets to better evaluate model performance. An example is shown below. This method was repeated for the `wide_data` and `highburden` countries.
+For the statistical analysis of the data, I created decision tree models for the main outcomes (TB incidence, TB mortality, and TB prevalence) based on the subgroups of the indicator and tuned the models using cross-validation folds. The data was initially split into test/train data sets to better evaluate model performance. This method was repeated for the `wide_data` and `highburden` countries.
 
-```{r}
-# fit linear model using TB incidence as outcome, subgroup as predictor
-lm_mod <- linear_reg() #set linear regression
 
-#fit model with high burden countries
-inclm_fit <- lm_mod %>% 
-  fit(`TB incidence (new infections per 100 000 population)` ~ subgroup,
-      data = highburden) #fit linear model
-incfittable <- tidy(inclm_fit) 
-print(incfittable) #produce tidy table of fitted model
-```
-
-Other indicators were also analyzed and fit to a decision tree model using the same methods.
-
-```{r}
-# fit linear model with BCG coverage as outcome, subgroups as predictors
-
-#fit model with high burden countries
-BCGlm_fit <- lm_mod %>% 
-  fit(`BCG immunization coverage among one-year-olds (%)` ~ subgroup,
-      data = highburden) #fit linear model
-BCGfittable <- tidy(BCGlm_fit) 
-print(BCGfittable) #produce tidy table of fitted model
-```
-
-I would still like to try to manipulate the data set so I can use the social determinant indicators as predictors for the main outcomes. This will most likely be limited to the high burden countries.
+I would still like to try to manipulate the data set so I can use the social determinant indicators as predictors for the main outcomes. This will most likely be limited to the high burden countries. I am meeting with Zane next week to discuss.
 
 {{< pagebreak >}}
 
@@ -176,120 +87,165 @@ I would still like to try to manipulate the data set so I can use the social det
 
 ## Exploratory/Descriptive analysis
 
-Please see `exploratory_analysis.qmd` for full code describing data exploratory analysis.
-
-The `processedcode` was loaded into the `exploratory_analysis.qmd` file which pulls coding from the `exploratoryanalysis.r` script.
+After processing the data, the `wide_data` and `highburden` datasets were described by exploring each health equity indicators and tuberculosis outcome. @fig-indicators shows the list of indicators, and the codebook can be found in the README.md file. 
 
 ```{r}
-#Path to data.
-data_location <- here::here("data","processed_data","processeddata.rda")
-#load data
-load(data_location)
+#| label: fig-indicators
+#| fig-cap: "Healthy equity indicators"
+readRDS(file = here("results", "processing", "indicators.rds"))
 ```
 
-For each indicator, I produced a summary table using `skim()` to determine the number of dimensions and subgroups as well as the summary statistics to see any overall trends in the data. The summary tables are stored in the `results` folder. An example of the code is shown below.
+For each indicator, I produced a summary table using `skim()` to determine the number of dimensions and subgroups as well as the summary statistics to see any overall trends in the data. The summary tables are stored in the `results` folder.
+The population for most variables were relatively low and skewed to the right. The TB incidence and mortality indicators also showed a skewed distribution. The highest incidence rate was 908 cases/100,000 shown in @fig-incsum, and highest mortality rate was 140 deaths/100,000 shown in @fig-mortsum.
+```{r}
+#| label: fig-incsum
+#| fig-cap: "Tuberculosis incidence summary"
+readRDS(file = here("results", "exploratory_analysis", "summary tables", "incsummarytable.rds"))
+```
 
 ```{r}
-#incidence summary and save to file location
-summary_inc <- skimr::skim(wide_data$`TB incidence (new infections per 100 000 population)`)
-print(summary_inc)
-
-#mortality summary and save to file location
-summary_mort <- skimr::skim(wide_data$`TB mortality (deaths per 100 000 population)`)
-print(summary_mort)
+#| label: fig-mortsum
+#| fig-cap: "Tuberculosis mortality summary"
+readRDS(file = here("results", "exploratory_analysis", "summary tables", "mortsummarytable.rds"))
 ```
 
-The population for most variables were relatively low and skewed to the right. The TB incidence and mortality indicators also showed a skewed distribution. The highest incidence rate was 908 cases/100,000 and highest mortality rate was 140 deaths/100,000.
-
-After getting an overview of the indicators, I wanted to explore the differences between subgroups and start identifying the largest disparities. Using `ggplot()`, I created plots of the indicators separated by dimension and subgroup. For most variables, these disparities were described using the `boxplot()` function as shown below.
+After getting an overview of the indicators, I explored the differences between subgroups within each health equity indicator and began identifying the largest disparities. Using `ggplot()`, I created plots of the indicators separated by dimension and subgroup. For most variables, these disparities were described using the `boxplot()` function. The main outcomes of interest for TB incidence, mortality, and prevalence were plotted using the `geom_point()` function.
 
 ```{r}
-p13 <- highburden %>%
-  filter(!dimension %in% c("Age (2 groups) (0-15+)", "TB drug resistance", "Sex")) %>%
-  ggplot(aes(x=dimension,
-             y = `People who report TB is spread through coughing - Female (%)`,
-             fill = subgroup)) +
-  geom_boxplot()+
-  theme(axis.text.x = element_text(angle = 90))   
-plot(p13) # plots knowledge about TB by dimension and subgroup for females
+#| label: fig-incexplore
+#| fig-cap: "Tuberculosis incidence by country"
+include_graphics(here("results", "exploratory_analysis", "figures", "incexplore1.png"))
 ```
-
-The main outcomes of interest for TB incidence, mortality, and prevalence were plotted using the `geom_point()` function as shown below.
+@fig-incexplore shows the tuberculosis incidence for each country stratified by sex. Males have a higher proportion of TB cases, and most countries have minimal cases per 100,000 people. @fig-incexplorehb shows the TB incidence for high burden countries which are responsible for most of the TB burden worldwide. Lesotho has the highest number of cases followed by South Africa and Central African Republic. 
 
 ```{r}
-p6 <- highburden %>% 
-  filter(dimension %in% "Sex") %>%
-  filter(indicator_abbr == "mortality") %>% 
-  select(c(1,2,3,4,5,6,13)) %>% 
-  ggplot(aes(x=fct_reorder(
-  setting, `TB mortality (deaths per 100 000 population)`),
-  y = `TB mortality (deaths per 100 000 population)`,
-  color = subgroup)) +
-    geom_point()+
-  theme(axis.text.x = element_text(angle = 90))+
-  scale_fill_brewer(palette = "Spectral")+
-  xlab("setting")
-plot(p6) #plots mortality by country from lowest mortality to highest, colored by subgroup
+#| label: fig-incexplorehb
+#| fig-cap: "Tuberculosis incidence by country for high burden countries"
+include_graphics(here("results", "exploratory_analysis", "figures", "incexplore2.png"))
 ```
 
-Most indicators showed the greatest disparities due to economic status and education level. 
+@fig-mortexplore shows the TB mortality for high burden countries. Compared with the TB incidence values, Central African Republic has high TB incidence and mortality. 
+```{r}
+#| label: fig-mortexplore
+#| fig-cap: "Tuberculosis mortality by country"
+include_graphics(here("results", "exploratory_analysis", "figures", "mortexplore.png"))
+```
+
+@fig-prevexplore shows tuberculosis prevalence by country. There may be a slight trend of urban areas having higher prevalence compared to rural areas.
+```{r}
+#| label: fig-prevexplore
+#| fig-cap: "Tuberculosis prevalence by country"
+include_graphics(here("results", "exploratory_analysis", "figures", "prevexplore1.png"))
+```
+
+When exploring the health equity indicators, the BCG immunization proportion, catastrophic costs due to TB, prevalence to notification ratio, and knowledge about TB showed the largest disparities between subgroups. @fig-bcg shows the percentage of immunization for one-year-olds based on economic status, education level, area of residence, and sex. The economic status and education levels showed an approximate difference of 10-15% vaccination coverage between the highest and lowest levels. 
+```{r}
+#| label: fig-bcg
+#| fig-cap: "BCG immunization by subgroup"
+include_graphics(here("results", "exploratory_analysis", "figures", "bcgexplore.png"))
+```
+Experiencing catastrophic costs due to TB was most heavily present in the lowest economic quintile and was highly associated with drug resistant TB with approximately 85% of people with drug-resistant strains experiencing high costs.
+```{r}
+#| label: fig-catacost
+#| fig-cap: "Catastropic costs due to TB in highburden countries"
+include_graphics(here("results", "exploratory_analysis", "figures", "catacostexplore.png"))
+```
+
+The prevalence to notification also shows a mild inequity between females and males as shown in @fig-prevnot. Males on average have 2.4 years between contracting tuberculosis and receiving a diagnosis compared to 1.7 years for females.
+```{r}
+#| label: fig-prevnot
+#| fig-cap: "Time between prevalence to notification in high burden countries"
+include_graphics(here("results", "exploratory_analysis", "figures", "pnexplore.png"))
+```
+
+The final indicator that showed the highest disparity is the male and female knowledge of TB shown in @fig-knowledge. Both groups show similar disparities within the economic status, education level, and place of residence subgroups. However, females appear to have more extreme disparities within the subgroups. For example, males in the lowest quintile have 60% of the population exhibiting knowledge about how TB is spread, but females of the same quintile show only 50% of population having TB knowledge. Similar trends occur for th education and place of residence subgroups. 
+```{r}
+#| label: fig-knowledge
+#| fig-cap: "Knowledge about TB by subgroup for each sex"
+#| fig-show: hold
+#| fig-align: center
+include_graphics(c(here("results", "exploratory_analysis", "figures", "coughmexplore.png"), here("results", "exploratory_analysis", "figures", "coughfexplore.png")))
+```
+
+
+Most indicators showed the greatest disparities due to economic status and education level. Please render the `exploratory_analysis.qmd` file for the full exploratory analysis exploring the other health equity indicators.
 
 ## Basic statistical analysis
-*update depending on binding outcomes and predictors: will probably do linear model predictions from TB outcomes from one indicator if possible. otherwise will do line*
+*update depending on binding outcomes and predictors: will probably do linear model predictions from TB outcomes from one indicator if possible.*
 
-The linear models summary for TB incidence are listed below.The high burden model has the linear equation of `TB incidence = 194 + 126(Male)` where male would equal 1. The full data model has the linear equation of `TB incidence = 82.6 + 48(Male)`. Based on the p-value for the subgroup variable, sex has a significant association with TB incidence in both models. Males having higher TB incidence is congruent with the exploratory analysis findings. The full model has smaller coefficients compared to `highburden` model.
+The linear models summary for TB incidence are listed below as @tbl-incfithb and @tbl-incfit.The high burden model has the linear equation of `TB incidence = 194 + 126(Male)` where male would equal 1. The full data model has the linear equation of `TB incidence = 82.6 + 48(Male)`. Males having higher TB incidence is congruent with the exploratory analysis findings. The full model has smaller coefficients compared to `highburden` model.
 
 ```{r}
-readRDS(file = here("results", "model fit tables", "incfittable.rds")) #TB incidence model for high burden countries
-readRDS(file = here("results", "model fit tables", "incfittableFD.rds")) #TB incidence model for full data
+#| label: tbl-incfithb
+#| fig-cap: "Summary table for fitted linear model predicting incidence for high burden countries"
+readRDS(file = here("results", "model fit tables", "incfittable.rds")) 
+```
+```{r}
+#| label: tbl-incfit
+#| fig-cap: "Summary table for fitted linear model predicting incidence"
+readRDS(file = here("results", "model fit tables", "incfittableFD.rds")) 
 ```
 
-The fitted model summaries below are the TB mortality for high burden countries and full data. For high burden countries, the linear equation is `TB mortality = 23.6 + 14.9(Male)`; for the full data model, the linear equation is `TB mortality = 9.98 + 6.43(Male)`. Sex is a statistically significant predictor of TB mortality (p-values \<0.05), but this does not consider any other factors. The next step in my analysis would be to rearrange the data set so I can predict the main outcomes using the sociodemographic indicators.
+The fitted model summaries below are the TB mortality for high burden countries (@tbl-mortfithb) and full data (@tbl-mortfit). For high burden countries, the linear equation is `TB mortality = 23.6 + 14.9(Male)`; for the full data model, the linear equation is `TB mortality = 9.98 + 6.43(Male)`. 
 
 ```{r}
-readRDS(file = here("results", "model fit tables", "mortfittable.rds")) #TB mortality model for high burden countries
-readRDS(file = here("results", "model fit tables", "mortfittableFD.rds")) #TB mortality model for full data
+#| label: tbl-mortfithb
+#| fig-cap: "Summary table for fitted linear model predicting mortality for high burden countries"
+readRDS(file = here("results", "model fit tables", "mortfittable.rds"))
+```
+```{r}
+#| label: tbl-mortfit
+#| fig-cap: "Summary table for fitted linear model predicting mortality"
+readRDS(file = here("results", "model fit tables", "mortfittableFD.rds"))
 ```
 
-The last outcome model I fitted was TB prevalence for high burden countries and the full data. For high burden countries, the linear equation is `TB Prevalence = 399 + 151(Urban)` with urban residences receiving a 1 and rural residences receiving a 0. The full data model has an equation of `TB Prevalence = 410 + 95.5(Urban)`.
+The last outcome model I fitted was TB prevalence for high burden countries (@tbl-prevfithb) and the full data (@tbl-prevfit). For high burden countries, the linear equation is `TB Prevalence = 399 + 151(Urban)` with urban residences receiving a 1 and rural residences receiving a 0. The full data model has an equation of `TB Prevalence = 410 + 95.5(Urban)`.
 
 ```{r}
-readRDS(file = here("results", "model fit tables", "prevfittable.rds")) #TB prevalence model for high burden countries
-readRDS(file = here("results", "model fit tables", "prevfittableFD.rds")) #TB prevalence model for full data
+#| label: tbl-prevfithb
+#| fig-cap: "Summary table for fitted linear model predicting prevalence for high burden countries"
+readRDS(file = here("results", "model fit tables", "prevfittable.rds"))
+```
+```{r}
+#| label: tbl-prevfit
+#| fig-cap: "Summary table for fitted linear model predicting prevalence"
+readRDS(file = here("results", "model fit tables", "prevfittableFD.rds")) 
 ```
 
-The models can be further explored by including `setting` as a predictor, shown in the prediction model below. The prediction model is basic prediction of TB incidence from subgroup and setting. As an example, I predicted the incidence for females and males in India (shown in the plot). The estimates for males (249.3660; CI = 139.68336, 359.0486) and females (123.1038; CI = 13.42112, 232.7864) are shown using `geom_point()` and `geom_errorbar()`. I need to explore the prediction modelling further before attempting to predict my main outcomes with more variables.
+The models can be further explored by including `setting` as a predictor, shown in the prediction model below as @fig-prediction. The prediction model is basic prediction of TB incidence from subgroup and setting. As an example, I predicted the incidence for females and males in Central African Republic (shown in the plot). The estimates for males (602.5720; CI = 492.8893, 712.2546) and females (476.3097; CI = 366.6271, 585.9924) are shown using `geom_point()` and `geom_errorbar()`.
 
 ```{r}
-#prediction model for TB incidence with subgroup and setting as predictors
-predinclm_fit <- lm_mod %>% 
-  fit(`TB incidence (new infections per 100 000 population)` ~ subgroup + setting,
-      data = highburden) #fit linear model
-predincfittable <- tidy(predinclm_fit) 
-print(predincfittable)
-
-#prediction plot using the above model estimating TB incidence for females and males in India
+#| label: fig-prediction
+#| fig-cap: "Prediction plot estimating TB incidence for females and males in Central African Republic"
 readRDS(file = here("results", "model fit tables", "prediction1.rds")) 
 ```
 
 ## Full analysis
 
-For the majority of the statistical analysis, the tuberculosis outcomes and the health equity indicators with high disparity between subgroups (as identified during the exploratory analysis) were modeled and tuned using the decision tree model and cross-validation methods from the `tidymodels` guide. The models were all used the training data to tune the cost_complexity and tree_depth parameters to find the model with the lowest value of RMSE. An example output is shown below.
+For the majority of the statistical analysis, the tuberculosis outcomes and the health equity indicators with high disparity between subgroups (as identified during the exploratory analysis) were modeled and tuned using the decision tree model and cross-validation methods from the `tidymodels` guide. The models were all used the training data to tune the cost_complexity and tree_depth parameters to find the model with the lowest value of RMSE.
+
+The @tbl-treeinc displays an example of the model tuning for decision tree model predicting incidence, and @tbl-treeinchb shows the same method for high burden countries. Please refer to the `statistical_analysis.qmd` for the full code and results on modelling.
+```{r}
+#| label: tbl-treeinc
+#| fig-cap: "Summary table for fitted tree model predicting incidence"
+readRDS(file = here("results", "tune plots", "wdinctreeplot.rds")) 
+```
 
 ```{r}
-#tree plot models for full data TB incidence
-readRDS(file = here("results", "tune plots", "wdinctreeplot.rds")) 
-#tree plot models for high burden TB incidence
+#| label: tbl-treeinchb
+#| fig-cap: "Summary table for fitted linear model predicting incidence for high burden countries"
 readRDS(file = here("results", "tune plots", "hbinctreeplot.rds"))
 ```
 
 
 
-Please refer to the `statistical_analysis.qmd` for the full code and results.
 
-A summary of the model performances are shown below. The full data set models are marked with 'wd' and the high burden models are marked as 'hb'. The outcomes being modeled are abbreviated in the `model` column. The best performing model predicted prevalence to notification ratio for the full data set (RMSE = 0.971). The TB outcome models all performed poorly in predicting TB incidence, mortality, and prevalence. This is most likely due to the only significant predictor being country.
+
+A summary of the model performances are shown below predicting TB outcomes and healthy equity indicators by subgroup and setting. The full data set models are marked with 'wd' and the high burden models are marked as 'hb'. The outcomes being modeled are abbreviated in the `model` column. The best performing model predicted prevalence to notification ratio for the full data set (RMSE = 0.971). The TB outcome models all performed poorly in predicting TB incidence, mortality, and prevalence. This is most likely due to the only significant predictor being country.
 ```{r}
-readRDS(file = here("results", "summaryrmse.rds")) #summary table of RMSE from decision tree models
+#| label: tbl-rmsesum
+#| fig-cap: "Summary table of RMSE values for tree models"
+readRDS(file = here("results", "summaryrmse.rds"))
 ```
 
 The second research question was to explore the differences between the full data set and high burden countries. I hypothesized that the high burden models would have a higher performance because these countries have the highest concentration of TB cases. However, the high burden models consistently preformed worse than the full data models. This is most likely due to the lower amount of available data. 
@@ -297,17 +253,33 @@ The second research question was to explore the differences between the full dat
 
 # Discussion
 
+The objective of this project was to compare disparities in the health equity indicators with tuberculosis outcomes to determine if larger disparities are associated with tuberculosis burden. Due to the formatting of the data, the relationship could not be directly compared. Instead, each equity indicator was individually analyzed, and the tuberculosis outcomes were modeled using the countries and subgroups.
+
 ## Summary and Interpretation
 
-TBA: summary of findings and why it matters
+The data for this analysis was collected by the World Health Organization to study tuberculosis outcomes and explore disparities in several underlying indicators of health equity including knowledge about how tuberculosis is spread, proportion of children vaccinated against TB, and percentage of people that experience catastrophic costs due to the disease. The health equity indicators can be viewed as potential targets of public health programs in order to reduce the morbidity of TB. 
+
+Most countries in the world experience relatively low levels of tuberculosis cases, so very few countries experience high burden of tuberculosis. In 2020, Lesotho had the highest number of TB cases (908 cases/100,000 population) followed by South Africa and Central African Republic. When considering mortality of the same year, Central African Republic had the highest mortality, indicating the country had the highest case fatality rate. 
+
+Males tended to have a higher proportion of the tuberculosis cases when exploring the incidence, prevalence, and mortality. In addition, males had a longer prevalence to notification ratio compared to females. There are many factors that may be contributing to the greater TB burden on males, this delay in notification may be associated with longer transmission time which could be a factor in the higher incidence. 
+
+The initial statistical analysis predicted tuberculosis outcomes using a linear model. The incidence and mortality models were consistent with the exploratory analysis since being male was the main predictor of the model. The high burden countries have higher levels of TB outcomes compared to the full data set. However, these models did not take into account the country as a predictor, so the full analysis used a decision tree model to include this as a predictor.
+
+The full analysis consisted of a series of decision tree models that predicted TB outcomes and equity indicators by subgroups. The high burden models were predicted to perform better than the full set models, but this hypothesis did not hold true. All tuberculosis outcome models did not perform well with the incidence, mortality, and prevalence models for the high burden countries having RMSE values of 163, 21.6, and 184 respectively. The prevalence model was the only outcome in which the high burden model performed better than the full model. 
+
+Of the healthy equity indicators, the prevalence to notification ratio, attitudes toward TB, and BCG vaccination coverage models were the top performing models. 
+
+For most decision tree models, country was the most significant predictor. This indicates that public health programs should personalize their efforts to eliminate tuberculosis using country/population specific factors. 
+
+After discussing with Zane, the goal would be to be able to use health equity indicator level (ex: BCG vaccine coverage) to predict TB outcome. With this information, you would be able to model how changes would improve TB outcome (if you raise the BCG vaccine coverage to at least 80%, the predicted TB incidence would lower by ##).
 
 ## Strengths and Limitations
 
-TBA: strengths and limitations of analysis
+This project had several limitations associated with the analysis. Due to the collection years differing between indicator variables and TB outcomes, I am not able to predict tuberculosis incidence, mortality, and prevalence from the health inequity indicators. In order to complete this analysis as my research question designed, I would be losing valuable data on the subgroups by having to summarize the overall indicators by country. I will be discussing this with Zane and either adjust my research question or reformat my data. Another limitation of the analysis is the difficulty interpreting the decision tree models. Since country was the most significant predictor for the models, it was difficult to visualize and express the model. The final limitation is that the data did not capture all factors that contribute to the spread of tuberculosis such as population density, access to treatment regimens, consistency of adherence, and other aspects that can affect one's susceptibility to contracting or spreading the disease. The strengths of the analysis is the substantial data set which accurately described countries of various tuberculosis burden rather than focusing specifically on countries with TB cases. The analysis also thoroughly explored each equity indicator to highlight trends and populations that could aid in the distribution of public health resources. 
 
 ## Conclusions
+This analysis explores tuberculosis-related disparities between levels of income, education, sex, and other health equity topics. TB incidence and mortality is most closely associated with the country. There is no direct comparison between level of disparity in equity indicator and tuberculosis incidence, prevalence, or mortality.  Continued analysis is required to address the gap in data preventing a direct measurement of health disparity on tuberculosis outcomes. Further research should explore impact of programs addressing the health equity covered during this analysis on tuberculosis incidence and mortality. 
 
-TBA: take away messages, citations from bibtex
 
 {{< pagebreak >}}
 

@@ -49,7 +49,9 @@ length(unique(rawdata$setting))
            indicator_abbr, dimension, subgroup,
            estimate, population)) %>% 
   pivot_wider(names_from = "indicator_name", values_from = "estimate")
-slice(wide_data)
+summarywide <- tbl_sum(wide_data)
+data1 = here("results", "processing", "summarywide.rds")
+saveRDS(summarywide, file = data1)
 
 #subset high burden countries
 highburden <- wide_data %>% 
@@ -71,10 +73,15 @@ highburden <- wide_data %>%
            "Somalia", "Tajikistan", "Ukraine",
            "Uzbekistan", "Zimbabwe")) 
 unique(highburden$setting)
+summaryhb <- tbl_sum(highburden)
+data2 = here("results", "processing", "summaryhighburden")
+saveRDS(summaryhb, file = data2)
 
 ## ---- cleandata2 --------
 # look at each indicator to check for cleaning requirements
-unique(wide_data$indicator_abbr)
+indicator <- unique(wide_data$indicator_abbr)
+fig2 = here("results", "processing", "indicators.rds")
+saveRDS(indicator, file = fig2)
 
 # BCG coverage indicator
 wide_data %>% 
