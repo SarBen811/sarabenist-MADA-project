@@ -1,0 +1,226 @@
+---
+  title: Project Review Template 
+author: 
+date: "`r file.mtime(knitr::current_input())`"
+format: 
+  html:
+  toc: true
+toc-depth: 3
+number-sections: true
+---
+
+# Overview
+
+Title of project: sarabenist-MADA-project
+
+Name of project author(s): Sara Benist
+
+Name of project reviewer: Jacob Matta
+
+## HELLO
+
+Hi Sara, I am happy to be reviewing your project as it appears to be quite organzied and complete. Please bear with me as I attempt to provide meaningful comments in order to help you further develop your project. I thank you for your time in advance!
+
+## Background, Context and Motivation
+
+How well is the context of the project described? Is a comprehensive background, including summary of previous/related work given? Is the project well placed into the context of existing work (including proper referencing of existing work). Is it clear why the project was undertaken and what new information it hopes to provide?
+
+### Review of Summary/Abstract
+The first two sentences of your Summary/Abstract section are quite important and strong. Immediately the reader is aware "the burden of TB" in "high burden countries" is the topic of your research. You then mention that there is a lack of information understanding why there are disparities between countries and populations when it comes to the burden of TB. From these two sentences I immediately understand what you will be conducting your anaylsis on and why there is a need for the analysis, which is great information to know as a reader.
+
+In your fourth sentence of the first paragraph in the Summary/Abstract "**The** further explore the reasons behind the health inequity surrounding tuberculosis, this analysis explores the health equity indicators collected by WHO and attempts to predict tuberculosis outcomes" I think you meant to use the word "To" instead of "The" to start the sentence. Other than that, I like this sentence because you directly tell the reader what the focus of your analysis will be.
+
+In second paragraph, gives a nice introduction into the analysis you conducted which appears to include: cleaning and exploring by health equity indicators, subsetting the data by high burden countries, and then doing linear regression followed by decision tree modeling to predict TB outcomes. This is a strong paragraph that helps the reader understand how you will be conducting the analysis.
+
+The third paragraph provides some further context and known information of TB disparities between countries. It may be useful to add a little more information on the two countries you use in this paragraph, both Lesotho and Central African Republic. Adding information regarding where these countries are in the world would be helpful for me at least(I'm someone with awful geographical knowledge). I assume Central African Republic is in Central Africa but I have no idea where Lesotho is. Other than that, this paragraph does a great job giving the reader an idea to some of the health equity indicators like gender, income and education.  
+
+### Review of Introduction
+The introduction provides further background regarding TB which is helpful for me because I do not know much about TB. Your second sentence is quite powerful "Approximately 10 million people are infected each year, and 1.5 million die from the disease" as it is staggering to me that 1.5 million people die from TB when about 10.5 million people are infected. You also mention what the WHO is doing to investigate the disparities and their goals by 2030. You provide the relevant context for the reader to understand the severity of TB throughout the world and this puts emphasis on why your analysis is important. 
+
+
+### Summary assessment (PICK ONE, DELETE THE OTHERS)
+-   strong contextualization and motivation
+
+## Question description
+
+How well and clear are the question(s)/hypotheses the project aims to address described? Is it clear how the questions relate to the data?
+
+
+It seems like you have a 6 questions you are investigating through this analysis:
+
+1. "Does high disparities between inequality measures show high correlation to TB incidence, prevalence, and mortality of a country?"
+
+2. "How do these relationships differ for high burden countries compared to all countries?"
+
+3. "I would like to be able to identify populations that could be a focus of TB health improvement programs"
+
+4. "I would like to explore include regional differences in drug-resistant TB"
+
+5. "the attitudes and perceptions for high burden areas compared to medium or low burden regions"
+
+6. "I would like to examine differences in TB outcomes based on level of TB burden"
+
+All these appear to relate to the data and are able to be addressed. I have yet to explore the results and discussion section as I write this, but I am interested to see the results for these questions. Regarding question 5, there is little background regarding the attitudes and perceptions of TB in countries in your introduction. I do think question 5 is relevant and important, but a little background on the perceptions and attitudes of TB in countries may be helpful for the reader to understand why it is of interest. 
+
+### Summary assessment
+-   question/hypotheses fully clear
+
+## Data description
+
+You did a good job describing the data as I understand that it was collected from "WHO Global TB programme, TB prevalence surveys, country-specific TB programmes, the WHO Health Equity Monitor database, TB patient cost surveys, and other sources". 
+
+When using the link https://www.who.int/data/inequality-monitor/data#PageContent_C158_Col00 to find the data set, I actually had a difficult time finding the "Tuberculosis Indicators" section. However, I was able to find the data set under the "Tuberculosis (multiple data sources)" section which contained a data set with 10 indicators and 194 countries which aligns with your description of the data set. You include a code book for the data which is helpful as well.
+
+### Summary assessment
+-   source and overall structure of data well explained
+
+## Data wrangling and exploratory analysis
+
+Your cleaning/processing code is well explained in the manuscript. I was unable to render the `processingfile.qmd` as the error that results is 
+
+"Quitting from lines 59-59 (processingfile.qmd) 
+Error in tbl_sum(wide_data) : could not find function "tbl_sum"
+Calls: .main ... withVisible -> eval_with_user_handlers -> eval -> eval
+
+Execution halted"
+
+It seems that the function pillar::tbl_sum was not found because I do not believe you included the pillar package in your library. Once I included  library(pillar), the file was able to run. Your code seems to follow the steps you list in the manuscript. You don't describe your cleaning/processing in the supplementary file but I'm not sure you need to as you describe the main data cleaning steps in the manuscript. 
+
+
+### Summary assessment
+-   essentially no weaknesses in wrangling and exploratory component
+
+## Appropriateness of Analysis
+
+Were the analysis methods appropriate for the data? Was the analysis done properly? Were different components of the analysis (e.g. performance measure, variable selection, data pre-processing, model evaluation) done in the best way possible and explained well?
+
+### Exploratory Analysis 
+You summarized each each health equity indicator and tuberculosis outcome and you mention each table is in the results folder. You may want to mention that all the tables are in the `summary tables` folder and also provide a `readme` file that briefly describes each table. This would be helpful for those interested in teh summary tables. The summary tables are self explanatory by name but an additional `readme` file is always helpful when navigating a folder. 
+
+After you summarized the indicators in each group you briefly discussed the results which is helpful and helps viewer understand the descriptive analysis better. 
+
+Next, ggplot what used to create plots of the indicators in order to get a sense of the differences between subgroups. Specifically you gave insight to TB incidence by country, tb incidence by country for high burden countries, tb mortality by country, tb prevalence by country, BCG immunization by subgroup, Catastrophic costs due to TB in high burden countries, time between prevalence to notification in high burden countries, and knowledge about TB by subgroup for each sex while further analysis was provided in the `exploratory_analysis.qmd` file. 
+
+All of descriptive analysis appears to be done properly and the results were summarized well in the Manuscript, as the `exploratory_analysis.qmd` file rendered without any issues. I also went through the code and it was well documented as I could follow along.
+
+### Statistical Analysis 
+
+#### bivariate analysis:
+
+1. You first ran linear regression for high burden countries and all countries with an outcome of Tb incidence and predictor of subgroupMale and the results were discussed. 
+
+2. Linear regression for high burden countries and all countries with an outcome of Tb mortality and predictor of subgroupMale and the results were discussed. 
+
+3. Linear regression for high burden countries and all countries with an outcome of TB Prevalence  and predictor of subgroupUrban and the results were discussed. 
+
+I think it would be helpful to state why you chose these outcomes and predictors and performed linear regression here. The results are fascinating and do align with your research questions. My concern is why did you chose to share these three bivariate analyses when there a bunch of predictors to choose from. 
+
+#### Full Analysis 
+I do not have much to comment on regarding your full analysis as it was well explains and documented. Great job.
+
+### Summary assessment
+-   strong and reasonable analysis
+
+## Presentation
+
+The overall presentation of your manuscript is very organized and clean in respect to the amount of information you share with the reader. I like your tables in the exploratory/descriptive analysis section of your Manuscript as they are easy to follow for me. However, one of the questions I am asked to consider as a reviewer is "Are the main figures/tables publication level quality?". The tables in the exploratory/descriptive section appear to be R output, as this is what I would have done if I was in your situation. If you have the time it may be worth it to see if there is a way to organize a clean table through R that isn't just output. This is something I will look into as well as I am unsure if this is even possible. If I do find that there is a way to organize tables in R, I will make sure to reach out. 
+
+In Figure 1, the countries on teh x-axis are not visible. I can see that this is a tough issue to resolve because there are so many countries to include. Possibly shrinking the text may help?
+
+Great job on the presentation!
+
+### Summary assessment
+-   results are very well presented
+
+## Discussion/Conclusions
+
+Are the study findings properly discussed? Are strengths and limitations acknowledged? Are findings interpreted properly?
+
+What was discussed:
+1. most countries experience low levels of TB
+
+2. Lesotho had the highest number of TB cases (908 cases/100,000 population) followed by South Africa and Central African Republic
+
+3. Central African Republic had the highest mortality rate due TB
+
+4. Males tended to have a higher proportion of the tuberculosis cases when exploring the incidence, prevalence, and mortality
+
+5. Males had a longer prevalence to notification ratio compared to females. 
+
+6. The high burden countries have higher levels of TB outcomes compared to the full data set.
+
+7. The full analysis consisted of a series of decision tree models that predicted TB outcomes and equity indicators by subgroups
+
+8. results of the full analysis were discussed
+
+9. Machine learning models were discussed
+
+10. Strength and limitations were discussed 
+
+
+In the discussion and conclusion section you do a good job summarizing the methods you used and the results. In regards to your research questions, I think you may have to go back and make sure some of those are answered more fully. Questions like  "I would like to be able to identify populations that could be a focus of TB health improvement programs",  "I would like to explore include regional differences in drug-resistant TB" and "the attitudes and perceptions for high burden areas compared to medium or low burden regions" may have been answered through exploratroy and statistical anaylsis but they were not discussed in the discussion and conclusion. 
+
+
+### Summary assessment
+-   minor parts wrong, missing or unclear
+
+
+# Overall project content evaluation
+
+Overall your project is very interesting, organized and well documented. You may want to specify your research question as the questions/hypotheses you intend to address are not covered in the discussion and conclusion. I do think you answer most of the questions through your analysis so by discussing the results that directly answer "I would like to be able to identify populations that could be a focus of TB health improvement programs",  "I would like to explore include regional differences in drug-resistant TB" and "the attitudes and perceptions for high burden areas compared to medium or low burden regions" in your discussion would make your discussion stronger. If you do not think you can answer all the questions you originally set out to answer, I think that is okay but make sure to mention that in the discussion as well. 
+
+
+## Structure
+
+Very well organized! Easy to follow! 
+
+
+
+### Summary assessment
+-   well structured
+
+## Documentation
+
+Your project is well documented as you help guide the reader along through the code for you cleaning and analysis. It could be helpful to describe each file in the Supplemental file and explain where to find each file. Also a few readme files could be added to describe the figures in the `tune plots` folder and the `model fit tables` folder would be helpful.
+
+### Summary assessment
+-   fully and well documented
+
+## Reproducibility
+
+I was unable to render your manuscript as the issue was due to the code below 
+```{r}
+#| label: tbl-incfithb
+#| fig-cap: "Summary table for fitted linear model predicting incidence for high burden countries"
+readRDS(file = here("results", "model fit tables", "incfittable.rds")) 
+```
+
+If you run this it says the file can't be found. However it does exist but you forgot to add the `statistical_analysis` folder that lies in the `results folder`. I have gone ahead and made these changes shown in the code below
+```{r}
+#| label: tbl-incfithb
+#| fig-cap: "Summary table for fitted linear model predicting incidence for high burden countries"
+readRDS(file = here("results", "statistical_analysis", "model fit tables", "incfittable.rds")) 
+```
+
+```{r}
+#| label: tbl-incfit
+#| fig-cap: "Summary table for fitted linear model predicting incidence"
+readRDS(file = here("results", "statistical_analysis","model fit tables", "incfittableFD.rds")) 
+```
+
+However when I attempted to render the file after updating the code, it looks like you left out the `statistical_analysis` folder for all of the results regarding the statistical analysis inside your manuscript. As a result, I have updated the code as an easy fix and it should all render now.
+
+### Summary assessment
+-   small parts not reproducible or required manual intervention
+
+
+## Thoroughness
+
+How thorough was the overall study? Were alternatives (e.g. different ways of processing the data or different models) considered? Were alternatives discussed? Were the questions/hypotheses fully and thoroughly addressed?
+
+Your project was thorough as I felt that the main research question was answered and investigated in a structured and documented manner. I mentioned in the reveiw of your discussion/conclusion that some of the research questions were not fully answered but I do beleive you have the results to further discuss those questions.
+
+
+### Summary assessment
+
+-   strong level of thorougness
