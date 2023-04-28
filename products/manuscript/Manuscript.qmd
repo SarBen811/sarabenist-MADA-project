@@ -178,12 +178,13 @@ The linear models summary for TB incidence are listed below as @tbl-incfithb and
 ```{r}
 #| label: tbl-incfithb
 #| fig-cap: "Summary table for fitted linear model predicting incidence for high burden countries"
-readRDS(file = here("results", "model fit tables", "incfittable.rds")) 
+readRDS(file = here("results", "statistical_analysis", "model fit tables", "incfittable.rds")) 
 ```
+
 ```{r}
 #| label: tbl-incfit
 #| fig-cap: "Summary table for fitted linear model predicting incidence"
-readRDS(file = here("results", "model fit tables", "incfittableFD.rds")) 
+readRDS(file = here("results", "statistical_analysis","model fit tables", "incfittableFD.rds")) 
 ```
 
 The fitted model summaries below are the TB mortality for high burden countries (@tbl-mortfithb) and full data (@tbl-mortfit). For high burden countries, the linear equation is `TB mortality = 23.6 + 14.9(Male)`; for the full data model, the linear equation is `TB mortality = 9.98 + 6.43(Male)`. 
@@ -191,12 +192,12 @@ The fitted model summaries below are the TB mortality for high burden countries 
 ```{r}
 #| label: tbl-mortfithb
 #| fig-cap: "Summary table for fitted linear model predicting mortality for high burden countries"
-readRDS(file = here("results", "model fit tables", "mortfittable.rds"))
+readRDS(file = here("results", "statistical_analysis", "model fit tables", "mortfittable.rds"))
 ```
 ```{r}
 #| label: tbl-mortfit
 #| fig-cap: "Summary table for fitted linear model predicting mortality"
-readRDS(file = here("results", "model fit tables", "mortfittableFD.rds"))
+readRDS(file = here("results","statistical_analysis", "model fit tables", "mortfittableFD.rds"))
 ```
 
 The last outcome model I fitted was TB prevalence for high burden countries (@tbl-prevfithb) and the full data (@tbl-prevfit). For high burden countries, the linear equation is `TB Prevalence = 399 + 151(Urban)` with urban residences receiving a 1 and rural residences receiving a 0. The full data model has an equation of `TB Prevalence = 410 + 95.5(Urban)`.
@@ -204,12 +205,12 @@ The last outcome model I fitted was TB prevalence for high burden countries (@tb
 ```{r}
 #| label: tbl-prevfithb
 #| fig-cap: "Summary table for fitted linear model predicting prevalence for high burden countries"
-readRDS(file = here("results", "model fit tables", "prevfittable.rds"))
+readRDS(file = here("results","statistical_analysis", "model fit tables", "prevfittable.rds"))
 ```
 ```{r}
 #| label: tbl-prevfit
 #| fig-cap: "Summary table for fitted linear model predicting prevalence"
-readRDS(file = here("results", "model fit tables", "prevfittableFD.rds")) 
+readRDS(file = here("results", "statistical_analysis", "model fit tables", "prevfittableFD.rds")) 
 ```
 
 The models can be further explored by including `setting` as a predictor, shown in the prediction model below as @fig-prediction. The prediction model is basic prediction of TB incidence from subgroup and setting. As an example, I predicted the incidence for females and males in Central African Republic (shown in the plot). The estimates for males (602.5720; CI = 492.8893, 712.2546) and females (476.3097; CI = 366.6271, 585.9924) are shown using `geom_point()` and `geom_errorbar()`.
@@ -217,7 +218,7 @@ The models can be further explored by including `setting` as a predictor, shown 
 ```{r}
 #| label: fig-prediction
 #| fig-cap: "Prediction plot estimating TB incidence for females and males in Central African Republic"
-readRDS(file = here("results", "model fit tables", "prediction1.rds")) 
+readRDS(file = here("results", "statistical_analysis", "model fit tables", "prediction1.rds")) 
 ```
 
 ## Full analysis
@@ -228,13 +229,13 @@ The @tbl-treeinc displays an example of the model tuning for decision tree model
 ```{r}
 #| label: tbl-treeinc
 #| fig-cap: "Summary table for fitted tree model predicting incidence"
-readRDS(file = here("results", "tune plots", "wdinctreeplot.rds")) 
+readRDS(file = here("results", "statistical_analysis","tune plots", "wdinctreeplot.rds")) 
 ```
 
 ```{r}
 #| label: tbl-treeinchb
 #| fig-cap: "Summary table for fitted linear model predicting incidence for high burden countries"
-readRDS(file = here("results", "tune plots", "hbinctreeplot.rds"))
+readRDS(file = here("results", "statistical_analysis","tune plots", "hbinctreeplot.rds"))
 ```
 
 

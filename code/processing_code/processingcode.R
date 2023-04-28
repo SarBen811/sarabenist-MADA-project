@@ -15,6 +15,7 @@ library(tidyr) #for data processing/cleaning
 library(skimr) #for nice visualization of data 
 library(here) #to set paths
 library(naniar) #to look for missing data
+library(pillar)
 
 ## ---- loaddata --------
 #path to data
