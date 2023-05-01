@@ -7,102 +7,112 @@ output: html_document
 
 # Processing script with R script code
 
-This Quarto file runs the exploratory analysis code from the `exploratoryanalysis.r` script. The processed data is examined using summary tables and figures. 
+This Quarto file runs the exploratory analysis code from the `exploratoryanalysis.r` script. The processed data is examined using summary tables and figures.
 
-To start, the needed packages are loaded, and the `processeddata.rda` is loaded from the `processed_data` folder. 
+To start, the needed packages are loaded, and the `processeddata.rda` is loaded from the `processed_data` folder.
 
 # Setup
-The `exploratoryanalysis.r` script needs to be indicated as the file from which to pull code chunks from. 
+
+The `exploratoryanalysis.r` script needs to be indicated as the file from which to pull code chunks from.
+
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('exploratoryanalysis.R')
 ```
 
 Next, load the needed packages.
+
 ```{r, packages, message = FALSE, warning = FALSE}
 ```
 
-
 Then, load the data from the `processed_data` folder.
+
 ```{r, loaddata}
 ```
 
-
-
 # Data exploration through tables
 
-I would like to look at each variable individually to see an overview of the indicator. These summary tables will be saved in the `results` folder. Similar to the cleaning code, I will separate the summary tables into groups of indicators. 
+I would like to look at each variable individually to see an overview of the indicator. These summary tables will be saved in the `results` folder. Similar to the cleaning code, I will separate the summary tables into groups of indicators.
+
 ```{r, exploratorytables1}
 ```
+
 The BCG coverage indicator has 4 dimensions and 12 subgroups and appears to have mostly data from smaller population sizes (most of the data has less than 720) and high BCG coverage (mean of 88.7%).
 
-The catastrophic costs has 2 dimensions and 7 subgroups, but there does not appear to be any major trends with the overview. The population is more uniform but missing data, and the percentage estimate does not have any large trends. 
+The catastrophic costs has 2 dimensions and 7 subgroups, but there does not appear to be any major trends with the overview. The population is more uniform but missing data, and the percentage estimate does not have any large trends.
 
-The case detection rate has 2 dimensions and 4 subgroups. All data is from 2020 and most of the population sizes are below 27000. The case detection rate has an average of 56.7%. 
+The case detection rate has 2 dimensions and 4 subgroups. All data is from 2020 and most of the population sizes are below 27000. The case detection rate has an average of 56.7%.
 
 Drug resistance studies 2 subgroups within a dimension, only has data from 2019, and tends to have a low population size and percentage estimate.
 
 ```{r, exploratorytables2}
 ```
 
-TB incidence studies 2 subgroups within a dimension and only has data from 2020. The population sizes are much higher than the other variables, and the incidence is a continuous variable (rather than percentage like many of the other indicators). Most observations appear to have low TB incidience. 
+TB incidence studies 2 subgroups within a dimension and only has data from 2020. The population sizes are much higher than the other variables, and the incidence is a continuous variable (rather than percentage like many of the other indicators). Most observations appear to have low TB incidience.
 
 TB mortality is similar to the incidence variable in terms of subgroups, year, and population. The mortality outcome is also continuous, and the highest mortality rate is 140 deaths/100000 population.
+
 ```{r, exploratorytables3}
 ```
-Prevalence to notification ratio studies 2 subgroups within a dimension. There does not appear to be a trend toward shorter or longer length of time. 
 
-TB prevalence looks at 2 subgroups within a dimension, and there appears to be trend to lower amounts of cases (mean = 458) with the highest prevalence count being 1014 cases/100,000 population. 
+Prevalence to notification ratio studies 2 subgroups within a dimension. There does not appear to be a trend toward shorter or longer length of time.
+
+TB prevalence looks at 2 subgroups within a dimension, and there appears to be trend to lower amounts of cases (mean = 458) with the highest prevalence count being 1014 cases/100,000 population.
 
 ```{r, exploratorytables4}
 ```
 
 Attitudes toward keeping TB infection a secret studies 2 subgroups within a dimension for the overall measure, and when split into female and male, measures 4 dimensions with 14 subgroups. All data was collected from 2011 to 2019, and each group tends to have a relatively low percentage (means of 23.3%, 26.8%, and 19.9%).
+
 ```{r, exploratorytables5}
 ```
-Knowledge indicators of people reporting TB is spread through cough has similar dimensions and subgroups as the attitudes indicators. Data collection also occured during the same years (2011-2019). The groups all tended to have similar levels of knowledge based on the overall view (means of 66.7%, 62.3%, 68.8%). 
 
-All summary tables are saved in the `results` folder. 
+Knowledge indicators of people reporting TB is spread through cough has similar dimensions and subgroups as the attitudes indicators. Data collection also occured during the same years (2011-2019). The groups all tended to have similar levels of knowledge based on the overall view (means of 66.7%, 62.3%, 68.8%).
 
-
-
+All summary tables are saved in the `results` folder.
 
 # Data exploration through figures
 
-After examining the indicators, I would like to explore the differences between the subgroups using graphs and plots. 
+After examining the indicators, I would like to explore the differences between the subgroups using graphs and plots.
 
 For each indicator, I will be creating a plot using the `highburden` data set and `ggplot()` to study differences between subgroups. For most of these variables, I will be using a boxplot in order to compare the summary measures between subgroups. For viewing multiple dimensions and comparing subgroups within each dimension, I will be colors and grouping through `ggplot()`.
 
 ```{r, exploratoryfigures1}
 ```
-The first plot show BCG coverage among under 1 year olds by economic status, education, place of residence, and sex. The economic status and education groups shows a clear trend of high coverage for higher income and higher education. The place of residence shows a higher coverage for urban areas, but the rural sites show greater spread of data. The coverage seems about equal between females and males. all categories show a significant number of outliers. 
 
-The second plot shows catastrophic costs due to TB by economic level and TB resistance. Higher income seems to be correlated with lower catastrophic costs, and drug resistance has a much higher correlation with costs compared to non-drug resistant TB. 
+The first plot show BCG coverage among under 1 year olds by economic status, education, place of residence, and sex. The economic status and education groups shows a clear trend of high coverage for higher income and higher education. The place of residence shows a higher coverage for urban areas, but the rural sites show greater spread of data. The coverage seems about equal between females and males. all categories show a significant number of outliers.
+
+The second plot shows catastrophic costs due to TB by economic level and TB resistance. Higher income seems to be correlated with lower catastrophic costs, and drug resistance has a much higher correlation with costs compared to non-drug resistant TB.
+
 ```{r, exploratoryfigures2}
 ```
+
 The third plot shows case detection rate by age and sex. Higher age groups tend to have higher detection rates (although the age group is quite large).
 
 The forth plot shows drug resistance by sex. Neither group appears to have a higher percentage of drug resistance.
+
 ```{r, exploratoryfigures3}
 ```
-The 5a plot and 5b plots show TB incidence by country, separated by sex for the high burden countries and full data set. The countries are ordered from lowest to highest rate, and males seem to have a higher proportion of TB cases.The `highburden` data set appears to include most of the countries that have at least one new case per 100,000. 
 
-The sixth plot shows TB mortality by country, separated by sex. The countries are ordered from lowest to highest rate, and males tend to have a mortality rate. 
+The 5a plot and 5b plots show TB incidence by country, separated by sex for the high burden countries and full data set. The countries are ordered from lowest to highest rate, and males seem to have a higher proportion of TB cases.The `highburden` data set appears to include most of the countries that have at least one new case per 100,000.
 
-The seventh plot shows prevalence to notification ratio by sex. Males tend to have a longer gap between getting TB and being notified they have TB. 
+The sixth plot shows TB mortality by country, separated by sex. The countries are ordered from lowest to highest rate, and males tend to have a mortality rate.
 
-The 8a and 8b plots show TB prevalence by country, showing differences between rural and urban areas for the `highburden` and full data set. There appears to be a small trend of urban areas having higher prevalence then rural. 
+The seventh plot shows prevalence to notification ratio by sex. Males tend to have a longer gap between getting TB and being notified they have TB.
+
+The 8a and 8b plots show TB prevalence by country, showing differences between rural and urban areas for the `highburden` and full data set. There appears to be a small trend of urban areas having higher prevalence then rural.
+
 ```{r, exploratoryfigures4}
 ```
-The ninth plot shows the overall attitude towards keeping a family member's TB a secret by sex. Females tend to be correlated with a higher percentage compared to males. 
+
+The ninth plot shows the overall attitude towards keeping a family member's TB a secret by sex. Females tend to be correlated with a higher percentage compared to males.
 
 The tenth and eleventh graph shows the same attitude indicator for males and females while taking into account age, economic status, education, and residence. For both groups, higher age is appears to be associated with decreased percentages. There may also be a small negative correlation between education and economic status and attitude percentage.
 
 ```{r, exploratoryfigures5}
 ```
+
 The twelfth plot shows TB knowledge about spreading the disease through cough by sex. Males tended to have a slightly higher proportion compared to females.
 
-The thirteenth and fourteenth plot shows the same knowledge question for females and males, separated into the same dimensions as the attitude indicator. For both groups, increasing economic status and education showed an association with increased knowledge about TB. Urban populations also tended to show a higher percentage of knowledge compared to rural. For age groups, the 2 older groups (20-34 and 35-49) had similar proportions, but both groups had a higher percentage than the youngest (15-19). Male data appeared to be slightly less dispersed than female responses. 
+The thirteenth and fourteenth plot shows the same knowledge question for females and males, separated into the same dimensions as the attitude indicator. For both groups, increasing economic status and education showed an association with increased knowledge about TB. Urban populations also tended to show a higher percentage of knowledge compared to rural. For age groups, the 2 older groups (20-34 and 35-49) had similar proportions, but both groups had a higher percentage than the youngest (15-19). Male data appeared to be slightly less dispersed than female responses.
 
-In the next proportion of the exploratory analysis, I would like to examine more closely the influence of outliers as well as start comparing indicators to TB mortality, incidence, and prevalence. 
-
-
+In the next proportion of the exploratory analysis, I would like to examine more closely the influence of outliers as well as start comparing indicators to TB mortality, incidence, and prevalence.

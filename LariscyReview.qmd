@@ -1,0 +1,164 @@
+---
+title: Project part five review
+author: Leah Lariscy
+date: "`r file.mtime(knitr::current_input())`"
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+---
+
+# Overview
+
+Title of project: Tuberculosis Burden and Health Inequality Measures
+
+Name of project author(s): Sara Benist
+
+Name of project reviewer: Leah Lariscy
+
+# Specific project content evaluation
+
+## Background, Context and Motivation
+
+How well is the context of the project described? Is a comprehensive background, including summary of previous/related work given? Is the project well placed into the context of existing work (including proper referencing of existing work). Is it clear why the project was undertaken and what new information it hopes to provide?
+
+### Feedback and Comments
+
+Your background was informative but concise, I would expand on it!
+
+### Summary assessment (PICK ONE, DELETE THE OTHERS)
+
+\* some contextualization and motivation
+
+## Question description
+
+How well and clear are the question(s)/hypotheses the project aims to address described? Is it clear how the questions relate to the data?
+
+### Feedback and Comments
+
+It is clear from the description what the aim of the study is and how it related to the data.
+
+### Summary assessment
+
+\* question/hypotheses fully clear
+
+## Data description
+
+How well is the data overall described? Is the source provided? Is a codebook or other meta-information available that makes it clear what the data is?
+
+### Feedback and Comments
+
+The sources of the data were provided and characteristics of the data were described and it is clear how this data relates to the question.
+
+### Summary assessment
+
+\* source and overall structure of data well explained
+
+## Data wrangling and exploratory analysis
+
+How well is the data cleaned/processed and explored? Are all steps reasonable and well explained? Are alternatives discussed and considered? Are meaningful exploratory results shown (e.g. in the supplementary materials)?
+
+### Feedback and Comments
+
+Wrangling steps were well-explained, however, some information like specific functions may be better in a supplementary file. I enjoyed your figures in the exploratory analysis, but some had labels that were difficult to read so those should be fixed.
+
+### Summary assessment
+
+\* some weaknesses in wrangling and exploratory component
+
+## Appropriateness of Analysis
+
+Were the analysis methods appropriate for the data? Was the analysis done properly? Were different components of the analysis (e.g. performance measure, variable selection, data pre-processing, model evaluation) done in the best way possible and explained well?
+
+### Feedback and Comments
+
+Analysis write-up was informative but short and the tables make it more visually cluttered and difficult to interpret. Describing the data and results with your woulds could be a better way to show your work. Explanations of your full analysis figures would also be beneficial as I am slightly lost on what is happening in your analysis.
+
+### Summary assessment
+
+\* defensible but not optimal analysis
+
+## Presentation
+
+How well are results presented? Are tables and figures easy to read and understand? Are the main figures/tables publication level quality?
+
+### Feedback and Comments
+
+Figures are pretty good, but the tables are cluttered and aren't quite publication quality. They are informative, but I think are more appropriate in a supplementary file.
+
+### Summary assessment
+
+\* results are presented ok, with room for improvement
+
+## Discussion/Conclusions
+
+Are the study findings properly discussed? Are strengths and limitations acknowledged? Are findings interpreted properly?
+
+### Feedback and Comments
+
+The discussion and conclusion pretty much check all the boxes, however, I would remove the sentences mentioning meeting with the TA in the final manuscript.
+
+### Summary assessment
+
+\* minor parts wrong, missing or unclear
+
+## Further comments
+
+Overall I think you are trying to answer an interesting question and it seems like you are going about it the right way, but there needs to be more detail and clarity in the final manuscript. You may want to consider expanding upon the methods sections and analysis portions of the manuscript.
+
+# Overall project content evaluation
+
+Evaluate overall features of the project by filling in the sections below.
+
+## Structure
+
+Is the project well structured? Are files in well labeled folders? Do files have reasonable names? Are all "junk" files not needed for analysis/reproduction removed? By just looking at files and folders, can you get an idea of how things fit together?
+
+### Feedback and Comments
+
+Structure looks good!
+
+### Summary assessment
+
+\* well structured
+
+## Documentation
+
+How well is the project documented? Are you able to understand each step of the whole analysis, each decision that was made, and each line of code? Is enough information provided as comments in code or as part of Rmd files?
+
+### Feedback and Comments
+
+The documentation was well done, code had comments to describe the function and the I like how all your notes were in a .qmd and all code was knitted from a .R file.
+
+### Summary assessment
+
+\* fully and well documented
+
+## Reproducibility
+
+Are all results fully reproducible? Is documentation provided which clearly explains how to reproduce things, and does it work without the need for any manual intervention? Are you able to re-run the whole analysis without having to do manual interventions/edits?
+
+### Feedback and Comments
+
+I would add more detailed instruction on how to reproduce the manuscript, like which files are needed to reproduce all the figures.
+
+### Summary assessment
+
+\* fully reproducible without issues
+
+## Thoroughness
+
+How thorough was the overall study? Were alternatives (e.g. different ways of processing the data or different models) considered? Were alternatives discussed? Were the questions/hypotheses fully and thoroughly addressed?
+
+### Feedback and Comments
+
+The hypothesis seemed to be pretty thoroughly addressed, and limitations of the study were addressed.
+
+### Summary assessment
+
+\* decent level of thoroughness
+
+## Further comments
+
+The project is really interesting and I can tell you put a lot of work into it but I think it needs a bit more flushing out of the details, especially in the analysis portion. The analysis wasn't easy to follow, so that is one area to work on.
