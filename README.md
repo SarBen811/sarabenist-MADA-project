@@ -17,8 +17,9 @@ This project uses R Studio, Quarto, Github, and Zotero programs.
 -   Each folder contains a `readme.md` file with more information.
 
 ## To produce Manuscript and Supplementary files
-  In order to easily view the Manuscript and supplementary files found in the `code` folder, please render the document to produce the Word/HTML documents. This will pull the code from the Rscript files into the Quarto documents without having to switch between outputs. Check the folder `readme.md` file for more information.
-  
+
+In order to easily view the Manuscript and supplementary files found in the `code` folder, please render the document to produce the Word/HTML documents. This will pull the code from the Rscript files into the Quarto documents without having to switch between outputs. Check the folder `readme.md` file for more information.
+
 # Project content
 
 See the `readme` files in each folder for more details.
@@ -27,9 +28,9 @@ See the `readme` files in each folder for more details.
 -   The `processing_code` folder contains files that load the raw data, mostly cleans the data, and save the result in the `processed_data` folder.
 -   The `analysis_code` folder contains files that load the processed data and conduct several exploratory analyses. These files produce figures and some numeric output (tables), which are saved to the `results` folder.
 -   The `products` folder contains an example `bibtex` and CSL style files for references (to be updated with project references).
--   The `manuscript` folder contains the project report written as Quarto file. There is also a sub-folder  for any supplementary material file (to be added and updated).
+-   The `manuscript` folder contains the project report written as Quarto file. There is also a sub-folder for any supplementary material file (to be added and updated).
 -   The `slides` folder will contain a slide presentation for the project made with Quarto (to be added and updated).
--   The files should be run in this order to complete the analysis: `processingfile.qmd` > `exploratory_analysis.qmd` > `statistical_analysis.qmd`
+-   The files should be run in this order to complete the analysis: `processingfile.qmd` \> `exploratory_analysis.qmd` \> `statistical_analysis.qmd`
 
 # Data variables
 
