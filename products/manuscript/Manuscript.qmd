@@ -81,13 +81,7 @@ As a means of comparison, I also created boosted tree models for the TB outcomes
 
 ## Exploratory/Descriptive analysis
 
-After processing the data, the `otherburden` and `highburden` datasets were described by exploring each health equity indicators and tuberculosis outcome. The table below shows the list of indicators, and the codebook can be found in the README.md file.
-
-```{r}
-#| label: fig-indicators
-#| fig-cap: "Healthy equity indicators"
-readRDS(file = here("results", "processing", "indicators.rds"))
-```
+After processing the data, the `otherburden` and `highburden` datasets were described by exploring each health equity indicators and tuberculosis outcome. The codebook with indicator descriptions can be found in the README.md file.
 
 For each indicator, I produced a summary table using `skim()` to determine the number of dimensions and subgroups as well as the summary statistics to see any overall trends in the data. The summary tables are stored in the `results` folder.
 
