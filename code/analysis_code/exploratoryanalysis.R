@@ -13,6 +13,7 @@ library(skimr)
 library(ggplot2) #for plots/figures
 library(forcats) #for factoring
 library(scales)
+library(tidyr)
 
 
 ## ---- loaddata --------
@@ -23,89 +24,101 @@ load(data_location)
 
 ## ---- exploratorytables1 --------
 #bcg coverage summary and save to file location
-summary_bcg <- skimr::skim(wide_data$`BCG immunization coverage among one-year-olds (%)`)
+summary_bcg <- skimr::skim(otherburden$`BCG immunization coverage among one-year-olds (%)`)
 print(summary_bcg)
 bcgsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "bcgsummarytable.rds")
 saveRDS(summary_bcg, file = bcgsummarytable_file)
 
 #catastrophic cost summary and save to file location
-summary_catacost <- skimr::skim(wide_data$`Families affected by TB facing catastrophic costs due to TB (%)`)
+summary_catacost <- skimr::skim(otherburden$`Families affected by TB facing catastrophic costs due to TB (%)`)
 print(summary_catacost)
 catacostsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "catacostsummarytable.rds")
 saveRDS(summary_catacost, file = catacostsummarytable_file)
 
 #case detection rate summary and save to file location
-summary_cdr <- skimr::skim(wide_data$`Case detection rate (%)`)
+summary_cdr <- skimr::skim(otherburden$`Case detection rate (%)`)
 print(summary_cdr)
 cdrsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "cdrsummarytable.rds")
 saveRDS(summary_cdr, file = cdrsummarytable_file)
 
 #drug resistance summary and save to file location
-summary_drug <- skimr::skim(wide_data$`People with MDR/RR-TB (%)`)
+summary_drug <- skimr::skim(otherburden$`People with MDR/RR-TB (%)`)
 print(summary_drug)
 drugsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "drugsummarytable.rds")
 saveRDS(summary_drug, file = drugsummarytable_file)
 
 ## ---- exploratorytables2 --------
 #incidence summary and save to file location
-summary_inc <- skimr::skim(wide_data$`TB incidence (new infections per 100 000 population)`)
+summary_inc <- skimr::skim(otherburden$`TB incidence (new infections per 100 000 population)`)
 print(summary_inc)
 incsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "incsummarytable.rds")
 saveRDS(summary_inc, file = incsummarytable_file)
 
+#incidence histogram
+obinchist <- hist(otherburden$`TB incidence (new infections per 100 000 population)`,
+     main = "Histogram for TB incidence\nfor low-mid burden countries",
+     xlab = "TB incidence (new infections per 100 000 population",
+     col = "orange")
+
 #mortality summary and save to file location
-summary_mort <- skimr::skim(wide_data$`TB mortality (deaths per 100 000 population)`)
+summary_mort <- skimr::skim(otherburden$`TB mortality (deaths per 100 000 population)`)
 print(summary_mort)
 mortsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "mortsummarytable.rds")
 saveRDS(summary_mort, file = mortsummarytable_file)
 
+#mortality histogram
+obmorthist <- hist(otherburden$`TB mortality (deaths per 100 000 population)`,
+                  main = "Histogram for TB mortality\nfor low-mid burden countries",
+                  xlab = "TB mortality (deaths per 100 000 population)",
+                  col = "orange")
+
 ## ---- exploratorytables3 --------
 #prevalence to notification summary and save to file location
-summary_pn <- skimr::skim(wide_data$`Prevalence to notification ratio (years)`)
+summary_pn <- skimr::skim(otherburden$`Prevalence to notification ratio (years)`)
 print(summary_pn)
 pnsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "pnsummarytable.rds")
 saveRDS(summary_pn, file = pnsummarytable_file)
 
 #prevalence summary and save to file location
-summary_prev <- skimr::skim(wide_data$`TB prevalence (cases per 100 000 population)`)
+summary_prev <- skimr::skim(otherburden$`TB prevalence (cases per 100 000 population)`)
 print(summary_prev)
 prevsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "prevsummarytable.rds")
 saveRDS(summary_prev, file = prevsummarytable_file)
 
 ## ---- exploratorytables4 --------
 #attitude summary and save to file location
-summary_att <- skimr::skim(wide_data$`People who would want a family member's TB kept secret (%)`)
+summary_att <- skimr::skim(otherburden$`People who would want a family member's TB kept secret (%)`)
 print(summary_att)
 attsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "attsummarytable.rds")
 saveRDS(summary_att, file = attsummarytable_file)
 
 #female attitudesummary and save to file location
-summary_attf <- skimr::skim(wide_data$`People who would want a family member's TB kept secret - Female (%)`)
+summary_attf <- skimr::skim(otherburden$`People who would want a family member's TB kept secret - Female (%)`)
 print(summary_attf)
 attfsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "attfsummarytable.rds")
 saveRDS(summary_attf, file = attfsummarytable_file)
 
 #male attitude summary and save to file location
-summary_attm <- skimr::skim(wide_data$`People who would want a family member's TB kept secret - Male (%)`)
+summary_attm <- skimr::skim(otherburden$`People who would want a family member's TB kept secret - Male (%)`)
 print(summary_attm)
 attmsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "attmsummarytable.rds")
 saveRDS(summary_attm, file = attmsummarytable_file)
 
 ## ---- exploratorytables5 --------
 #spread through cough summary and save to file location
-summary_cough <- skimr::skim(wide_data$`People who report TB is spread through coughing (%)`)
+summary_cough <- skimr::skim(otherburden$`People who report TB is spread through coughing (%)`)
 print(summary_cough)
 coughsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "coughsummarytable.rds")
 saveRDS(summary_cough, file = coughsummarytable_file)
 
 #female spread through cough summary and save to file location
-summary_coughf <- skimr::skim(wide_data$`People who report TB is spread through coughing - Female (%)`)
+summary_coughf <- skimr::skim(otherburden$`People who report TB is spread through coughing - Female (%)`)
 print(summary_coughf)
 coughfsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "coughfsummarytable.rds")
 saveRDS(summary_coughf, file = coughfsummarytable_file)
 
 #male spread through cough summary and save to file location
-summary_coughm <- skimr::skim(wide_data$`People who report TB is spread through coughing - Male (%)`)
+summary_coughm <- skimr::skim(otherburden$`People who report TB is spread through coughing - Male (%)`)
 print(summary_coughm)
 coughmsummarytable_file <- here("results", "exploratory_analysis", "summary tables", "coughmsummarytable.rds")
 saveRDS(summary_coughm, file = coughmsummarytable_file)
@@ -180,7 +193,7 @@ ggsave(filename = figure_file, plot=p4)
 ## ---- exploratoryfigures3 --------
 #plots incidence by country from lowest incidence to highest, colored by subgroup 
 #and saves
-p5a <- wide_data %>%
+p5a <- otherburden %>%
   filter(indicator_abbr == "incidence") %>% 
   select(c(1,2,3,4,5,6,12)) %>% 
   ggplot(aes(x=fct_reorder(
@@ -253,7 +266,7 @@ ggsave(filename = figure_file, plot=p7)
 
 #plots TB prevalence by country from lowest prevalence to highest, colored by subgroup
 #and saves
-p8a <- wide_data %>%
+p8a <- otherburden %>%
   filter(indicator_abbr == "prevalence_place") %>% 
   select(c(1,2,3,4,5,6,17)) %>% 
   ggplot(aes(x=fct_reorder(
@@ -381,4 +394,3 @@ p14 <- highburden %>%
 plot(p14)
 figure_file = here("results", "exploratory_analysis", "figures", "coughmexplore.png")
 ggsave(filename = figure_file, plot=p14) 
-

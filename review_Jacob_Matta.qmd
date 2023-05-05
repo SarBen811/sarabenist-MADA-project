@@ -1,12 +1,12 @@
 ---
-  title: Project Review Template 
-author: 
+title: Project Review Template 
+author: Jacob Matta
 date: "`r file.mtime(knitr::current_input())`"
 format: 
   html:
-  toc: true
-toc-depth: 3
-number-sections: true
+    toc: true
+    toc-depth: 3
+    number-sections: true
 ---
 
 # Overview
@@ -189,24 +189,24 @@ Your project is well documented as you help guide the reader along through the c
 ## Reproducibility
 
 I was unable to render your manuscript as the issue was due to the code below 
-```{r}
+
 #| label: tbl-incfithb
 #| fig-cap: "Summary table for fitted linear model predicting incidence for high burden countries"
 readRDS(file = here("results", "model fit tables", "incfittable.rds")) 
-```
+
 
 If you run this it says the file can't be found. However it does exist but you forgot to add the `statistical_analysis` folder that lies in the `results folder`. I have gone ahead and made these changes shown in the code below
-```{r}
+
 #| label: tbl-incfithb
 #| fig-cap: "Summary table for fitted linear model predicting incidence for high burden countries"
 readRDS(file = here("results", "statistical_analysis", "model fit tables", "incfittable.rds")) 
-```
 
-```{r}
+
+
 #| label: tbl-incfit
 #| fig-cap: "Summary table for fitted linear model predicting incidence"
 readRDS(file = here("results", "statistical_analysis","model fit tables", "incfittableFD.rds")) 
-```
+
 
 However when I attempted to render the file after updating the code, it looks like you left out the `statistical_analysis` folder for all of the results regarding the statistical analysis inside your manuscript. As a result, I have updated the code as an easy fix and it should all render now.
 

@@ -1,0 +1,67 @@
+---
+title: "Boosted Tree Statistical Analysis"
+author: "Sara Benist"
+date: "2023-04-06"
+output: html_document
+---
+
+# Processing script with R script code
+
+This Quarto file runs the statistical analysis code from the `booststatistical_analysis.r` script. The best way to view the output of the script is to render the qmd and view the html document. The processed data is used for model fitting.
+
+*Note: this file takes approximately 15 minutes to render*
+
+To start, the needed packages are loaded, and the `processeddata.rda` is loaded from the `processed_data` folder. 
+
+# Setup
+The `statistical_analysis.r` script needs to be indicated as the file from which to pull code chunks from. 
+```{r, cache=FALSE}
+knitr::read_chunk('booststatistical_analysis.R')
+```
+
+# Load packages and data
+The packages and data are loaded.
+```{r, packages, message = FALSE, warning = FALSE}
+```
+
+```{r, loaddata}
+```
+
+# Model fitting
+In addition to the decision tree modelling found in `statistical_analysis.qmd` file, I wanted to also look at boosted tree models. First, we will split the data like in the decision tree models.
+
+```{r, splitdata}
+```
+I will be tuning boosted tree models for the main outcomes of TB incidence, TB mortality, and TB prevalence for both high burden countries and the full data set. To make it more clear when saving the resulting tables and plots, the other burden country boosted tree results will be labeled `obb` and high burden as `hbb`.
+
+## Boosted tree model for TB Incidence
+```{r, obbincidencemodel}
+```
+The best boosted tree model for TB incidence using the other burden countries has a depth of 15 with an RMSE of 48 (SE = 4.81). This is slightly better than the decision tree model (RMSE of 51.6). The fitted model to the training data has a RMSE of 49.0, and since the model performs better than the  decision tree, we can fit the test data as well. Using the testing data, the model had a performance of RMSE = 37.1. This would indicate the model would perform similar on new data (compared to the training data). The residual plot shows clustering in the low prediction values with high residuals for 0-100 predictions.
+
+```{r, hbbincidencemodel}
+```
+The best boosted tree model for TB incidence using the high burden countries has a depth of 8 with an RMSE of 134 (SE = 8). This is also a low level of performance in predicting TB incidence but slightly improved from the decision trees (RMSE of 159. The fitted model to the training data has a RMSE of 136 which was much higher compared to the full dataset. Using the testing data, the model had a performance of RMSE = 92.4. The residual plot shows clustering for low values but very low residuals for all values. 
+
+## Boosted tree model for TB Mortality
+```{r, obbmortalitymodel}
+```
+The best boosted tree model for TB mortality using the other burden countries has a depth of 1 with an RMSE of 9.08 (SE = 1.49). The fitted model to the training data has a RMSE of 8.66, and using the testing data, the model had a performance of RMSE = 6.34. The residual plot shows clustering in low values and moderate spread. 
+
+```{r, hbbmortalitymodel}
+```
+The best boosted tree model for TB mortality using the high burden countries has a depth of 15 with an RMSE of 18.2 (SE = 1.74). The fitted model to the training data has a RMSE of 18.5. Using the testing data, the model had a performance of RMSE = 11.1. The residual plot shows a uniform spread with low low residual values. 
+
+## Boosted tree model for TB Prevalence
+```{r, obbprevalencemodel}
+```
+The best boosted tree model for TB prevalence using the other burden countries has a depth of 8 with an RMSE of 323 (SE = 130). This is a very low level of performance in predicting TB prevalence with high uncertainty. The fitted model to the training data has a RMSE of 450 which is much worse compared to the decision tree models. For comparison since the other boosted tree models all preformed better than the decision trees, I will still fit the testing data to the boosted tree models. Using the testing data, the model had a performance of RMSE = 257. The residual plot shows only positive residuals (indicating the actual values were far greater than the predictions). 
+
+```{r, hbbprevalencemodel}
+```
+The best boosted tree model for TB prevalence using the high burden countries has a depth of 1 with an RMSE of 322 (SE = 58.9). This is a very low level of performance in predicting TB incidence but has less uncertainty than the other burden model. The fitted model to the training data has a RMSE of 351, but using the testing data, the model had a performance of RMSE = 448 which is the worst performance of the models. The  residual plot still is mostly high value, positive residuals but is slightly better than the other model.
+
+## Summary
+```{r, compare}
+```
+The models were overall not subpar predictors of TB outcomes. TB prevalence was significantly different from the incidence and mortality models, possibly due to using different predictor variables or the limited availability of data points. The mortality models performed best based on RMSE values, and the other burden incidence and mortality models performed better than the high burden countries. 

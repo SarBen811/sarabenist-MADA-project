@@ -51,6 +51,7 @@ length(unique(rawdata$setting))
            estimate, population)) %>% 
   pivot_wider(names_from = "indicator_name", values_from = "estimate")
 summarywide <- tbl_sum(wide_data)
+length(unique(wide_data$setting))
 data1 = here("results", "processing", "summarywide.rds")
 saveRDS(summarywide, file = data1)
 
@@ -73,14 +74,36 @@ highburden <- wide_data %>%
            "Kyrgyzstan", "Nepal", "Peru", "Republic of Moldova",
            "Somalia", "Tajikistan", "Ukraine",
            "Uzbekistan", "Zimbabwe")) 
-unique(highburden$setting)
+length(unique(highburden$setting))
 summaryhb <- tbl_sum(highburden)
 data2 = here("results", "processing", "summaryhighburden")
 saveRDS(summaryhb, file = data2)
 
+otherburden <- wide_data %>% 
+  filter(!setting %in% c("Brazil", "Central African Republic", "Congo",
+                        "Ethiopia", "Gabon", "Kenya",
+                        "Lesotho", "Liberia", "Namibia",
+                        "Thailand", "Uganda", "United Republic of Tanzania",
+                        "Botswana", "Cameroon", "Eswatini",
+                        "Guinea", "Guinea-Bissau", "Malawi",
+                        "Russian Federation", "Zimbabwe", "China",
+                        "Democratic Republic of the Congo", "India",
+                        "Indonesia", "Mozambique", "Myanmar",
+                        "Nigeria", "Philippines", "South Africa",
+                        "Zambia", "Sierra Leone", "Angola",
+                        "Bangladesh", "Democratic People's Republic of Korea",
+                        "Mongolia", "Pakistan", "Papua New Guinea",
+                        "Viet Nam", "Azerbaijan", "Belarus", "Kazakhstan",
+                        "Kyrgyzstan", "Nepal", "Peru", "Republic of Moldova",
+                        "Somalia", "Tajikistan", "Ukraine",
+                        "Uzbekistan", "Zimbabwe")) 
+length(unique(otherburden$setting))
+summaryob <- tbl_sum(otherburden)
+data3 = here("results", "processing", "summaryotherburden")
+saveRDS(summaryob, file = data3)
 ## ---- cleandata2 --------
 # look at each indicator to check for cleaning requirements
-indicator <- unique(wide_data$indicator_abbr)
+indicator <- unique(otherburden$indicator_abbr)
 fig2 = here("results", "processing", "indicators.rds")
 saveRDS(indicator, file = fig2)
 
@@ -173,6 +196,67 @@ wide_data %>%
   select(c(1,2,3,4,5,6,19)) %>% 
   summary()
 
+## ---- modelsetup ---------
+# set up modelling datasets
+
+#models for high burden countries
+hbmodel <- highburden %>% 
+  select(-c(population, year, dimension)) %>% #remove unneeded columns
+  filter(subgroup == "Male" | subgroup == "Female") %>% 
+  group_by(setting,subgroup) %>% 
+  summarise(across(c(`BCG immunization coverage among one-year-olds (%)`, #summarise into means of columns
+                     `People who report TB is spread through coughing (%)`,
+                     `Case detection rate (%)`,
+                     `People with MDR/RR-TB (%)`,
+                     `People who would want a family member's TB kept secret (%)`,
+                     `Prevalence to notification ratio (years)`,
+                     `TB incidence (new infections per 100 000 population)`,
+                     `TB mortality (deaths per 100 000 population)`), ~mean(.x, na.rm = TRUE)))
+
+hbmodelprev <- highburden %>% 
+  select(-c(population, year, dimension)) %>% #remove unneeded columns
+  filter(subgroup == "Rural" | subgroup == "Urban") %>% 
+  group_by(setting,subgroup) %>% 
+  summarise(across(c(`BCG immunization coverage among one-year-olds (%)`, #summarise into means of columns
+                     `People who report TB is spread through coughing - Female (%)`,
+                     `People who report TB is spread through coughing - Male (%)`,
+                     `Case detection rate (%)`,
+                     `People who would want a family member's TB kept secret - Male (%)`,
+                     `People who would want a family member's TB kept secret - Female (%)`,
+                     `TB prevalence (cases per 100 000 population)`), ~mean(.x, na.rm = TRUE)))
+
+# models for other burden countries
+obmodel <- otherburden %>% 
+  select(-c(population, year, dimension)) %>% 
+  filter(subgroup == "Male" | subgroup == "Female") %>% 
+  group_by(setting,subgroup) %>% 
+  summarise(across(c(`BCG immunization coverage among one-year-olds (%)`,
+                     `People who report TB is spread through coughing (%)`,
+                     `People who report TB is spread through coughing - Female (%)`,
+                     `People who report TB is spread through coughing - Male (%)`,
+                     `Case detection rate (%)`,
+                     `People with MDR/RR-TB (%)`,
+                     `People who would want a family member's TB kept secret (%)`,
+                     `People who would want a family member's TB kept secret - Male (%)`,
+                     `People who would want a family member's TB kept secret - Female (%)`,
+                     `Prevalence to notification ratio (years)`,
+                     `Families affected by TB facing catastrophic costs due to TB (%)`,
+                     `TB incidence (new infections per 100 000 population)`,
+                     `TB mortality (deaths per 100 000 population)`,
+                     `TB prevalence (cases per 100 000 population)`), ~mean(.x, na.rm = TRUE)))
+
+obmodelprev <- otherburden %>% 
+  select(-c(population, year, dimension)) %>% #remove unneeded columns
+  filter(subgroup == "Rural" | subgroup == "Urban") %>% 
+  group_by(setting,subgroup) %>% 
+  summarise(across(c(`BCG immunization coverage among one-year-olds (%)`, #summarise into means of columns
+                     `People who report TB is spread through coughing - Female (%)`,
+                     `People who report TB is spread through coughing - Male (%)`,
+                     `Case detection rate (%)`,
+                     `People who would want a family member's TB kept secret - Male (%)`,
+                     `People who would want a family member's TB kept secret - Female (%)`,
+                     `TB prevalence (cases per 100 000 population)`), ~mean(.x, na.rm = TRUE)))
+
 ## ---- savedata --------
 # all done, data is clean now. 
 # Let's assign at the end to some final variable
@@ -180,7 +264,7 @@ wide_data %>%
 
 # location to save file
 save_data_location <- here::here("data","processed_data","processeddata.rda")
-save(wide_data, highburden, file = save_data_location)
+save(otherburden, highburden, obmodel, hbmodel, obmodelprev, hbmodelprev, file = save_data_location)
 
 
 

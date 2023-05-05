@@ -11,5 +11,6 @@ In the `exploratory_analysis` folder:
   
 In the `statistical_analysis` folder:
   - fit tables for model fitting
-  - tuning plots for decision tree models
+  - tuning plots for decision tree(hbdt- or obdt-) and boosted tree(hbb- or obb-) models
+  - summary tables of RMSE values for models
 

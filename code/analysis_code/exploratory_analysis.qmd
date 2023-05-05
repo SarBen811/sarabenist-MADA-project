@@ -47,7 +47,7 @@ Drug resistance studies 2 subgroups within a dimension, only has data from 2019,
 ```{r, exploratorytables2}
 ```
 
-TB incidence studies 2 subgroups within a dimension and only has data from 2020. The population sizes are much higher than the other variables, and the incidence is a continuous variable (rather than percentage like many of the other indicators). Most observations appear to have low TB incidience.
+TB incidence studies 2 subgroups within a dimension and only has data from 2020. The population sizes are much higher than the other variables, and the incidence is a continuous variable (rather than percentage like many of the other indicators). Most observations appear to have low TB incidence.
 
 TB mortality is similar to the incidence variable in terms of subgroups, year, and population. The mortality outcome is also continuous, and the highest mortality rate is 140 deaths/100000 population.
 

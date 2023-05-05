@@ -53,12 +53,12 @@ Now the data cleaning can get started. This phase will coincide with data explor
 
 To start, I want the indicators to move to columns using `pivot_wider()` function so each indicator has a column. I will also subset the columns I would like to keep moving into the exploratory phase. The wide version of the data will be assigned to `wide_data`.
 
-I will also be looking specifically at high TB burden countries. The high burden countries list is updated by the WHO and can be found [here](https://www.who.int/news/item/17-06-2021-who-releases-new-global-lists-of-high-burden-countries-for-tb-hiv-associated-tb-and-drug-resistant-tb). I will subset these countries in the `highburden` object.
+I will also be looking specifically at high TB burden countries. The high burden countries list is updated by the WHO and can be found [here](https://www.who.int/news/item/17-06-2021-who-releases-new-global-lists-of-high-burden-countries-for-tb-hiv-associated-tb-and-drug-resistant-tb). I will subset these countries in the `highburden` object. The countries with low or mid level burden will be sorted into `otherburden`.
 
 ```{r, cleandata1}
 ```
 
-The `wide_data` had 7473 rows and 20 columns. The `highburden` object has 3761 rows and 20 columns.
+The `wide_data` had 7473 rows and 20 columns with 194 countries. The `highburden` object has 3761 rows and 20 columns with 49 countries. The `otherburden` object has 3712 rows and 20 columns with 145 countries. 
 
 
 ## Subset by indicator
@@ -105,6 +105,12 @@ Looking over the data more closely, the missing data (marked as `NA`) is due to 
 
 I would also like to mention the odd population minimums for BCG coverage, drug resistance, and case detection rate which are 18.9, 26, and 18 respectively. These seem like odd population counts when the maximum is in the 600,000s. I believe these numbers are due to the subsetting of the indicators by dimension subgroups, so I will not be changing these numbers.
 
+# Modelling setup
+
+The final analysis will be predicting tuberculosis outcomes from the indicators. Due to the nature of the data, each indicator must be summarized for males and females (aggregate data can measure males or someone in the lowest economic quintile but cannot predict the indicator measure for males in the lowest economic quintile). To set up the data for modelling, the data is summarized by sex and indicator for each country in the high burden and other burden data sets. The incidence and mortality outcomes consist of indicators with sex as a dimension, and the prevalence outcome consists of rural or urban subgroups.
+
+```{r, modelsetup}
+```
 
 # Save data
 
